@@ -1,4 +1,7 @@
+//Note: the .js is not required as Node assumes these files are javascript
 var Discord = require("discord.js")
+
+//These three required for the fs.readdirSync()
 var fs = require( 'fs' );
 var path = require( 'path' );
 var process = require( "process" );
@@ -11,6 +14,7 @@ var cenaImageFolder = "C:/Users/Quinten/Desktop/SDG_Discord_Bot/cenaimages/";
 
 var cenaImageArray = new Array();
 
+//Loops through a given folder and creates an array of file names
 cenaImageArray = fs.readdirSync(cenaImageFolder);
 
 bot.on("message", function(message)
@@ -50,9 +54,9 @@ bot.on("message", function(message)
 	//Maybe you get kicked here...
 	*/
 	
-	//KoolAid - no larger goal on this one...just the KoolAid man. Ohhhh yeeahh!
-	if(message.content.includes("oh no")){
-		bot.reply(message, "OHHHHH YEEEAAAHHHHH!!!");
+	//KoolAid - just the KoolAid man. Ohhhh yeeahh!
+	if(lowerCaseMessage.includes("oh no") ||
+		lowerCaseMessage.includes("hey koolaid")){
 		bot.sendFile(message.channel, "C:/Users/Quinten/Desktop/SDG_Discord_Bot/koolaid.jpg","koolaid.jpg", (err, message) => {
 			if(err)
 				console.log("couldn't send image:", err);
