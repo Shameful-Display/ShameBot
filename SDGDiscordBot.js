@@ -10,7 +10,7 @@ var process = require( "process" );
 var bot = new Discord.Client ();
 var AuthDetails = require("./auth.json");
 
-var cenaImageFolder = "C:/Users/Quinten/Desktop/SDG_Discord_Bot/cenaimages/";
+var cenaImageFolder = "C:/Users/Quinten/Documents/GitHub/SDG_Discord_Bot/cenaimages/";
 
 var cenaImageArray = new Array();
 cenaImageArray = fs.readdirSync(cenaImageFolder);//Loops through a given folder and creates an array of file names
@@ -75,7 +75,7 @@ bot.on("message", function(message)
 	//KoolAid - just the KoolAid man. Ohhhh yeeahh!
 	if(lowerCaseMessage.includes("oh no") ||
 		lowerCaseMessage.includes("hey koolaid")){
-		bot.sendFile(message.channel, "C:/Users/Quinten/Desktop/SDG_Discord_Bot/koolaid.jpg","koolaid.jpg", (err, message) => {
+		bot.sendFile(message.channel, "C:/Users/Quinten/Documents/GitHub/SDG_Discord_Bot/koolaid.jpg","koolaid.jpg", (err, message) => {
 			if(err)
 				console.log("couldn't send image:", err);
 		});
