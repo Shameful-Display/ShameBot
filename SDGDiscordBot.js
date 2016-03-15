@@ -21,12 +21,13 @@ bot.on("message", function(message)
 	if(lowerCaseMessage.includes("and his name is") ||
 		lowerCaseMessage.includes("and his name was") ||
 		message.content.includes("\uD83C\uDFBA")){ //Unicode trumpet
-		bot.reply(message, "JOHN CENA!!!");
-		/*Eventually I want to be able to loop through a folder containing
-		any number of images, have them put into an array, then send a random image from said array.
-		Assigning one/many files one at a time is static which will lead to issues
-		and is not convinient. The file names shouldn't be hardcoded...*/
-		bot.sendFile(message.channel, "C:/Users/Quinten/Desktop/SDG_Discord_Bot/cenaimages/cena1.jpg","jonny.png", (err, message) => {
+		
+		//Get random image path from array
+		var randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
+		//Reply message	
+		bot.reply(message, "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBAJOHN CENA!\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
+		//Reply with random cena image
+		bot.sendFile(message.channel, cenaImageFolder + randomCenaImageFilePath,"jonny.png", (err, message) => {
 			if(err)
 				console.log("couldn't send image:", err);
 		})
