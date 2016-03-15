@@ -5,6 +5,7 @@ var process = require( "process" );
 
 
 var bot = new Discord.Client ();
+var AuthDetails = require("./auth.json");
 
 var cenaImageFolder = "C:/Users/Quinten/Desktop/SDG_Discord_Bot/cenaimages/";
 
@@ -58,12 +59,4 @@ bot.on("message", function(message)
 	}
 });
 
-bot.login("botEmail", "botPass", function (error, token){
-	if (error) {
-		console.log("couldn't logon:", error);
-	}
-});
-
-//bot.loginWithToken(token,email,password,callback);
-
-
+bot.login(AuthDetails.email, AuthDetails.password);
