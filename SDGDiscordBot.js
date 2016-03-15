@@ -13,9 +13,13 @@ var AuthDetails = require("./auth.json");
 var cenaImageFolder = "C:/Users/Quinten/Desktop/SDG_Discord_Bot/cenaimages/";
 
 var cenaImageArray = new Array();
+cenaImageArray = fs.readdirSync(cenaImageFolder);//Loops through a given folder and creates an array of file names
 
-//Loops through a given folder and creates an array of file names
-cenaImageArray = fs.readdirSync(cenaImageFolder);
+var tableCatchTimeStamps = new Array(3);
+//Shitty code. Not sure if I need to initialize the array with date objects so I did it anyway.
+for (var i = 0; i < cenaImageArray.length; i++){
+	cenaImageArray[i] = new Date();
+}
 
 bot.on("message", function(message)
 {
@@ -46,21 +50,25 @@ bot.on("message", function(message)
 	*/
 	
 	//Catch tables
-	/*The goal on this one is to escalate the catch-table-emoji's expression
-	as people keep throwing tables. Something like - if table was thrown and caught
-	in the last X seconds - perform escalated catch. After Y seconds, reset counters*/
-	if(message.content === "(╯°□°）╯︵ ┻━┻"){
-		bot.reply(message, "┬─┬﻿ ノ( ゜-゜ノ)")
+	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
+		if (Math.abs(new Date() - tableCatchTimeStamps[2]) <= 90000){
+			tableCatchTimeStamps.unshift(new Date());
+			tableCatchTimeStamps.splice(3, 1);
+			bot.reply(message, "FOURTH CATCH - **add an action here**");
+		} else if (Math.abs(new Date() - tableCatchTimeStamps[1]) <= 60000){
+			tableCatchTimeStamps.unshift(new Date());
+			tableCatchTimeStamps.splice(3, 1);
+			bot.reply(message, "┬─┬ノ(ಥ益ಥノ)");
+		} else if(Math.abs(new Date() - tableCatchTimeStamps[0]) <= 30000) {
+			tableCatchTimeStamps.unshift(new Date());
+			tableCatchTimeStamps.splice(3, 1);
+			bot.reply(message, "┬─┬ノ(ಠ益ಠノ)");
+		} else {
+			tableCatchTimeStamps.unshift(new Date());
+			tableCatchTimeStamps.splice(3, 1);
+			bot.reply(message, "┬─┬﻿ ノ( ゜-゜ノ)");
+		}
 	}
-	/*
-	if(message.content === "(╯°□°）╯︵ ┻━┻"){
-		bot.reply(message, "┬─┬ノ(ಠ益ಠノ)")
-	}
-	if(message.content === "(╯°□°）╯︵ ┻━┻"){
-		bot.reply(message, "┬─┬ノ(ಥ益ಥノ)")
-	}
-	//Maybe you get kicked here...
-	*/
 	
 	//KoolAid - just the KoolAid man. Ohhhh yeeahh!
 	if(lowerCaseMessage.includes("oh no") ||
