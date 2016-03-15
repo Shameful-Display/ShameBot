@@ -37,6 +37,14 @@ bot.on("message", function(message)
 		})
 	}
 	
+	/*Future feature: The John Cena Summer Slam PPV Event.
+	new key word + @someone pulls cena and @someone into a new
+	channel where they'll play a mini text game and fight john cena for
+	the heavy weight title belt. @someone is given a list of options to choose from
+	but unfortunately they're fighting champ and will lose regardless. Outcome is
+	always the same because you can't C me now. trollface.jpg
+	*/
+	
 	//Catch tables
 	/*The goal on this one is to escalate the catch-table-emoji's expression
 	as people keep throwing tables. Something like - if table was thrown and caught
