@@ -17,8 +17,8 @@ cenaImageArray = fs.readdirSync(cenaImageFolder);//Loops through a given folder 
 
 var tableCatchTimeStamps = new Array(3);
 //Shitty code. Not sure if I need to initialize the array with date objects so I did it anyway.
-for (var i = 0; i < cenaImageArray.length; i++){
-	cenaImageArray[i] = new Date();
+for (var i = 0; i < tableCatchTimeStamps.length; i++){
+	tableCatchTimeStamps[i] = new Date();
 }
 
 bot.on("message", function(message)
@@ -28,14 +28,16 @@ bot.on("message", function(message)
 	//John Cena
 	if(lowerCaseMessage.includes("and his name is") ||
 		lowerCaseMessage.includes("and his name was") ||
-		message.content.includes("\uD83C\uDFBA")){ //Unicode trumpet
+		message.content.includes("\uD83C\uDFBA") &&
+		message.author.name != "ShameBot"){ //Unicode trumpet
 		
+		//Reply message	
+		bot.reply(message, "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
+		console.log(message.author.username);
 		//Get random image path from array
 		var randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
-		//Reply message	
-		bot.reply(message, "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBAJOHN CENA!\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
 		//Reply with random cena image
-		bot.sendFile(message.channel, cenaImageFolder + randomCenaImageFilePath,"jonny.png", (err, message) => {
+		bot.sendFile(message.channel, cenaImageFolder.concat(randomCenaImageFilePath),"jonny.png", (err, message) => {
 			if(err)
 				console.log("couldn't send image:", err);
 		})
