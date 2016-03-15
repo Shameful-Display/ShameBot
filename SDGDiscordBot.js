@@ -1,22 +1,31 @@
 var Discord = require("discord.js")
+var fs = require( 'fs' );
+var path = require( 'path' );
+var process = require( "process" );
+
+
 var bot = new Discord.Client ();
+
+var cenaImageFolder = "C:/Users/Quinten/Desktop/SDG_Discord_Bot/cenaimages/";
+
+var cenaImageArray = new Array();
+
+cenaImageArray = fs.readdirSync(cenaImageFolder);
 
 bot.on("message", function(message)
 {
 	//Make all message content lower case so all triggers can be written lower case and always work.
-	//Need to see if this will effect Unicode. Case sensitive? 
-	message.content.toLowerCase();
-	
+	var lowerCaseMessage = message.content.toLowerCase();
 	//John Cena
-	if(message.content.includes("and his name is") ||
-		message.content.includes("and his name was") ||
+	if(lowerCaseMessage.includes("and his name is") ||
+		lowerCaseMessage.includes("and his name was") ||
 		message.content.includes("\uD83C\uDFBA")){ //Unicode trumpet
 		bot.reply(message, "JOHN CENA!!!");
 		/*Eventually I want to be able to loop through a folder containing
 		any number of images, have them put into an array, then send a random image from said array.
 		Assigning one/many files one at a time is static which will lead to issues
 		and is not convinient. The file names shouldn't be hardcoded...*/
-		bot.sendFile(message.channel, "C:/Users/Quinten/Desktop/johncena/cena1.jpg","jonny.png", (err, message) => {
+		bot.sendFile(message.channel, "C:/Users/Quinten/Desktop/SDG_Discord_Bot/cenaimages/cena1.jpg","jonny.png", (err, message) => {
 			if(err)
 				console.log("couldn't send image:", err);
 		})
@@ -42,12 +51,19 @@ bot.on("message", function(message)
 	//KoolAid - no larger goal on this one...just the KoolAid man. Ohhhh yeeahh!
 	if(message.content.includes("oh no")){
 		bot.reply(message, "OHHHHH YEEEAAAHHHHH!!!");
-		bot.sendFile(message.channel, "C:/Users/Quinten/Desktop/johncena/koolaid.jpg","koolaid.jpg", (err, message) => {
+		bot.sendFile(message.channel, "C:/Users/Quinten/Desktop/SDG_Discord_Bot/koolaid.jpg","koolaid.jpg", (err, message) => {
 			if(err)
 				console.log("couldn't send image:", err);
 		});
 	}
 });
 
-bot.login("discordBotEmail", "discordBotPassword");
+bot.login("botEmail", "botPass", function (error, token){
+	if (error) {
+		console.log("couldn't logon:", error);
+	}
+});
+
 //bot.loginWithToken(token,email,password,callback);
+
+
