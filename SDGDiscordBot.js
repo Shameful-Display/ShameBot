@@ -1,9 +1,9 @@
 //Note: the .js is not required as Node assumes these files are javascript
-var Discord = require("discord.js")
+var Discord = require( "discord.js" )
 
 //These three required for the fs.readdirSync()
-var fs = require( 'fs' );
-var path = require( 'path' );
+var fs = require( "fs" );
+var path = require( "path" );
 var process = require( "process" );
 
 
