@@ -55,7 +55,16 @@ bot.on("message", function(message)
 	//Catch tables
 	//Todo: cooldown timer, channel specific, and fourth action
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
-		tableFlipInstanceArray.push(new tableFlipInstanceArray(message.channel, message.timestamp));
+		var tableFlipInstanceExists = false;
+		for(var i = 0, i <= tableFlipInstanceArray.length, i++){
+			var tableInstance = tableFlipInstance[i];
+			if (tableInstance.channelFlippedIn.equals(message.channel)){
+				tableFlipInstanceExists = true;
+			}
+		}
+		if (tableFlipInstanceExists == false){
+			tableFlipInstanceArray.push(new tableFlipInstanceArray(message.channel, message.timestamp));
+		}
 		if (Math.abs(new Date() - tableCatchTimeStamps[2]) <= 90000){
 			tableCatchTimeStamps.unshift(new Date());
 			tableCatchTimeStamps.splice(3, 1);
