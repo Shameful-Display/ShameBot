@@ -23,6 +23,12 @@ for (var i = 0; i < tableCatchTimeStamps.length; i++){
 
 bot.on("message", function(message)
 {
+	function tableFlipInstance(channel, timeStamp){
+		this.channelFlippedIn = channel;
+		this.timeStamp = new Array(3);
+		this.timeStamp[0] = timeStamp 
+	}
+	
 	//Make all message content lower case so all triggers can be written lower case and always work.
 	var lowerCaseMessage = message.content.toLowerCase();
 	//John Cena
@@ -43,15 +49,9 @@ bot.on("message", function(message)
 		})
 	}
 	
-	/*Future feature: The John Cena Summer Slam PPV Event.
-	new key word + @someone pulls cena and @someone into a new
-	channel where they'll play a mini text game and fight john cena for
-	the heavy weight title belt. @someone is given a list of options to choose from
-	but unfortunately they're fighting champ and will lose regardless. Outcome is
-	always the same because you can't C me now. trollface.jpg
-	*/
-	
+		
 	//Catch tables
+	//Todo: cooldown timer, channel specific, and fourth action
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
 		if (Math.abs(new Date() - tableCatchTimeStamps[2]) <= 90000){
 			tableCatchTimeStamps.unshift(new Date());
