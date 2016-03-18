@@ -29,7 +29,7 @@ bot.on("message", function(message)
 	if(lowerCaseMessage.includes("and his name is") ||
 		lowerCaseMessage.includes("and his name was") ||
 		message.content.includes("\uD83C\uDFBA") &&
-		message.author.name != "ShameBot"){ //Unicode trumpet
+		!message.author.equals(bot.user)){ //Unicode trumpet
 		
 		//Reply message	
 		bot.reply(message, "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
