@@ -100,7 +100,7 @@ function BattleManager() {
     this.battleChannel = null;
 
     this.parseCommand = function (message) {
-        if (message.channel.isPrivate) {
+        if (message.channel.isPrivate && !message.author.equals(bot.user)) {
             // Direct Message Received
             console.log("Direct Message Recieved");
 
@@ -117,6 +117,9 @@ function BattleManager() {
                     case "scissors":
                         this.playerOne.choice = "Scissors";
                         break;
+                    default:
+                        bot.reply(message, "Choose one of the following: Rock, Paper, Scissors");
+                        break;
                 }               
             }
 
@@ -132,6 +135,9 @@ function BattleManager() {
                         break;
                     case "scissors":
                         this.playerTwo.choice = "Scissors";
+                        break;
+                    default:
+                        bot.reply(message, "Choose one of the following: Rock, Paper, Scissors");
                         break;
                 }
             }
@@ -199,18 +205,40 @@ function BattleManager() {
 
             // Begin Command
             if (message.content.includes("begin")) {
-                if (message.mentions.length == 2) {
+                this.battleChannel = message.channel;
+
+                var validStart = true;
+
+                if (message.mentions.length != 2) {
+                    bot.sendMessage(this.battleChannel, "**Error:** Not enough players");
+                    validStart = false;
+                } else {
                     this.playerOne = new Player(message.mentions[0]);
                     this.playerTwo = new Player(message.mentions[1]);
-                    this.battleChannel = message.channel;
 
+                    if (this.isBattleOn) {
+                        bot.sendMessage(this.battleChannel, "**Error:** No more than one active battle at a time");
+                        validStart = false;
+                    } else if (this.playerOne.user.equals(bot.user) || this.playerTwo.user.equals(bot.user)) {
+                        bot.sendMessage(this.battleChannel, "**Error:** The bot can't be one of the players (yet).");
+                        validStart = false;
+                    } else if (this.playerOne.user.equals(this.playerTwo.user)) {
+                        bot.sendMessage(this.battleChannel, "**Error:** Both players must be unique");
+                        validStart = false;
+                    } else if (this.playerOne.user.status != "online" || this.playerTwo.user.status != "online") {
+                        bot.sendMessage(this.battleChannel, "**Error:** One or more players is not online");
+                        validStart = false;
+                    }
+                }  
+
+                if (validStart) {
                     bot.sendMessage(this.battleChannel, "**ROCK - PAPER - SCISSORS** \n\n" + "**" + this.playerOne.user.username + "** *-- VS --* **" + this.playerTwo.user.username + "** \n" + "Both opponents must DM the bot with their selection.");
-
                     this.isBattleOn = true;
                 } else {
-                    bot.sendMessage(this.battleChannel, "Not Enough Players");
+                    this.playerOne = null;
+                    this.playerTwo = null;
                 }
-               
+
             }
         }
     }
