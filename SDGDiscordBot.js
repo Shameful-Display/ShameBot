@@ -138,7 +138,6 @@ function BattleManager() {
 
             // Both answered?
             if (this.playerOne.choice && this.playerTwo.choice) {
-                bot.sendMessage(this.battleChannel)
                 console.log("Both Entries are in!");
 
                 var winningPlayer = null;
