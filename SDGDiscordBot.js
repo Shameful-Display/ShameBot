@@ -80,6 +80,15 @@ bot.on("message", function(message)
 				console.log("couldn't send image:", err);
 		});
 	}
+
+	// Macho Man!
+	if(lowerCaseMessage.includes("savage")) {
+		bot.reply(message, "Ohhhh yeah brother!");
+		bot.sendFile(message.channel, "./savage.jpg","savage.jpg", (err, message) => {
+			if(err)
+				console.log("couldn't send image:", err);
+		});
+	}
 });
 
 bot.login(AuthDetails.email, AuthDetails.password);
