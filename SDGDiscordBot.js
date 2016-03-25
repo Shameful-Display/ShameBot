@@ -15,25 +15,14 @@ var cenaImageFolder = "./cenaimages/";
 var cenaImageArray = new Array();
 cenaImageArray = fs.readdirSync(cenaImageFolder);//Loops through a given folder and creates an array of file names
 
-/*var tableCatchTimeStamps = new Array(3);
+var tableCatchTimeStamps = new Array(3);
 //Shitty code. Not sure if I need to initialize the array with date objects so I did it anyway.
 for (var i = 0; i < tableCatchTimeStamps.length; i++){
 	tableCatchTimeStamps[i] = new Date();
-}*/
+}
 
 bot.on("message", function(message)
 {
-	function tableFlipInstance(channel, timeStamp){
-		this.channelFlippedIn = channel;
-		this.timeStamp = new Array(3);
-		for (var i = 0; i < this.timeStamp.length; i++){
-			this.timeStamp[i] = Math.abs(new Date() - 1200000);
-		}
-		this.timeStamp[0] = timeStamp 
-	}
-	
-	var tableFlipInstanceArray = new Array();
-	
 	//Make all message content lower case so all triggers can be written lower case and always work.
 	var lowerCaseMessage = message.content.toLowerCase();
 	//John Cena
@@ -54,50 +43,31 @@ bot.on("message", function(message)
 		})
 	}
 	
-		
+	/*Future feature: The John Cena Summer Slam PPV Event.
+	new key word + @someone pulls cena and @someone into a new
+	channel where they'll play a mini text game and fight john cena for
+	the heavy weight title belt. @someone is given a list of options to choose from
+	but unfortunately they're fighting champ and will lose regardless. Outcome is
+	always the same because you can't C me now. trollface.jpg
+	*/
+	
 	//Catch tables
-	//Todo: cooldown timer, channel specific, and fourth action
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
-		console.log(message.timestamp);
-		var tableFlipInstanceExists = false;
-		var tableFlipIndex = 0;
-		var tableFlipToCheck = tableFlipInstanceArray[tableFlipIndex];
-		if (tableFlipInstanceArray.length == 0){
-			var poop = new tableFlipInstance(message.channel, message.timestamp);
-			tableFlipInstanceArray.push(poop);
-			tableFlipIndex = tableFlipInstanceArray.length - 1;
-			tableFlipInstanceExists = true;
-		} else{
-			for(var i = 0; i <= tableFlipInstanceArray.length; i++){
-				var tableInstance = tableFlipInstanceArray[i];
-				if (tableInstance.channelFlippedIn.equals(message.channel)){
-					tableFlipInstanceExists = true;
-					tableFlipIndex = i;
-					tableFlipInstanceArray[i].timestamp.unshift(message.timestamp)
-				}
-			}	
-		}
-		if (tableFlipInstanceExists == false){
-			var poop = new tableFlipInstance(message.channel, message.timestamp);
-			tableFlipInstanceArray.push(poop);
-			tableFlipIndex = tableFlipInstanceArray.length - 1;
-		}
-		var tableFlipToCheck = tableFlipInstanceArray[tableFlipIndex];
-		if (Math.abs(new Date() - tableFlipToCheck.timeStamp[3]) <= 90000){
-			tableFlipToCheck.timeStamp.unshift(new Date());
-			tableFlipToCheck.timeStamp.splice(3, 1);
+		if (Math.abs(new Date() - tableCatchTimeStamps[2]) <= 90000){
+			tableCatchTimeStamps.unshift(new Date());
+			tableCatchTimeStamps.splice(3, 1);
 			bot.reply(message, "FOURTH CATCH - **add an action here**");
-		} else if (Math.abs(new Date() - tableFlipToCheck.timeStamp[2]) <= 60000){
-			tableFlipToCheck.timeStamp.unshift(new Date());
-			tableFlipToCheck.timeStamp.splice(3, 1);
+		} else if (Math.abs(new Date() - tableCatchTimeStamps[1]) <= 60000){
+			tableCatchTimeStamps.unshift(new Date());
+			tableCatchTimeStamps.splice(3, 1);
 			bot.reply(message, "┬─┬ノ(ಥ益ಥノ)");
-		} else if(Math.abs(new Date() - tableFlipToCheck.timeStamp[1]) <= 30000) {
-			tableFlipToCheck.timeStamp.unshift(new Date());
-			tableFlipToCheck.timeStamp.splice(3, 1);
+		} else if(Math.abs(new Date() - tableCatchTimeStamps[0]) <= 30000) {
+			tableCatchTimeStamps.unshift(new Date());
+			tableCatchTimeStamps.splice(3, 1);
 			bot.reply(message, "┬─┬ノ(ಠ益ಠノ)");
 		} else {
-			tableFlipToCheck.timeStamp.unshift(new Date());
-			tableFlipToCheck.timeStamp.splice(3, 1);
+			tableCatchTimeStamps.unshift(new Date());
+			tableCatchTimeStamps.splice(3, 1);
 			bot.reply(message, "┬─┬﻿ ノ( ゜-゜ノ)");
 		}
 	}
