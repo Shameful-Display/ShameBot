@@ -55,7 +55,7 @@ bot.on("message", function(message)
 					if (Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp) <= 30000){
 						bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
 						currentTableCatcher.lastFlipTimestamp = new Date();
-						if (currentTableCatcher.currentEmotionalState <= 2){//don't hard code the number 2!
+						if (currentTableCatcher.currentEmotionalState <= tableCatcherArray.length - 2){
 							currentTableCatcher.currentEmotionalState++;
 						} else {
 							currentTableCatcher.currentEmotionalState = 0;
@@ -81,7 +81,7 @@ bot.on("message", function(message)
 							}
 						}
 						
-						if (currentTableCatcher.currentEmotionalState <= 2){
+						if (currentTableCatcher.currentEmotionalState <= tableCatcherArray.length - 2){
 							currentTableCatcher.currentEmotionalState++;
 						} else {
 							currentTableCatcher.currentEmotionalState = 0;
