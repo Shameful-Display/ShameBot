@@ -21,11 +21,12 @@ for (var i = 0; i < tableCatchTimeStamps.length; i++){
 }*/
 //Table catcher object constructor
 function TableCatcher(channel){
-	self.currentEmotionalState = 0;
-	self.emotionalState = ["┬─┬ノ( ゜-゜ノ)", "┬─┬ノ(ಠ益ಠノ)", "┬─┬ノ(ಥ益ಥノ)", "(/ .□.)\ ︵╰(゜Д゜)╯︵ /(.□. \)"]
-	self.lastFlipTimestamp = new Date();
-	self.channel = channel; 
+	this.currentEmotionalState = 0;
+	this.emotionalState = ["┬─┬ノ( ゜-゜ノ)", "┬─┬ノ(ಠ益ಠノ)", "┬─┬ノ(ಥ益ಥノ)", "(/ .□.)\ ︵╰(゜Д゜)╯︵ /(.□. \)"]
+	this.lastFlipTimestamp = new Date();
+	this.channel = channel; 
 }
+var tableCatcherArray = new Array(); //Keeps all TableCatcher objects
 
 bot.on("message", function(message)
 {
@@ -70,6 +71,28 @@ bot.on("message", function(message)
 		}
 	}
 	*/
+	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
+		var channelHasCatcher = false;
+		if (tableCatcherArray.length > 0){ //Make sure there's at least 1 object in the array
+			for (var i = 0; i < tableCatcherArray.length; i++){ //loop through array to see if object already exists for channel
+				var currentTableCatcher = tableCatcherArray[i];
+				if (currentTableCatcher.channel.equals(message.channel)){
+					channelHasCatcher = true;
+					if (Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp) <= 30000){
+						bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
+						currentTableCatcher.lastFlipTimestamp = new Date();
+						currentTableCatcher.currentEmotionalState++;
+					}
+				}
+			}
+		}else{
+			tableCatcherArray[0] = new TableCatcher(message.channel);
+			var currentTableCatcher = tableCatcherArray[0];
+			bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
+			currentTableCatcher.lastFlipTimestamp = new Date();
+			currentTableCatcher.currentEmotionalState++;
+		}
+	}
 	//KoolAid - just the KoolAid man. Ohhhh yeeahh!
 	if(lowerCaseMessage.includes("oh no") ||
 		lowerCaseMessage.includes("hey koolaid")){
