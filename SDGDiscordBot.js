@@ -55,10 +55,37 @@ bot.on("message", function(message)
 					if (Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp) <= 30000){
 						bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
 						currentTableCatcher.lastFlipTimestamp = new Date();
+						if (currentTableCatcher.currentEmotionalState <= 2){//don't hard code the number 2!
+							currentTableCatcher.currentEmotionalState++;
+						} else {
+							currentTableCatcher.currentEmotionalState = 0;
+						}
+					}else if (Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp) > 30000){
+						var timePast = Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp);
+						var numberOfIncrementsPast = (timePast / 30000) - 1; //30 seconds is one increment
+						
+						if (numberOfIncrementsPast < 1){
+							//return previous table catch emotion
+							currentTableCatcher.currentEmotionalState--;
+							bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
+							currentTableCatcher.lastFlipTimestamp = new Date();
+						}else {
+							//decrease emotional states equal to the number of increments to a minimum of 0
+							numberOfIncrementsPast = Math.floor(numberOfIncrementsPast);
+							if (currentTableCatcher.currentEmotionalState - numberOfIncrementsPast <= 0){
+								currentTableCatcher.currentEmotionalState = 0;
+								bot.reply(message, currentTableCatcher.emotionalState[0]);
+							}else {
+								currentTableCatcher.currentEmotionalState -=  numberOfIncrementsPast;
+								bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
+							}
+						}
+						
 						if (currentTableCatcher.currentEmotionalState <= 2){
 							currentTableCatcher.currentEmotionalState++;
 						} else {
 							currentTableCatcher.currentEmotionalState = 0;
+							bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
 						}
 					}
 				}
