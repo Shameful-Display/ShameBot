@@ -32,6 +32,14 @@ bot.on("message", function(message)
 	//Make all message content lower case so all triggers can be written lower case and always work.
 	var lowerCaseMessage = message.content.toLowerCase();
 	
+	//help 
+	if(message.content.includes("!help")){
+		bot.reply(message, "Availible commands *(all commands start with !)* :\r" +
+		"help\r" +
+		"uptime\r" +
+		"battle begin *@player1* *@player2*");
+	}
+	
 	//uptime
 	if(message.content.includes("!uptime")){
 		var botUptime = Math.abs(new Date() - botStartTime);
