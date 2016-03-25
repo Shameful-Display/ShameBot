@@ -1,159 +1,161 @@
+var CHOICE = {
+    ROCK: "Rock",
+    PAPER: "Paper",
+    SCISSORS: "Scissors" 
+};
+
 //Battle Manager
 var BattleManager = function (bot) {
-    this.isBattleOn = false;
-    this.playerOne = null;
-    this.playerTwo = null;
+    var _isBattleOn = false;
+    var _playerOne = null;
+    var _playerTwo = null;
+    var _players = null;
 
-    this.battleChannel = null;
+    var _battleChannel = null;
 
     this.parseCommand = function (message) {
-        if (message.channel.isPrivate && !message.author.equals(bot.user)) {
-            // Direct Message Received
-            console.log("Direct Message Recieved");
-
-            //Check for Player 1
-            if (message.author.equals(this.playerOne.user)) {
-                console.log("Player 1 Entry is In");
-                switch (message.content.toLowerCase()) {
-                    case "rock":
-                        this.playerOne.choice = "Rock";
-                        break;
-                    case "paper":
-                        this.playerOne.choice = "Paper";
-                        break;
-                    case "scissors":
-                        this.playerOne.choice = "Scissors";
-                        break;
-                    default:
-                        bot.reply(message, "Choose one of the following: Rock, Paper, Scissors");
-                        break;
-                }
-            }
-
-            //Check for Player 2
-            if (message.author.equals(this.playerTwo.user)) {
-                console.log("Player 2 Entry is In");
-                switch (message.content.toLowerCase()) {
-                    case "rock":
-                        this.playerTwo.choice = "Rock";
-                        break;
-                    case "paper":
-                        this.playerTwo.choice = "Paper";
-                        break;
-                    case "scissors":
-                        this.playerTwo.choice = "Scissors";
-                        break;
-                    default:
-                        bot.reply(message, "Choose one of the following: Rock, Paper, Scissors");
-                        break;
-                }
-            }
-
-            // Both answered?
-            if (this.playerOne.choice && this.playerTwo.choice) {
-                console.log("Both Entries are in!");
-
-                var winningPlayer = null;
-                switch (this.playerOne.choice) {
-                    case "Rock":
-                        switch (this.playerTwo.choice) {
-                            case "Rock":
-                                break;
-                            case "Paper":
-                                winningPlayer = this.playerTwo;
-                                break;
-                            case "Scissors":
-                                winningPlayer = this.playerOne;
-                                break;
-                        }
-                        break;
-                    case "Paper":
-                        switch (this.playerTwo.choice) {
-                            case "Rock":
-                                winningPlayer = this.playerOne;
-                                break;
-                            case "Paper":
-                                break;
-                            case "Scissors":
-                                winningPlayer = this.playerTwo;
-                                break;
-                        }
-                        break;
-                    case "Scissors":
-                        switch (this.playerTwo.choice) {
-                            case "Rock":
-                                winningPlayer = this.playerTwo;
-                                break;
-                            case "Paper":
-                                winningPlayer = this.playerOne;
-                                break;
-                            case "Scissors":
-                                break;
-                        }
-                }
-
-                var victoryString = null;
-                if (winningPlayer) {
-                    victoryString = winningPlayer.user.username.toUpperCase() + " WINS!";
-                } else {
-                    victoryString = "It's a DRAW!";
-                }
-
-                bot.sendMessage(this.battleChannel, "```\n" + this.playerOne.user.username + "\t\t\t" + this.playerTwo.user.username + "\n" + this.playerOne.choice + "\t\t\t" + this.playerTwo.choice + "\n\n" + victoryString + "```");
-                this.isBattleOn = false;
-                this.playerOne = null;
-                this.playerTwo = null;
-                winningPlayer = null;
-            }
-
+        if (message.channel.isPrivate &&
+            !message.author.equals(bot.user)
+            && (message.author.equals(_playerOne.user) || message.author.equals(_playerTwo.user))) {
+            
+            parseDirectMessage(message);
         } else {
-            // Public Message Received
-            console.log("Public Message Received");
+            parsePublicMessage(message);
+        }
+    }
+    
+    this.isBattleOn = function () {
+        return _isBattleOn;
+    }
 
-            // Begin Command
-            if (message.content.includes("begin")) {
-                this.battleChannel = message.channel;
+    function parseDirectMessage(message) {
 
-                var validStart = true;
+        //Assign the Choice to Appropriate Player
+        var activePlayer = messageAuthorToPlayer(message.author);
+        if (assignChoiceToPlayer(activePlayer, message.content.toLowerCase())) {
+            bot.reply(message, "Entry Acknowledged!");
+        } else {
+            bot.reply(message, "Choose one of the following: Rock, Paper, Scissors");
+        }
 
-                if (message.mentions.length != 2) {
-                    bot.sendMessage(this.battleChannel, "**Error:** Not enough players");
+        // Both answered?
+        if (_playerOne.choice && _playerTwo.choice) {
+
+            var winningPlayer = determineWinner(_playerOne, _playerTwo);
+            
+            var victoryString = null;
+            if (winningPlayer) {
+                victoryString = winningPlayer.user.username.toUpperCase() + " WINS!";
+            } else {
+                victoryString = "It's a DRAW!";
+            }
+
+            bot.sendMessage(_battleChannel, "```\n" + _playerOne.user.username + "\t\t\t" + _playerTwo.user.username + "\n" + _playerOne.choice + "\t\t\t" + _playerTwo.choice + "\n\n" + victoryString + "```");
+            _isBattleOn = false;
+            _playerOne = null;
+            _playerTwo = null;
+            winningPlayer = null;
+        }
+    }
+        
+    function parsePublicMessage(message) {
+               
+        // Begin Command
+        if (message.content.includes("begin")) {
+            _battleChannel = message.channel;
+
+            var validStart = true;
+
+            if (message.mentions.length != 2) {
+                bot.sendMessage(_battleChannel, "**Error:** Not enough players");
+                validStart = false;
+            } else {
+                _playerOne = new Player(message.mentions[0]);
+                _playerTwo = new Player(message.mentions[1]);
+                _players = [_playerOne, _playerTwo];
+
+                if (_isBattleOn) {
+                    bot.sendMessage(_battleChannel, "**Error:** No more than one active battle at a time");
                     validStart = false;
-                } else {
-                    this.playerOne = new Player(message.mentions[0]);
-                    this.playerTwo = new Player(message.mentions[1]);
-
-                    if (this.isBattleOn) {
-                        bot.sendMessage(this.battleChannel, "**Error:** No more than one active battle at a time");
-                        validStart = false;
-                    } else if (this.playerOne.user.equals(bot.user) || this.playerTwo.user.equals(bot.user)) {
-                        bot.sendMessage(this.battleChannel, "**Error:** The bot can't be one of the players (yet).");
-                        validStart = false;
-                    } else if (this.playerOne.user.equals(this.playerTwo.user)) {
-                        bot.sendMessage(this.battleChannel, "**Error:** Both players must be unique");
-                        validStart = false;
-                    } else if (this.playerOne.user.status != "online" || this.playerTwo.user.status != "online") {
-                        bot.sendMessage(this.battleChannel, "**Error:** One or more players is not online");
-                        validStart = false;
-                    }
+                } else if (_playerOne.user.equals(bot.user) || _playerTwo.user.equals(bot.user)) {
+                    bot.sendMessage(_battleChannel, "**Error:** The bot can't be one of the players (yet).");
+                    validStart = false;
+                } else if (this.playerOne.user.equals(this.playerTwo.user)) {
+                    bot.sendMessage(this.battleChannel, "**Error:** Both players must be unique");
+                    validStart = false;
+                } else if (_playerOne.user.status != "online" || _playerTwo.user.status != "online") {
+                    bot.sendMessage(_battleChannel, "**Error:** One or more players is not online");
+                    validStart = false;
                 }
+            }
 
-                if (validStart) {
-                    bot.sendMessage(this.battleChannel, "**ROCK - PAPER - SCISSORS** \n\n" + "**" + this.playerOne.user.username + "** *-- VS --* **" + this.playerTwo.user.username + "** \n" + "Both opponents must DM the bot with their selection.");
-                    this.isBattleOn = true;
-                } else {
-                    this.playerOne = null;
-                    this.playerTwo = null;
-                }
+            if (validStart) {
+                bot.sendMessage(_battleChannel, "**ROCK - PAPER - SCISSORS** \n\n" + "**" + _playerOne.user.username + "** *-- VS --* **" + _playerTwo.user.username + "** \n" + "Both opponents must DM the bot with their selection.");
+               _isBattleOn = true;
 
+            } else {
+               _playerOne = null;
+               _playerTwo = null;
             }
         }
     }
+
+    function assignChoiceToPlayer(player, choice) {
+        var isValidChoice = false;
+        switch (choice) {
+                case "rock":
+                    player.choice = CHOICE.ROCK;
+                    isValidChoice = true;
+                    break;
+                case "paper":
+                    player.choice = CHOICE.PAPER;
+                    isValidChoice = true;
+                    break;
+                case "scissors":
+                    player.choice = CHOICE.SCISSORS;
+                    isValidChoice = true;
+                    break;
+                default:
+                    isValidChoice = false;
+                    break;
+        }
+
+        return isValidChoice
+    }
+
+    function determineWinner(playerA, playerB) {
+        if ((playerA.choice == playerB.choice)) {
+            return null;
+        }
+
+        if ((playerA.choice == CHOICE.ROCK && playerB.choice == CHOICE.SCISSORS) ||
+            (playerA.choice == CHOICE.PAPER && playerB.choice == CHOICE.ROCK) ||
+            (playerA.choice == CHOICE.SCISSORS && playerB.choice == CHOICE.PAPER)) {
+            return playerA;
+        }
+
+        return playerB;
+    }
+
+    function messageAuthorToPlayer(author) {
+        for (i = 0; i < _players.length; i++) {
+            var player = _players[i];
+            if (author.equals(player.user)) {
+                return player;
+            }
+        }
+
+        return null;
+    }
+
+    function Player(user) {
+        this.user = user;
+        this.choice = null;
+    }
+
 };
 
-function Player(user) {
-    this.user = user;
-    this.choice = null;
-}
+
+
 
 module.exports = BattleManager;

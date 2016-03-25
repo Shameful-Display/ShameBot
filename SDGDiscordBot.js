@@ -85,7 +85,7 @@ bot.on("message", function(message)
 	if (message.content.substring(0, 7) == "!battle") {
 	    rpsManager.parseCommand(message);
 	}
-	if (message.channel.isPrivate && rpsManager.isBattleOn) {
+	if (message.channel.isPrivate && rpsManager.isBattleOn()) {
 	    rpsManager.parseCommand(message);
 	}
 });
