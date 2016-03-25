@@ -10,6 +10,8 @@ var process = require( "process" );
 var bot = new Discord.Client ();
 var AuthDetails = require("./auth.json");
 
+var botStartTime = new Date();
+
 var cenaImageFolder = "./cenaimages/";
 
 var cenaImageArray = new Array();
@@ -29,6 +31,22 @@ bot.on("message", function(message)
 {
 	//Make all message content lower case so all triggers can be written lower case and always work.
 	var lowerCaseMessage = message.content.toLowerCase();
+	
+	//uptime
+	if(message.content.includes("!uptime")){
+		var botUptime = Math.abs(new Date() - botStartTime);
+		var x = botUptime / 1000;
+		var uptimeSeconds = Math.floor(x % 60);
+		x /= 60;
+		var uptimeMinutes = Math.floor(x % 60);
+		x /= 60;
+		var uptimeHours = Math.floor(x % 24);
+		x /= 24;
+		var uptimeDays = Math.floor(x);
+		botUptime = "D:H:M:S - " + uptimeDays + ":" + uptimeHours + ":" + uptimeMinutes + ":" + uptimeSeconds;
+		bot.reply(message, botUptime);
+	}
+	
 	//John Cena
 	if(lowerCaseMessage.includes("and his name is") ||
 		lowerCaseMessage.includes("and his name was") ||
@@ -46,6 +64,7 @@ bot.on("message", function(message)
 		})
 	}
 	
+	//Table Catcher
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
 		var channelHasCatcher = false;
 		if (tableCatcherArray.length > 0){ //Make sure there's at least 1 object in the array
