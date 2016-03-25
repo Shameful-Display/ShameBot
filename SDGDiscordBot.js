@@ -14,11 +14,11 @@ var cenaImageFolder = "./cenaimages/";
 
 var cenaImageArray = new Array();
 cenaImageArray = fs.readdirSync(cenaImageFolder);//Loops through a given folder and creates an array of file names
-
+/*
 var tableCatchTimeStamps = new Array(3);
 for (var i = 0; i < tableCatchTimeStamps.length; i++){
 	tableCatchTimeStamps[i] = new Date();
-}
+}*/
 //Table catcher object constructor
 function TableCatcher(channel){
 	self.currentEmotionalState = 0;
@@ -48,15 +48,7 @@ bot.on("message", function(message)
 				console.log("couldn't send image:", err);
 		})
 	}
-	
-	/*Future feature: The John Cena Summer Slam PPV Event.
-	new key word + @someone pulls cena and @someone into a new
-	channel where they'll play a mini text game and fight john cena for
-	the heavy weight title belt. @someone is given a list of options to choose from
-	but unfortunately they're fighting champ and will lose regardless. Outcome is
-	always the same because you can't C me now. trollface.jpg
-	*/
-	
+	/*
 	//Catch tables
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
 		if (Math.abs(new Date() - tableCatchTimeStamps[2]) <= 90000){
@@ -77,7 +69,7 @@ bot.on("message", function(message)
 			bot.reply(message, "┬─┬ノ( ゜-゜ノ)");
 		}
 	}
-	
+	*/
 	//KoolAid - just the KoolAid man. Ohhhh yeeahh!
 	if(lowerCaseMessage.includes("oh no") ||
 		lowerCaseMessage.includes("hey koolaid")){
