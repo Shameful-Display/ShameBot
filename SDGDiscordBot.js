@@ -16,9 +16,15 @@ var cenaImageArray = new Array();
 cenaImageArray = fs.readdirSync(cenaImageFolder);//Loops through a given folder and creates an array of file names
 
 var tableCatchTimeStamps = new Array(3);
-//Shitty code. Not sure if I need to initialize the array with date objects so I did it anyway.
 for (var i = 0; i < tableCatchTimeStamps.length; i++){
 	tableCatchTimeStamps[i] = new Date();
+}
+//Table catcher object constructor
+function TableCatcher(channel){
+	self.currentEmotionalState = 0;
+	self.emotionalState = ["┬─┬ノ( ゜-゜ノ)", "┬─┬ノ(ಠ益ಠノ)", "┬─┬ノ(ಥ益ಥノ)", "(/ .□.)\ ︵╰(゜Д゜)╯︵ /(.□. \)"]
+	self.lastFlipTimestamp = new Date();
+	self.channel = channel; 
 }
 
 bot.on("message", function(message)
@@ -68,7 +74,7 @@ bot.on("message", function(message)
 		} else {
 			tableCatchTimeStamps.unshift(new Date());
 			tableCatchTimeStamps.splice(3, 1);
-			bot.reply(message, "┬─┬﻿ ノ( ゜-゜ノ)");
+			bot.reply(message, "┬─┬ノ( ゜-゜ノ)");
 		}
 	}
 	
