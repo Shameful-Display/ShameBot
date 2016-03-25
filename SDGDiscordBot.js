@@ -14,11 +14,7 @@ var cenaImageFolder = "./cenaimages/";
 
 var cenaImageArray = new Array();
 cenaImageArray = fs.readdirSync(cenaImageFolder);//Loops through a given folder and creates an array of file names
-/*
-var tableCatchTimeStamps = new Array(3);
-for (var i = 0; i < tableCatchTimeStamps.length; i++){
-	tableCatchTimeStamps[i] = new Date();
-}*/
+
 //Table catcher object constructor
 function TableCatcher(channel){
 	this.currentEmotionalState = 0;
@@ -48,28 +44,7 @@ bot.on("message", function(message)
 				console.log("couldn't send image:", err);
 		})
 	}
-	/*
-	//Catch tables
-	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
-		if (Math.abs(new Date() - tableCatchTimeStamps[2]) <= 90000){
-			tableCatchTimeStamps.unshift(new Date());
-			tableCatchTimeStamps.splice(3, 1);
-			bot.reply(message, "FOURTH CATCH - **add an action here**");
-		} else if (Math.abs(new Date() - tableCatchTimeStamps[1]) <= 60000){
-			tableCatchTimeStamps.unshift(new Date());
-			tableCatchTimeStamps.splice(3, 1);
-			bot.reply(message, "┬─┬ノ(ಥ益ಥノ)");
-		} else if(Math.abs(new Date() - tableCatchTimeStamps[0]) <= 30000) {
-			tableCatchTimeStamps.unshift(new Date());
-			tableCatchTimeStamps.splice(3, 1);
-			bot.reply(message, "┬─┬ノ(ಠ益ಠノ)");
-		} else {
-			tableCatchTimeStamps.unshift(new Date());
-			tableCatchTimeStamps.splice(3, 1);
-			bot.reply(message, "┬─┬ノ( ゜-゜ノ)");
-		}
-	}
-	*/
+	
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
 		if (tableCatcherArray.length > 0){ //Make sure there's at least 1 object in the array
 			var channelHasCatcher = false;
