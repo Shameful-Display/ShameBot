@@ -40,7 +40,6 @@ bot.on("message", function(message)
 		
 		//Reply message	
 		bot.reply(message, "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
-		console.log(message.author.username);
 		//Get random image path from array
 		var randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
 		//Reply with random cena image
@@ -72,8 +71,8 @@ bot.on("message", function(message)
 	}
 	*/
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
-		var channelHasCatcher = false;
 		if (tableCatcherArray.length > 0){ //Make sure there's at least 1 object in the array
+			var channelHasCatcher = false;
 			for (var i = 0; i < tableCatcherArray.length; i++){ //loop through array to see if object already exists for channel
 				var currentTableCatcher = tableCatcherArray[i];
 				if (currentTableCatcher.channel.equals(message.channel)){
@@ -84,6 +83,13 @@ bot.on("message", function(message)
 						currentTableCatcher.currentEmotionalState++;
 					}
 				}
+			}
+			if (channelHasCatcher == false){
+				tableCatcherArray.push(new TableCatcher(message.channel));
+				var currentTableCatcher = tableCatcherArray[tableCatcherArray.length - 1];
+				bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
+				currentTableCatcher.lastFlipTimestamp = new Date();
+				currentTableCatcher.currentEmotionalState++;
 			}
 		}else{
 			tableCatcherArray[0] = new TableCatcher(message.channel);
