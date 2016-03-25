@@ -80,7 +80,7 @@ var BattleManager = function (bot) {
                 } else if (_playerOne.user.equals(bot.user) || _playerTwo.user.equals(bot.user)) {
                     bot.sendMessage(_battleChannel, "**Error:** The bot can't be one of the players (yet).");
                     validStart = false;
-                } else if (this.playerOne.user.equals(this.playerTwo.user)) {
+                } else if (_playerOne.user.equals(_playerTwo.user)) {
                     bot.sendMessage(this.battleChannel, "**Error:** Both players must be unique");
                     validStart = false;
                 } else if (_playerOne.user.status != "online" || _playerTwo.user.status != "online") {
