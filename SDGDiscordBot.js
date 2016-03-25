@@ -1,13 +1,14 @@
 //Note: the .js is not required as Node assumes these files are javascript
-var Discord = require( "discord.js" )
+var Discord = require("discord.js")
+var RPSManager = require("./RPSManager.js")
 
 //These three required for the fs.readdirSync()
 var fs = require( "fs" );
 var path = require( "path" );
 var process = require( "process" );
 
-
-var bot = new Discord.Client ();
+var bot = new Discord.Client();
+var rpsManager = new RPSManager(bot);
 var AuthDetails = require("./auth.json");
 
 var botStartTime = new Date();
@@ -162,6 +163,14 @@ bot.on("message", function(message)
 			if(err)
 				console.log("couldn't send image:", err);
 		});
+	}
+
+    // Rock, Paper, Scissors
+	if (message.content.substring(0, 7) == "!battle") {
+	    rpsManager.parseCommand(message);
+	}
+	if (message.channel.isPrivate && rpsManager.isBattleOn()) {
+	    rpsManager.parseCommand(message);
 	}
 
 	// Macho Man!
