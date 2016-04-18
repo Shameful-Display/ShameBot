@@ -13,7 +13,7 @@ var AuthDetails = require("./auth.json");
 
 var botStartTime = new Date();
 
-var cenaImageFolder = "./cenaimages/";
+var cenaImageFolder = "./cenaImages/";
 
 var cenaImageArray = new Array();
 cenaImageArray = fs.readdirSync(cenaImageFolder);//Loops through a given folder and creates an array of file names
