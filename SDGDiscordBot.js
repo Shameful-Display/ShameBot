@@ -183,4 +183,4 @@ bot.on("message", function(message)
 	}
 });
 
-bot.login(AuthDetails.email, AuthDetails.password);
+bot.loginWithToken(AuthDetails.token);
