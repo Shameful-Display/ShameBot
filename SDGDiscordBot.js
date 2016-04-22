@@ -181,6 +181,15 @@ bot.on("message", function(message)
 				console.log("couldn't send image:", err);
 		});
 	}
+
+		// Tiny Rick!!!!
+		if(lowerCaseMessage.includes("tiny rick")) {
+			bot.reply(message, "I'm Tiny Rick!!!!!");
+			bot.sendFile(message.channel, "./tinyRick.jpg","tinyRick.jpg", (err, message) => {
+				if(err)
+					console.log("couldn't send image:", err);
+			});
+		}
 });
 
 bot.loginWithToken(AuthDetails.token);
