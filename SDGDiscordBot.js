@@ -30,6 +30,9 @@ var tableCatcherArray = new Array(); //Keeps all TableCatcher objects
 
 bot.on("message", function(message)
 {
+	if (message.author.id == bot.user.id){
+		return;
+	}
 	//Make all message content lower case so all triggers can be written lower case and always work.
 	var lowerCaseMessage = message.content.toLowerCase();
 	
