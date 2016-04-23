@@ -7,7 +7,7 @@ var fs = require( "fs" );
 var path = require( "path" );
 var process = require( "process" );
 
-var bot = new Discord.Client();
+var bot = new Discord.Client({autoReconnect: true});
 var rpsManager = new RPSManager(bot);
 var AuthDetails = require("./auth.json");
 
