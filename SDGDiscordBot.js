@@ -28,6 +28,14 @@ function TableCatcher(channel){
 }
 var tableCatcherArray = new Array(); //Keeps all TableCatcher objects
 
+bot.on("disconnected", function(disconnected){
+	console.log("** Shamebot disconnected at " + new Date() + " **");
+});
+
+bot.on("ready", function(disconnected){
+	console.log("|| -- Shamebot ready for input at " + new Date() + " -- ||");
+});
+
 bot.on("message", function(message)
 {
 	if (message.author.id == bot.user.id){
