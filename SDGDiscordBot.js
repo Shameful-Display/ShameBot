@@ -28,11 +28,11 @@ function TableCatcher(channel){
 }
 var tableCatcherArray = new Array(); //Keeps all TableCatcher objects
 
-bot.on("disconnected", function(disconnected){
+bot.on("disconnected", function(){
 	console.log("** Shamebot disconnected at " + new Date() + " **");
 });
 
-bot.on("ready", function(disconnected){
+bot.on("ready", function(){
 	console.log("|| -- Shamebot ready for input at " + new Date() + " -- ||");
 });
 
