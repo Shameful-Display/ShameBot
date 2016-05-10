@@ -45,11 +45,11 @@ function TableCatcher(channel){
 var tableCatcherArray = new Array(); //Keeps all TableCatcher objects
 
 bot.on("disconnected", function(){
-	console.log("** Shamebot disconnected at " + new Date() + " **");
+	winston.info("** Shamebot disconnected at " + new Date() + " **");
 });
 
 bot.on("ready", function(){
-	console.log("|| -- Shamebot ready for input at " + new Date() + " -- ||");
+	winston.info("|| -- Shamebot ready for input at " + new Date() + " -- ||");
 });
 
 bot.on("message", function(message)
@@ -96,7 +96,7 @@ bot.on("message", function(message)
 		//Reply with random cena image
 		bot.sendFile(message.channel, cenaImageFolder.concat(randomCenaImageFilePath),"jonny.png", (err, message) => {
 			if(err)
-				console.log("couldn't send image:", err);
+				winston.error("couldn't send image:", err);
 		})
 	}
 
@@ -110,23 +110,19 @@ bot.on("message", function(message)
 					channelHasCatcher = true;//set flag to true that channel already has object
 					if (currentTableCatcher.tableBroken == true && Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp) < 300000){//if table is broken and it's been less than 5 minutes
 						bot.reply(message, "*TABLE SHATTERS*: Shamebot's sick of your shit. He'll be back to save the tables in a few minutes.")
-						console.log("10");
 					}else if (currentTableCatcher.tableBroken == true && Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp) >= 300000){//if table is broken but it's been 5 minutes or more
 						currentTableCatcher.tableBroken = false;
 						bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
-						console.log("9");
 						currentTableCatcher.lastFlipTimestamp = new Date();
 						currentTableCatcher.currentEmotionalState++;
 					}else{//else -> table is not broken...
 						if (Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp) <= 30000){
 							bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
-							console.log("8");
 							currentTableCatcher.lastFlipTimestamp = new Date();
 							if (currentTableCatcher.currentEmotionalState <= currentTableCatcher.emotionalState.length - 2){
 								currentTableCatcher.currentEmotionalState++;
 							}else {
 								//bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
-								console.log("7");
 								currentTableCatcher.currentEmotionalState = 0;
 								currentTableCatcher.tableBroken = true;
 							}
@@ -138,7 +134,6 @@ bot.on("message", function(message)
 								//return previous table catch emotion
 								currentTableCatcher.currentEmotionalState--;
 								bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
-								console.log("6");
 								currentTableCatcher.lastFlipTimestamp = new Date();
 							}else {
 								//decrease emotional states equal to the number of increments to a minimum of 0
@@ -146,11 +141,9 @@ bot.on("message", function(message)
 								if (currentTableCatcher.currentEmotionalState - numberOfIncrementsPast <= 0){
 									currentTableCatcher.currentEmotionalState = 0;
 									bot.reply(message, currentTableCatcher.emotionalState[0]);
-									console.log("5");
 								}else {
 									currentTableCatcher.currentEmotionalState -=  numberOfIncrementsPast;
 									bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
-									console.log("4");
 								}
 							}
 
@@ -158,7 +151,6 @@ bot.on("message", function(message)
 								currentTableCatcher.currentEmotionalState++;
 							}else {
 								bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
-								console.log("3");
 								currentTableCatcher.currentEmotionalState = 0;
 								currentTableCatcher.tableBroken = true;
 							}
@@ -170,7 +162,6 @@ bot.on("message", function(message)
 				tableCatcherArray.push(new TableCatcher(message.channel));
 				var currentTableCatcher = tableCatcherArray[tableCatcherArray.length - 1];
 				bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
-				console.log("2");
 				currentTableCatcher.lastFlipTimestamp = new Date();
 				currentTableCatcher.currentEmotionalState++;
 			}
@@ -178,7 +169,6 @@ bot.on("message", function(message)
 			tableCatcherArray[0] = new TableCatcher(message.channel);
 			var currentTableCatcher = tableCatcherArray[0];
 			bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
-			console.log("1");
 			currentTableCatcher.lastFlipTimestamp = new Date();
 			currentTableCatcher.currentEmotionalState++;
 		}
@@ -188,7 +178,7 @@ bot.on("message", function(message)
 		lowerCaseMessage.includes("hey koolaid")){
 		bot.sendFile(message.channel, "./koolaid.jpg","koolaid.jpg", (err, message) => {
 			if(err)
-				console.log("couldn't send image:", err);
+				winston.error("couldn't send image:", err);
 		});
 	}
 
@@ -203,10 +193,10 @@ bot.on("message", function(message)
 	// Macho Man!
 	if(lowerCaseMessage.includes("savage")) {
 		bot.reply(message, "Ohhhh yeah brother!");
-		winston.info("A Wild Savage Appeared!")
+		winston.info("A Wild Savage Appeared!");
 		bot.sendFile(message.channel, "./savage.jpg","savage.jpg", (err, message) => {
 			if(err)
-				console.log("couldn't send image:", err);
+				winston.error("Couldn't send image:", err);
 		});
 	}
 
@@ -215,7 +205,7 @@ bot.on("message", function(message)
 			bot.reply(message, "I'm Tiny Rick!!!!!");
 			bot.sendFile(message.channel, "./tinyRick.jpg","tinyRick.jpg", (err, message) => {
 				if(err)
-					console.log("couldn't send image:", err);
+					winston.error("couldn't send image:", err);
 			});
 		}
 });
