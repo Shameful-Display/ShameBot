@@ -12,6 +12,8 @@ var bot = new Discord.Client({autoReconnect: true});
 var rpsManager = new RPSManager(bot);
 var AuthDetails = require("./auth.json");
 
+var botVersion = "0.5";
+
 var botStartTime = new Date();
 
 //---------------------------- WINSTON ----------------------------||
@@ -66,6 +68,14 @@ bot.on("message", function(message)
 		"help\r" +
 		"uptime\r" +
 		"battle begin *@player1* *@player2*");
+	}
+
+	if(message.content.includes("!about")){
+		bot.reply(message, "ShameBot Version " + botVersion + "\r" +
+		"Stack: Discord.js, Node.js, Ubuntu, Digital Ocean, GitHub, and pm2.\r" +
+		"Find us on GitHub!\r" +
+		"https://github.com/B1anc0N1n0/SDG_Discord_Bot\r" +
+		"@B1anc0N1n0 @DaKing @TeckHybrid");
 	}
 
 	//uptime
