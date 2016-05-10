@@ -1,6 +1,7 @@
 //Note: the .js is not required as Node assumes these files are javascript
 var Discord = require("discord.js")
 var RPSManager = require("./RPSManager.js")
+var winston = require('winston')
 
 //These three required for the fs.readdirSync()
 var fs = require( "fs" );
@@ -13,6 +14,21 @@ var AuthDetails = require("./auth.json");
 
 var botStartTime = new Date();
 
+//---------------------------- WINSTON ----------------------------||
+winston.add( //add transport (console is default)
+	winston.transports.File, { //add File transport type
+		filename: 'standardLog.log', //base filename
+		level: 'info', //level at which to log messages
+		json: true, //log in JSON format
+		timestamp: true, //append timestamp to log if true
+		dirname: './logs', //directory name
+		maxsize: 10000000, //size in bytes where roll over will occur
+		maxFiles: 0, //# of files to keep after roll over occurs
+		tailable: true //keep roll over in ascending order so that most current file is always base file name
+	}
+)
+//-------------------------WINSTON  ENDSTON------------------------||
+
 var cenaImageFolder = "./cenaImages/";
 
 var cenaImageArray = new Array();
@@ -23,7 +39,7 @@ function TableCatcher(channel){
 	this.currentEmotionalState = 0;
 	this.emotionalState = ["┬─┬ノ( ゜-゜ノ)", "┬─┬ノ(ಠ益ಠノ)", "┬─┬ノ(ಥ益ಥノ)", "(/ .□.)\ ︵╰(゜Д゜)╯︵ /(.□. \)"]
 	this.lastFlipTimestamp = new Date();
-	this.channel = channel; 
+	this.channel = channel;
 	this.tableBroken = false;
 }
 var tableCatcherArray = new Array(); //Keeps all TableCatcher objects
@@ -43,15 +59,15 @@ bot.on("message", function(message)
 	}
 	//Make all message content lower case so all triggers can be written lower case and always work.
 	var lowerCaseMessage = message.content.toLowerCase();
-	
-	//help 
+
+	//help
 	if(message.content.includes("!help")){
 		bot.reply(message, "Availible commands *(all commands start with !)* :\r" +
 		"help\r" +
 		"uptime\r" +
 		"battle begin *@player1* *@player2*");
 	}
-	
+
 	//uptime
 	if(message.content.includes("!uptime")){
 		var botUptime = Math.abs(new Date() - botStartTime);
@@ -66,14 +82,14 @@ bot.on("message", function(message)
 		botUptime = "D:H:M:S - " + uptimeDays + ":" + uptimeHours + ":" + uptimeMinutes + ":" + uptimeSeconds;
 		bot.reply(message, botUptime);
 	}
-	
+
 	//John Cena
 	if(lowerCaseMessage.includes("and his name is") ||
 		lowerCaseMessage.includes("and his name was") ||
 		message.content.includes("\uD83C\uDFBA") &&
 		!message.author.equals(bot.user)){ //Unicode trumpet
-		
-		//Reply message	
+
+		//Reply message
 		bot.reply(message, "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
 		//Get random image path from array
 		var randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
@@ -83,7 +99,7 @@ bot.on("message", function(message)
 				console.log("couldn't send image:", err);
 		})
 	}
-	
+
 	//Table Catcher
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
 		var channelHasCatcher = false;
@@ -117,7 +133,7 @@ bot.on("message", function(message)
 						}else if (Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp) > 30000){
 							var timePast = Math.abs(new Date() - currentTableCatcher.lastFlipTimestamp);
 							var numberOfIncrementsPast = (timePast / 30000) - 1; //30 seconds is one increment
-							
+
 							if (numberOfIncrementsPast < 1){
 								//return previous table catch emotion
 								currentTableCatcher.currentEmotionalState--;
@@ -137,7 +153,7 @@ bot.on("message", function(message)
 									console.log("4");
 								}
 							}
-							
+
 							if (currentTableCatcher.currentEmotionalState <= currentTableCatcher.emotionalState.length - 2){
 								currentTableCatcher.currentEmotionalState++;
 							}else {
@@ -187,6 +203,7 @@ bot.on("message", function(message)
 	// Macho Man!
 	if(lowerCaseMessage.includes("savage")) {
 		bot.reply(message, "Ohhhh yeah brother!");
+		winston.info("A Wild Savage Appeared!")
 		bot.sendFile(message.channel, "./savage.jpg","savage.jpg", (err, message) => {
 			if(err)
 				console.log("couldn't send image:", err);
