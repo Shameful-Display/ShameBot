@@ -94,6 +94,12 @@ bot.on("message", function(message)
 			MemeReplies.cenaReply(message);
 	}
 
+	//KoolAid
+	if(lowerCaseMessage.includes("oh no") ||
+		lowerCaseMessage.includes("hey koolaid")){
+		MemeReplies.koolaidReply(message);
+	}
+
 	//Table Catcher
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
 		var channelHasCatcher = false;
@@ -165,14 +171,6 @@ bot.on("message", function(message)
 			currentTableCatcher.lastFlipTimestamp = new Date();
 			currentTableCatcher.currentEmotionalState++;
 		}
-	}
-	//KoolAid - just the KoolAid man. Ohhhh yeeahh!
-	if(lowerCaseMessage.includes("oh no") ||
-		lowerCaseMessage.includes("hey koolaid")){
-		bot.sendFile(message.channel, "./koolaid.jpg","koolaid.jpg", (err, message) => {
-			if(err)
-				winston.error("couldn't send image:", err);
-		});
 	}
 
   // Rock, Paper, Scissors
