@@ -28,7 +28,16 @@ var MemeManager = function (bot){
       if(err)
         winston.error("couldn't send image:", err);
       });
-    }
   }
+
+  //Macho Man function
+  this.machoManReply = function (message){
+    bot.reply(message, "Ohhhh yeah brother!");
+		bot.sendFile(message.channel, "./savage.jpg","savage.jpg", (err, message) => {
+			if(err)
+				winston.error("Couldn't send image:", err);
+		});
+  }
+}
 
 module.exports = MemeManager;

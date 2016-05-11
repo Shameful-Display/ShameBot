@@ -100,6 +100,11 @@ bot.on("message", function(message)
 		MemeReplies.koolaidReply(message);
 	}
 
+	// Macho Man!
+	if(lowerCaseMessage.includes("savage")) {
+		MemeReplies.machoManReply(message);
+	}
+
 	//Table Catcher
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
 		var channelHasCatcher = false;
@@ -179,16 +184,6 @@ bot.on("message", function(message)
 	}
 	if (message.channel.isPrivate && rpsManager.isBattleOn()) {
 	    rpsManager.parseCommand(message);
-	}
-
-	// Macho Man!
-	if(lowerCaseMessage.includes("savage")) {
-		bot.reply(message, "Ohhhh yeah brother!");
-		winston.info("A Wild Savage Appeared!");
-		bot.sendFile(message.channel, "./savage.jpg","savage.jpg", (err, message) => {
-			if(err)
-				winston.error("Couldn't send image:", err);
-		});
 	}
 
 		// Tiny Rick!!!!
