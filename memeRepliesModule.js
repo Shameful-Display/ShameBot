@@ -19,4 +19,4 @@ var cenaReply = function (bot, message) {
   })
 }
 
-module.exports = cenaReply;
+module.exports.cena = cenaReply;
