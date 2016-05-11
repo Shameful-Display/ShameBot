@@ -5,8 +5,6 @@ var winston = require('winston')
 //initial bot setup
 var bot = new Discord.Client({autoReconnect: true});
 var AuthDetails = require("./auth.json");
-var botVersion = "0.5";
-var botStartTime = new Date();
 //bot modules
 var RPSManager = require("./RPSManager.js")
 var rpsManager = new RPSManager(bot);
@@ -14,6 +12,8 @@ var MemeManager = require("./memeRepliesModule.js")
 var MemeReplies = new MemeManager(bot);
 var TableCatchManager = require("./tableCatcherModule.js")
 var CatchManager = new TableCatchManager(bot);
+var InfoManager = require("./informationModule.js")
+var InfoReplies = new InfoManager(bot);
 
 //---------------------------- WINSTON ----------------------------||
 winston.add( //add transport (console is default)
@@ -51,34 +51,17 @@ bot.on("message", function(message)
 
 	//help
 	if(message.content.includes("!help")){
-		bot.reply(message, "Availible commands *(all commands start with !)* :\r" +
-		"help\r" +
-		"uptime\r" +
-		"battle begin *@player1* *@player2*");
+		InfoReplies.help(message);
 	}
 
 	//about
 	if(message.content.includes("!about")){
-		bot.reply(message, "ShameBot Version " + botVersion + "\r" +
-		"Stack: Discord.js, Node.js, Ubuntu, Digital Ocean, GitHub, and pm2.\r" +
-		"Find us on GitHub!\r" +
-		"https://github.com/B1anc0N1n0/SDG_Discord_Bot\r" +
-		"@B1anc0N1n0 @DaKing @TeckHybrid");
+		InfoReplies.about(message);
 	}
 
 	//uptime
 	if(message.content.includes("!uptime")){
-		var botUptime = Math.abs(new Date() - botStartTime);
-		var x = botUptime / 1000;
-		var uptimeSeconds = Math.floor(x % 60);
-		x /= 60;
-		var uptimeMinutes = Math.floor(x % 60);
-		x /= 60;
-		var uptimeHours = Math.floor(x % 24);
-		x /= 24;
-		var uptimeDays = Math.floor(x);
-		botUptime = "D:H:M:S - " + uptimeDays + ":" + uptimeHours + ":" + uptimeMinutes + ":" + uptimeSeconds;
-		bot.reply(message, botUptime);
+		InfoReplies.uptime(message);
 	}
 
 	//John Cena
