@@ -5,7 +5,7 @@ var process = require( "process" );
 
 var MemeManager = function (bot){
   //initialize cena
-  var cenaImageFolder = "./cenaImages/";
+  var cenaImageFolder = "./modules/cenaImages/";
   var cenaImageArray = new Array();
   cenaImageArray = fs.readdirSync(cenaImageFolder); //Loops through a given folder and creates an array of file names
 
@@ -24,7 +24,7 @@ var MemeManager = function (bot){
 
   //KoolAid reply function
   this.koolaidReply = function (message){
-    bot.sendFile(message.channel, "./koolaid.jpg","koolaid.jpg", (err, message) => {
+    bot.sendFile(message.channel, "./modules/memeImages/koolaid.jpg","koolaid.jpg", (err, message) => {
       if(err)
         winston.error("couldn't send image:", err);
       });
@@ -33,7 +33,7 @@ var MemeManager = function (bot){
   //Macho Man function
   this.machoManReply = function (message){
     bot.reply(message, "Ohhhh yeah brother!");
-		bot.sendFile(message.channel, "./savage.jpg","savage.jpg", (err, message) => {
+		bot.sendFile(message.channel, "./modules/memeImages/savage.jpg","savage.jpg", (err, message) => {
 			if(err)
 				winston.error("Couldn't send image:", err);
 		});
@@ -42,7 +42,7 @@ var MemeManager = function (bot){
   //Tiny Rick function
   this.tinyRickReply = function (message) {
     bot.reply(message, "I'm Tiny Rick!!!!!");
-    bot.sendFile(message.channel, "./tinyRick.jpg","tinyRick.jpg", (err, message) => {
+    bot.sendFile(message.channel, "./modules/memeImages/tinyRick.jpg","tinyRick.jpg", (err, message) => {
       if(err)
         winston.error("couldn't send image:", err);
     });

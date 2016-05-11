@@ -6,13 +6,13 @@ var winston = require('winston')
 var bot = new Discord.Client({autoReconnect: true});
 var AuthDetails = require("./auth.json");
 //bot modules
-var RPSManager = require("./RPSManager.js")
+var RPSManager = require("./modules/RPSManager.js")
 var rpsManager = new RPSManager(bot);
-var MemeManager = require("./memeRepliesModule.js")
+var MemeManager = require("./modules/memeRepliesModule.js")
 var MemeReplies = new MemeManager(bot);
-var TableCatchManager = require("./tableCatcherModule.js")
+var TableCatchManager = require("./modules/tableCatcherModule.js")
 var CatchManager = new TableCatchManager(bot);
-var InfoManager = require("./informationModule.js")
+var InfoManager = require("./modules/informationModule.js")
 var InfoReplies = new InfoManager(bot);
 
 //---------------------------- WINSTON ----------------------------||
