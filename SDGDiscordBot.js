@@ -10,7 +10,8 @@ var botStartTime = new Date();
 //bot modules
 var RPSManager = require("./RPSManager.js")
 var rpsManager = new RPSManager(bot);
-var MemeReplies = require("./memeRepliesModule.js")
+var MemeManager = require("./memeRepliesModule.js")
+var MemeReplies = new MemeManager(bot);
 
 //---------------------------- WINSTON ----------------------------||
 winston.add( //add transport (console is default)
@@ -90,7 +91,7 @@ bot.on("message", function(message)
 	if(lowerCaseMessage.includes("and his name is") ||
 		lowerCaseMessage.includes("and his name was") ||
 		message.content.includes("\uD83C\uDFBA")){
-			MemeReplies.cena(bot, message);
+			MemeReplies.cenaReply(message);
 	}
 
 	//Table Catcher
