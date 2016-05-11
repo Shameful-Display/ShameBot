@@ -2,20 +2,15 @@
 //node modules to include
 var Discord = require("discord.js")
 var winston = require('winston')
-//bot modules
-var RPSManager = require("./RPSManager.js")
-var cenaModule = require("./cenaModule.js")
 //initial bot setup
 var bot = new Discord.Client({autoReconnect: true});
 var AuthDetails = require("./auth.json");
 var botVersion = "0.5";
 var botStartTime = new Date();
-//These three required for the fs.readdirSync()
-var fs = require( "fs" );
-var path = require( "path" );
-var process = require( "process" );
-
+//bot modules
+var RPSManager = require("./RPSManager.js")
 var rpsManager = new RPSManager(bot);
+var cenaModule = require("./cenaModule.js")
 
 //---------------------------- WINSTON ----------------------------||
 winston.add( //add transport (console is default)
@@ -120,7 +115,6 @@ bot.on("message", function(message)
 							if (currentTableCatcher.currentEmotionalState <= currentTableCatcher.emotionalState.length - 2){
 								currentTableCatcher.currentEmotionalState++;
 							}else {
-								//bot.reply(message, currentTableCatcher.emotionalState[currentTableCatcher.currentEmotionalState]);
 								currentTableCatcher.currentEmotionalState = 0;
 								currentTableCatcher.tableBroken = true;
 							}
