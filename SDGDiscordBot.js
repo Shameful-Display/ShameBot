@@ -105,6 +105,19 @@ bot.on("message", function(message)
 		MemeReplies.machoManReply(message);
 	}
 
+	// Tiny Rick!!!!
+	if(lowerCaseMessage.includes("tiny rick")) {
+		MemeReplies.tinyRickReply(message);
+	}
+
+  // Rock, Paper, Scissors
+	if (message.content.substring(0, 7) == "!battle") {
+	    rpsManager.parseCommand(message);
+	}
+	if (message.channel.isPrivate && rpsManager.isBattleOn()) {
+	    rpsManager.parseCommand(message);
+	}
+
 	//Table Catcher
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
 		var channelHasCatcher = false;
@@ -178,22 +191,6 @@ bot.on("message", function(message)
 		}
 	}
 
-  // Rock, Paper, Scissors
-	if (message.content.substring(0, 7) == "!battle") {
-	    rpsManager.parseCommand(message);
-	}
-	if (message.channel.isPrivate && rpsManager.isBattleOn()) {
-	    rpsManager.parseCommand(message);
-	}
-
-		// Tiny Rick!!!!
-		if(lowerCaseMessage.includes("tiny rick")) {
-			bot.reply(message, "I'm Tiny Rick!!!!!");
-			bot.sendFile(message.channel, "./tinyRick.jpg","tinyRick.jpg", (err, message) => {
-				if(err)
-					winston.error("couldn't send image:", err);
-			});
-		}
 });
 
 bot.loginWithToken(AuthDetails.token);

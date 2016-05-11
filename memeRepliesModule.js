@@ -38,6 +38,15 @@ var MemeManager = function (bot){
 				winston.error("Couldn't send image:", err);
 		});
   }
+
+  //Tiny Rick function
+  this.tinyRickReply = function (message) {
+    bot.reply(message, "I'm Tiny Rick!!!!!");
+    bot.sendFile(message.channel, "./tinyRick.jpg","tinyRick.jpg", (err, message) => {
+      if(err)
+        winston.error("couldn't send image:", err);
+    });
+  }
 }
 
 module.exports = MemeManager;
