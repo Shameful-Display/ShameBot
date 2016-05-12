@@ -1,0 +1,36 @@
+{
+  "name": "shame_bot",
+  "version": "0.5.0",
+  "description": "Shameful Display Gaming Discord Bot",
+  "main": "SDGDiscordBot.js",
+  "dependencies": {
+    "discord.js": "^7.0.1",
+    "winston": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/B1anc0N1n0/SDG_Discord_Bot.git"
+  },
+  "keywords": [
+    "Discord",
+    "Bot",
+    "Shameful",
+    "Display",
+    "Gaming",
+    "Chat",
+    "Bot",
+    "Meme",
+    "Maker",
+    "4000"
+  ],
+  "author": "B1anc0N1n0, TeckHybrid, DaKing",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/B1anc0N1n0/SDG_Discord_Bot/issues"
+  },
+  "homepage": "https://github.com/B1anc0N1n0/SDG_Discord_Bot#readme"
+}
