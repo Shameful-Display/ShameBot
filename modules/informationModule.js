@@ -3,10 +3,10 @@ var botStartTime = new Date();
 
 var InfoManager = function (bot){
   this.help = function (message){
-    bot.reply(message, "Availible commands *(all commands start with !)* :\r" +
-		"help\r" +
-		"uptime\r" +
-		"battle begin *@player1* *@player2*");
+    bot.reply(message, "Available commands *(all commands start with !)* :\r" +
+		"!help\r" +
+		"!uptime\r" +
+		"!battle begin *@player1* *@player2*");
   }
 
   this.about = function (message){
