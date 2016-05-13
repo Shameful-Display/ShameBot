@@ -78,8 +78,10 @@ var BattleManager = function (bot) {
                 _playerOne = new Player(message.mentions[0]);
                 _playerTwo = new Player(message.mentions[1]);
 
+                _players = [_playerOne, _playerTwo];
+
                 // If playerOne is a bot, assign a random choice
-                if (_playerOne.user.equals(bot.user)) {
+                if(_playerOne.user.equals(bot.user)) {
                   _playerOne.choice = randomChoice();
                 }
 
@@ -104,6 +106,14 @@ var BattleManager = function (bot) {
             if (validStart) {
                 bot.sendMessage(_battleChannel, "**ROCK - PAPER - SCISSORS** \n\n" + "**" + _playerOne.user.username + "** *-- VS --* **" + _playerTwo.user.username + "** \n" + "Both opponents must DM the bot with their selection.");
                _isBattleOn = true;
+
+               // Prompt players for their answers (so long as they aren't a bot)
+               if (!_playerOne.user.equals(bot.user)) {
+                 bot.sendMessage(_playerOne.user, "Rock, Paper, or Scissors?");
+               }
+               if (!_playerTwo.user.equals(bot.user)) {
+                 bot.sendMessage(_playerTwo.user, "Rock, Paper, or Scissors?");
+               }
 
             } else {
                _playerOne = null;
