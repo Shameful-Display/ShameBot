@@ -6,6 +6,7 @@ var InfoManager = function (bot){
     bot.reply(message, "Available commands *(all commands start with !)* :\r" +
 		"!help\r" +
 		"!uptime\r" +
+		"!stats\r" +
 		"!battle begin *@player1* *@player2*");
   }
 
@@ -15,6 +16,11 @@ var InfoManager = function (bot){
 		"Find us on GitHub!\r" +
 		"https://github.com/B1anc0N1n0/SDG_Discord_Bot\r" +
 		"@B1anc0N1n0 @DaKing @TeckHybrid");
+  }
+
+  this.stats = function (message){
+    bot.reply(message, "Working hard for [" + bot.servers.length + "] Servers " +
+    "in [" + bot.channels.length + "] Channels for [" + bot.users.length + "] Users!");
   }
 
   this.uptime = function (message){
