@@ -1,6 +1,10 @@
 var botVersion = "0.5";
 var botStartTime = new Date();
 
+var serverNames = [];
+var channelNames = [];
+var userNames = [];
+
 var InfoManager = function (bot){
   this.help = function (message){
     bot.reply(message, "Available commands *(all commands start with !)* :\r" +
@@ -21,6 +25,24 @@ var InfoManager = function (bot){
   this.stats = function (message){
     bot.reply(message, "Working hard for [" + bot.servers.length + "] Servers " +
     "in [" + bot.channels.length + "] Channels for [" + bot.users.length + "] Users!");
+  }
+
+  this.fullStats = function (message){
+    bot.reply(message, "I've sent you a private message containing your request results.");
+
+    bot.servers.forEach(function(server) {
+      serverNames.push (server.name);
+    });
+    bot.channels.forEach(function(channel) {
+      channelNames.push (channel.name);
+    });
+    bot.users.forEach(function(user) {
+      userNames.push (user.name + "#" + user.discriminator);
+    });
+    bot.sendMessage(message.author, "Here are your full stats as requested:\n\n" +
+      "**Servers:**\n\`\`\`" + serverNames+ "\`\`\`" +
+      "**Channels:**\n\`\`\`" + channelNames + "\`\`\`" +
+      "**Users:**\n\`\`\`" + userNames + "\`\`\`");
   }
 
   this.uptime = function (message){

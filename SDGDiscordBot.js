@@ -64,6 +64,11 @@ bot.on("message", function(message)
 		InfoReplies.stats(message);
 	}
 
+	//fullStats
+	if(message.content.includes("!fullStats")){
+		InfoReplies.fullStats(message);
+	}
+
 	//uptime
 	if(message.content.includes("!uptime")){
 		InfoReplies.uptime(message);
