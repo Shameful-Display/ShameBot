@@ -43,7 +43,7 @@ bot.on("ready", function(){
 bot.on("message", function(message)
 {
 	//don't listen for self messages
-	if (message.author.id == bot.user.id){
+	if (message.author.id == bot.user.id || message.author.bot){
 		return;
 	}
 	//Make all message content lower case so all triggers can be written lower case and always work.
