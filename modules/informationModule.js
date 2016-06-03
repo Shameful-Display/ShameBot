@@ -1,10 +1,6 @@
 var botVersion = "0.5";
 var botStartTime = new Date();
 
-var serverNames = [];
-var channelNames = [];
-var userNames = [];
-
 var InfoManager = function (bot){
   this.help = function (message){
     bot.reply(message, "Available commands *(all commands start with !)* :\r" +
@@ -28,6 +24,10 @@ var InfoManager = function (bot){
   }
 
   this.fullStats = function (message){
+    var serverNames = [];
+    var channelNames = [];
+    var userNames = [];
+    
     bot.reply(message, "I've sent you a private message containing your request results.");
 
     bot.servers.forEach(function(server) {
