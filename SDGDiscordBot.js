@@ -2,6 +2,7 @@
 //node modules to include
 var Discord = require("discord.js")
 var winston = require('winston')
+var MongoClient = require('mongodb').MongoClient;
 //initial bot setup
 var bot = new Discord.Client({autoReconnect: true});
 var AuthDetails = require("./auth.json");
@@ -30,8 +31,6 @@ winston.add( //add transport (console is default)
 )
 //-------------------------WINSTON  ENDSTON------------------------||
 
-
-
 bot.on("disconnected", function(){
 	winston.info("** Shamebot disconnected at " + new Date() + " **");
 });
@@ -42,12 +41,77 @@ bot.on("ready", function(){
 
 bot.on("message", function(message)
 {
+	var serverID = message.channel.server.id;
 	//don't listen for self messages
 	if (message.author.id == bot.user.id || message.author.bot){
 		return;
 	}
 	//Make all message content lower case so all triggers can be written lower case and always work.
 	var lowerCaseMessage = message.content.toLowerCase();
+
+	//------------------------- Honor System Start ------------------------||
+	if(message.mentions.length > 0) { //check if message has any mentions
+		var mentionsArray = message.mentions; //store array of user objects which were mentioned in message
+		var messageTokens = message.content.split(" "); //tokenize message into array
+		for (i = 0; i < messageTokens.length; i++){ //step through tokenized message array
+			if (messageTokens[i].charAt(0) == '<'){ //check if word is a mention by checking for the opening char
+				var legitMention = false; //initialize flag for legitimate mentions
+				slicedStringMention = messageTokens[i].slice(2, -1); //extract user ID from mention in the message (removing <@ and >)
+				for (var userObj of mentionsArray){ //step through each object in the mentions array
+					if (userObj.id == slicedStringMention && !userObj.equals(message.author) ) {// check to see if the user ID found matches a real mention
+						legitMention = true;
+					}
+				}
+				if (legitMention == true){ //if the user id from the string is good
+					if (messageTokens[i+1] == '++'){ //check to see if the token following the mention is a '++' for upvote
+						MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
+						  if(err) {return callback(err)};
+							db.collection('honorCollection').update(
+								{ id: slicedStringMention, server: serverID },
+								{ $inc: { upvotes: 1} },
+								{upsert: true}
+							);
+							db.close();
+						});
+					}else if (messageTokens[i+1] == '--'){ //check to see if the token following the mention is a '--' for downvote
+						MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
+						  if(err) {return callback(err)};
+							db.collection('honorCollection').update(
+								{ id: slicedStringMention, server: serverID },
+								{ $inc: { downvotes: 1} },
+								{upsert: true}
+							);
+							db.close();
+						});
+					}
+				}
+			}
+		}
+	}
+
+	//Command to return user's honor.
+	if(message.content.includes("!honor") && message.mentions.length == 1){
+		var mentionedUser = message.mentions[0];
+		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
+			var myCursor = db.collection('honorCollection').find(
+				{id : mentionedUser.id, server : serverID},
+				{upvotes: 1, downvotes: 1}
+			);
+			myCursor.each(function(err, doc){
+				if(err) throw err;
+				if (doc != null){
+					var upvotes = doc.upvotes;
+					var downvotes = doc.downvotes;
+					var netHonor = upvotes - downvotes;
+					bot.reply(message, mentionedUser.username + " has " + netHonor + " honor!");
+					db.close();
+				}else {
+					db.close();
+				}
+			});
+		});
+	}
+	//-------------------------- Honor System End -------------------------||
 
 	//help
 	if(message.content.includes("!help")){
