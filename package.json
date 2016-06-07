@@ -5,6 +5,7 @@
   "main": "SDGDiscordBot.js",
   "dependencies": {
     "discord.js": "^7.0.1",
+    "mongodb": "^2.1.21",
     "winston": "^2.2.0"
   },
   "devDependencies": {},
