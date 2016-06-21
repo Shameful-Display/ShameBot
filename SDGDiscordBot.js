@@ -113,6 +113,65 @@ bot.on("message", function(message)
 	}
 	//-------------------------- Honor System End -------------------------||
 
+  // Steam Association
+
+	// Set Steam ID
+	if(message.content.includes("!setSteamID")) {
+		var splitContent = message.content.split(" ");
+		var userID = message.author.id;
+		var steamID = splitContent[1];
+
+		if(/^\d+$/.test(steamID)) {
+			// Assign SteamID to UserID in Mongo
+			MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
+				if(err) {return callback(err)};
+				db.collection('SteamIDtoDiscordID').update(
+					{ id: userID },
+					{ steamID: steamID },
+					{ upsert: true }
+				);
+
+				db.close();
+			});
+
+		} else
+      {
+				bot.reply(message, "A Steam ID must be a string comprised only of numbers");
+			}
+	}
+
+	// Clear Steam ID
+	if(message.content.includes("!clearSteamID")) {
+		var userID = message.author.id;
+
+		// Clear Assigned Steam ID from UserID in Mongo
+		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
+			if(err) {return callback(err)};
+			db.collection('SteamIDtoDiscordID').deleteOne(
+				{ id: userID }
+			);
+			db.close();
+		});
+	}
+
+	// Return Steam ID
+	if(message.content.includes("!steamID")) {
+		var userID = message.author.id;
+
+		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
+			var doc = db.collection('SteamIDtoDiscordID').findOne(
+				{ id : userID },
+				{ steamID : 1}
+			);
+
+			if (doc != null){
+					bot.reply(message, "SteamID: " + doc.steamID);
+			}
+
+			db.close();
+		});
+	}
+
 	//help
 	if(message.content.includes("!help")){
 		InfoReplies.help(message);
