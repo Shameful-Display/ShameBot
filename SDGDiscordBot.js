@@ -121,13 +121,15 @@ bot.on("message", function(message)
 		var userID = message.author.id;
 		var steamID = splitContent[1];
 
+		console.log("Author " + userID);
+
 		if(/^\d+$/.test(steamID)) {
 			// Assign SteamID to UserID in Mongo
 			MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
 				if(err) {return callback(err)};
 				db.collection('SteamIDtoDiscordID').update(
 					{ id: userID },
-					{ steamID: steamID },
+					{ id: userID, steamID: steamID },
 					{ upsert: true }
 				);
 
@@ -159,16 +161,15 @@ bot.on("message", function(message)
 		var userID = message.author.id;
 
 		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
-			var doc = db.collection('SteamIDtoDiscordID').findOne(
-				{ id : userID },
-				{ steamID : 1}
-			);
+			var steamIDCollection = db.collection('SteamIDtoDiscordID');
 
-			if (doc != null){
-					bot.reply(message, "SteamID: " + doc.steamID);
-			}
+			steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
+			  if (err) throw err
+				bot.reply(message, "Your Steam ID is set to: " + doc.steamID);
 
-			db.close();
+			  db.close()
+			})
+
 		});
 	}
 
