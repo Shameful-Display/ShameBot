@@ -121,8 +121,6 @@ bot.on("message", function(message)
 		var userID = message.author.id;
 		var steamID = splitContent[1];
 
-		console.log("Author " + userID);
-
 		if(/^\d+$/.test(steamID)) {
 			// Assign SteamID to UserID in Mongo
 			MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
