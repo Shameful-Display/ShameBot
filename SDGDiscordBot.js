@@ -130,13 +130,13 @@ bot.on("message", function(message)
 					{ id: userID, steamID: steamID },
 					{ upsert: true }
 				);
-
+				bot.reply(message, "Your SteamID has been associated with your DiscordID!");
 				db.close();
 			});
 
 		} else
       {
-				bot.reply(message, "A Steam ID must be a string comprised only of numbers");
+				bot.reply(message, "A Steam ID must be a string comprised only of numbers. \n\nExample: \n ```!setSteamID 76561197960434622```");
 			}
 	}
 
@@ -150,6 +150,7 @@ bot.on("message", function(message)
 			db.collection('SteamIDtoDiscordID').deleteOne(
 				{ id: userID }
 			);
+			bot.reply(message, "Your SteamID has been cleared!");
 			db.close();
 		});
 	}
@@ -163,11 +164,80 @@ bot.on("message", function(message)
 
 			steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
 			  if (err) throw err
+
+				if (doc == null) {
+					bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```");
+					return;
+				}
+
 				bot.reply(message, "SteamID: " + doc.steamID);
 
 			  db.close()
 			})
 
+		});
+	}
+
+	// Get Top Ten Played Games
+	if(message.content.includes("!steamTop10")) {
+		var userID = message.author.id;
+
+		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
+			var steamIDCollection = db.collection('SteamIDtoDiscordID');
+
+			steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
+				if (err) throw err
+
+				if (doc == null) {
+					bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```");
+					return;
+				}
+
+				var steamID = doc.steamID;
+
+				var https = require('https');
+				var pathWithParameters = "/IPlayerService/GetOwnedGames/v0001/?key=" + AuthDetails.steamAPIKey + "&steamid=" + steamID + "&format=json&include_appinfo=1";
+
+				var optionsget = {
+    			host : 'api.steampowered.com',
+    			port : 443,
+    			path : pathWithParameters,
+    			method : 'GET' // do GET
+				};
+
+				var reqGet = https.request(optionsget, function(res) {
+					var data = "";
+    			res.on('data', function(chunk) {
+						data += chunk;
+    			});
+
+					res.on("end", function() {
+
+						var jsonObj = JSON.parse(data);
+						var gameList = jsonObj.response.games;
+
+						gameList.sort(function(a, b) {
+			    		return b.playtime_forever - a.playtime_forever;
+						});
+
+						var responseString = "Your Top 10 Played Games: \n```"
+						for (i = 0; i < Math.min(gameList.length, 10); i++) {
+							var game = gameList[i];
+							responseString += i+1 + ". " + game.name + " | " + parseFloat(game.playtime_forever/60).toFixed(2) + " hours played \n";
+						}
+						responseString += "```";
+
+						bot.reply(message, responseString);
+					});
+				});
+
+				reqGet.end();
+				reqGet.on('error', function(e) {
+    			console.error(e);
+				});
+
+				db.close();
+			});
 		});
 	}
 
