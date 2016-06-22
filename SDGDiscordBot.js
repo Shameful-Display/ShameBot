@@ -165,7 +165,7 @@ bot.on("message", function(message)
 
 			steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
 			  if (err) throw err
-				bot.reply(message, "Your Steam ID is set to: " + doc.steamID);
+				bot.reply(message, "SteamID: " + doc.steamID);
 
 			  db.close()
 			})
