@@ -3,6 +3,9 @@
 var Discord = require("discord.js")
 var winston = require('winston')
 var MongoClient = require('mongodb').MongoClient;
+var db;
+var honorCollection;
+var steamIDCollection;
 //initial bot setup
 var bot = new Discord.Client({autoReconnect: true});
 var AuthDetails = require("./auth.json");
@@ -16,6 +19,13 @@ var CatchManager = new TableCatchManager(bot);
 var InfoManager = require("./modules/informationModule.js")
 var InfoReplies = new InfoManager(bot);
 
+MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, database) {
+	if(err) throw err;
+
+	db = database;
+	honorCollection = db.collection('honorCollection');
+	steamIDCollection = db.collection('SteamIDtoDiscordID');
+});
 //---------------------------- WINSTON ----------------------------||
 winston.add( //add transport (console is default)
 	winston.transports.File, { //add File transport type
@@ -52,38 +62,31 @@ bot.on("message", function(message)
 
 	//------------------------- Honor System Start ------------------------||
 	function returnHonor(user, serverID){
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
-			var myCursor = db.collection('honorCollection').find(
-				{id : user.id, server : serverID},
-				{upvotes: 1, downvotes: 1}
-			);
-			myCursor.each(function(err, doc){
-				if(err) throw err;
-				if (doc != null){
-					var upvotes = doc.upvotes;
-					var downvotes = doc.downvotes;
-					var netHonor = upvotes - downvotes;
-					bot.reply(message, user + " has " + netHonor + " honor!");
-				}
-				db.close();
-			});
+		var myCursor = honorCollection.find(
+			{id : user.id, server : serverID},
+			{upvotes: 1, downvotes: 1}
+		);
+		myCursor.each(function(err, doc){
+			if(err) throw err;
+			if (doc != null){
+				var upvotes = doc.upvotes;
+				var downvotes = doc.downvotes;
+				var netHonor = upvotes - downvotes;
+				bot.reply(message, user + " has " + netHonor + " honor!");
+			}
 		});
 	}
 
 	function initializeAndReturnHonor(user, serverID, callback){
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
-				if(err) throw err;
-				var honorCollection = db.collection('honorCollection');
-				honorCollection.findOne({id: user.id, server: serverID}, function(err, doc){
-					if(err) throw err;
-					if(doc == null){
-						honorCollection.insert(
-							{id: user.id, server: serverID,  upvotes: 0, downvotes: 0}
-						);
-					}
-					callback(user, serverID);
-				});
-			});
+		honorCollection.findOne({id: user.id, server: serverID}, function(err, doc){
+			if(err) throw err;
+			if(doc == null){
+				honorCollection.insert(
+					{id: user.id, server: serverID,  upvotes: 0, downvotes: 0}
+				);
+			}
+			callback(user, serverID);
+		});
 	}
 
 	if(message.mentions.length > 0) { //check if message has any mentions
