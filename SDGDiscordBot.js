@@ -113,7 +113,7 @@ bot.on("message", function(message)
 							{ id: slicedStringMention, server: serverID },
 							{ $inc: { downvotes: 1} },
 							{upsert: true}
-						);	
+						);
 					}
 				}
 			}
@@ -138,17 +138,12 @@ bot.on("message", function(message)
 
 		if(/^\d+$/.test(steamID)) {
 			// Assign SteamID to UserID in Mongo
-			MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
-				if(err) {return callback(err)};
-				db.collection('SteamIDtoDiscordID').update(
-					{ id: userID },
-					{ id: userID, steamID: steamID },
-					{ upsert: true }
-				);
-				bot.reply(message, "Your SteamID has been associated with your DiscordID!");
-				db.close();
-			});
-
+			steamIDCollection.update(
+				{ id: userID },
+				{ id: userID, steamID: steamID },
+				{ upsert: true }
+			);
+			bot.reply(message, "Your SteamID has been associated with your DiscordID!");
 		} else
       {
 				bot.reply(message, "A Steam ID must be a string comprised only of numbers. \n\nExample: \n ```!setSteamID 76561197960434622```");
@@ -160,36 +155,22 @@ bot.on("message", function(message)
 		var userID = message.author.id;
 
 		// Clear Assigned Steam ID from UserID in Mongo
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
-			if(err) {return callback(err)};
-			db.collection('SteamIDtoDiscordID').deleteOne(
-				{ id: userID }
-			);
-			bot.reply(message, "Your SteamID has been cleared!");
-			db.close();
-		});
+		db.collection('SteamIDtoDiscordID').deleteOne(
+			{ id: userID }
+		);
+		bot.reply(message, "Your SteamID has been cleared!");
 	}
 
 	// Return Steam ID
 	if(message.content.includes("!steamID")) {
 		var userID = message.author.id;
-
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
-			var steamIDCollection = db.collection('SteamIDtoDiscordID');
-
-			steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
-			  if (err) throw err
-
-				if (doc == null) {
-					bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```\nNeed help finding your SteamID? Try https://steamid.io/");
-					return;
-				}
-
-				bot.reply(message, "SteamID: " + doc.steamID);
-
-			  db.close()
-			})
-
+		steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
+		  if (err) throw err;
+			if (doc == null) {
+				bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```\nNeed help finding your SteamID? Try https://steamid.io/");
+				return;
+			}
+			bot.reply(message, "SteamID: " + doc.steamID);
 		});
 	}
 
