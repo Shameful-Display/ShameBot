@@ -103,25 +103,17 @@ bot.on("message", function(message)
 				}
 				if (legitMention == true){ //if the user id from the string is good
 					if (messageTokens[i+1] == '++'){ //check to see if the token following the mention is a '++' for upvote
-						MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
-						  if(err) {return callback(err)};
-							db.collection('honorCollection').update(
-								{ id: slicedStringMention, server: serverID },
-								{ $inc: { upvotes: 1} },
-								{upsert: true}
-							);
-							db.close();
-						});
+						honorCollection.update(
+							{ id: slicedStringMention, server: serverID },
+							{ $inc: { upvotes: 1} },
+							{upsert: true}
+						);
 					}else if (messageTokens[i+1] == '--'){ //check to see if the token following the mention is a '--' for downvote
-						MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
-						  if(err) {return callback(err)};
-							db.collection('honorCollection').update(
-								{ id: slicedStringMention, server: serverID },
-								{ $inc: { downvotes: 1} },
-								{upsert: true}
-							);
-							db.close();
-						});
+						honorCollection.update(
+							{ id: slicedStringMention, server: serverID },
+							{ $inc: { downvotes: 1} },
+							{upsert: true}
+						);	
 					}
 				}
 			}
