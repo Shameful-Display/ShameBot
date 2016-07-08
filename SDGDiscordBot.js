@@ -3,6 +3,9 @@
 var Discord = require("discord.js")
 var winston = require('winston')
 var MongoClient = require('mongodb').MongoClient;
+var db;
+var honorCollection;
+var steamIDCollection;
 //initial bot setup
 var bot = new Discord.Client({autoReconnect: true});
 var AuthDetails = require("./auth.json");
@@ -16,6 +19,13 @@ var CatchManager = new TableCatchManager(bot);
 var InfoManager = require("./modules/informationModule.js")
 var InfoReplies = new InfoManager(bot);
 
+MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, database) {
+	if(err) throw err;
+
+	db = database;
+	honorCollection = db.collection('honorCollection');
+	steamIDCollection = db.collection('SteamIDtoDiscordID');
+});
 //---------------------------- WINSTON ----------------------------||
 winston.add( //add transport (console is default)
 	winston.transports.File, { //add File transport type
@@ -52,38 +62,31 @@ bot.on("message", function(message)
 
 	//------------------------- Honor System Start ------------------------||
 	function returnHonor(user, serverID){
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
-			var myCursor = db.collection('honorCollection').find(
-				{id : user.id, server : serverID},
-				{upvotes: 1, downvotes: 1}
-			);
-			myCursor.each(function(err, doc){
-				if(err) throw err;
-				if (doc != null){
-					var upvotes = doc.upvotes;
-					var downvotes = doc.downvotes;
-					var netHonor = upvotes - downvotes;
-					bot.reply(message, user + " has " + netHonor + " honor!");
-				}
-				db.close();
-			});
+		var myCursor = honorCollection.find(
+			{id : user.id, server : serverID},
+			{upvotes: 1, downvotes: 1}
+		);
+		myCursor.each(function(err, doc){
+			if(err) throw err;
+			if (doc != null){
+				var upvotes = doc.upvotes;
+				var downvotes = doc.downvotes;
+				var netHonor = upvotes - downvotes;
+				bot.reply(message, user + " has " + netHonor + " honor!");
+			}
 		});
 	}
 
 	function initializeAndReturnHonor(user, serverID, callback){
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
-				if(err) throw err;
-				var honorCollection = db.collection('honorCollection');
-				honorCollection.findOne({id: user.id, server: serverID}, function(err, doc){
-					if(err) throw err;
-					if(doc == null){
-						honorCollection.insert(
-							{id: user.id, server: serverID,  upvotes: 0, downvotes: 0}
-						);
-					}
-					callback(user, serverID);
-				});
-			});
+		honorCollection.findOne({id: user.id, server: serverID}, function(err, doc){
+			if(err) throw err;
+			if(doc == null){
+				honorCollection.insert(
+					{id: user.id, server: serverID,  upvotes: 0, downvotes: 0}
+				);
+			}
+			callback(user, serverID);
+		});
 	}
 
 	if(message.mentions.length > 0) { //check if message has any mentions
@@ -100,25 +103,17 @@ bot.on("message", function(message)
 				}
 				if (legitMention == true){ //if the user id from the string is good
 					if (messageTokens[i+1] == '++'){ //check to see if the token following the mention is a '++' for upvote
-						MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
-						  if(err) {return callback(err)};
-							db.collection('honorCollection').update(
-								{ id: slicedStringMention, server: serverID },
-								{ $inc: { upvotes: 1} },
-								{upsert: true}
-							);
-							db.close();
-						});
+						honorCollection.update(
+							{ id: slicedStringMention, server: serverID },
+							{ $inc: { upvotes: 1} },
+							{upsert: true}
+						);
 					}else if (messageTokens[i+1] == '--'){ //check to see if the token following the mention is a '--' for downvote
-						MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
-						  if(err) {return callback(err)};
-							db.collection('honorCollection').update(
-								{ id: slicedStringMention, server: serverID },
-								{ $inc: { downvotes: 1} },
-								{upsert: true}
-							);
-							db.close();
-						});
+						honorCollection.update(
+							{ id: slicedStringMention, server: serverID },
+							{ $inc: { downvotes: 1} },
+							{upsert: true}
+						);
 					}
 				}
 			}
@@ -143,17 +138,12 @@ bot.on("message", function(message)
 
 		if(/^\d+$/.test(steamID)) {
 			// Assign SteamID to UserID in Mongo
-			MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
-				if(err) {return callback(err)};
-				db.collection('SteamIDtoDiscordID').update(
-					{ id: userID },
-					{ id: userID, steamID: steamID },
-					{ upsert: true }
-				);
-				bot.reply(message, "Your SteamID has been associated with your DiscordID!");
-				db.close();
-			});
-
+			steamIDCollection.update(
+				{ id: userID },
+				{ id: userID, steamID: steamID },
+				{ upsert: true }
+			);
+			bot.reply(message, "Your SteamID has been associated with your DiscordID!");
 		} else
       {
 				bot.reply(message, "A Steam ID must be a string comprised only of numbers. \n\nExample: \n ```!setSteamID 76561197960434622```");
@@ -165,36 +155,22 @@ bot.on("message", function(message)
 		var userID = message.author.id;
 
 		// Clear Assigned Steam ID from UserID in Mongo
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {//open connection to db
-			if(err) {return callback(err)};
-			db.collection('SteamIDtoDiscordID').deleteOne(
-				{ id: userID }
-			);
-			bot.reply(message, "Your SteamID has been cleared!");
-			db.close();
-		});
+		db.collection('SteamIDtoDiscordID').deleteOne(
+			{ id: userID }
+		);
+		bot.reply(message, "Your SteamID has been cleared!");
 	}
 
 	// Return Steam ID
 	if(message.content.includes("!steamID")) {
 		var userID = message.author.id;
-
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
-			var steamIDCollection = db.collection('SteamIDtoDiscordID');
-
-			steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
-			  if (err) throw err
-
-				if (doc == null) {
-					bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```\nNeed help finding your SteamID? Try https://steamid.io/");
-					return;
-				}
-
-				bot.reply(message, "SteamID: " + doc.steamID);
-
-			  db.close()
-			})
-
+		steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
+		  if (err) throw err;
+			if (doc == null) {
+				bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```\nNeed help finding your SteamID? Try https://steamid.io/");
+				return;
+			}
+			bot.reply(message, "SteamID: " + doc.steamID);
 		});
 	}
 
@@ -202,61 +178,55 @@ bot.on("message", function(message)
 	if(message.content.includes("!steamTop10")) {
 		var userID = message.author.id;
 
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
-			var steamIDCollection = db.collection('SteamIDtoDiscordID');
+		steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
+			if (err) throw err;
 
-			steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
-				if (err) throw err
+			if (doc == null) {
+				bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622``` \nNeed help finding your SteamID? Try https://steamid.io/");
+				return;
+			}
 
-				if (doc == null) {
-					bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622``` \nNeed help finding your SteamID? Try https://steamid.io/");
-					return;
-				}
+			var steamID = doc.steamID;
 
-				var steamID = doc.steamID;
+			var https = require('https');
+			var pathWithParameters = "/IPlayerService/GetOwnedGames/v0001/?key=" + AuthDetails.steamAPIKey + "&steamid=" + steamID + "&format=json&include_appinfo=1";
 
-				var https = require('https');
-				var pathWithParameters = "/IPlayerService/GetOwnedGames/v0001/?key=" + AuthDetails.steamAPIKey + "&steamid=" + steamID + "&format=json&include_appinfo=1";
+			var optionsget = {
+  			host : 'api.steampowered.com',
+  			port : 443,
+  			path : pathWithParameters,
+  			method : 'GET' // do GET
+			};
 
-				var optionsget = {
-    			host : 'api.steampowered.com',
-    			port : 443,
-    			path : pathWithParameters,
-    			method : 'GET' // do GET
-				};
+			var reqGet = https.request(optionsget, function(res) {
+				var data = "";
+  			res.on('data', function(chunk) {
+					data += chunk;
+  			});
 
-				var reqGet = https.request(optionsget, function(res) {
-					var data = "";
-    			res.on('data', function(chunk) {
-						data += chunk;
-    			});
+				res.on("end", function() {
 
-					res.on("end", function() {
+					var jsonObj = JSON.parse(data);
+					var gameList = jsonObj.response.games;
 
-						var jsonObj = JSON.parse(data);
-						var gameList = jsonObj.response.games;
-
-						gameList.sort(function(a, b) {
-			    		return b.playtime_forever - a.playtime_forever;
-						});
-
-						var responseString = "Your Top 10 Played Games: \n```"
-						for (i = 0; i < Math.min(gameList.length, 10); i++) {
-							var game = gameList[i];
-							responseString += i+1 + ". " + game.name + " | " + parseFloat(game.playtime_forever/60).toFixed(2) + " hours played \n";
-						}
-						responseString += "```";
-
-						bot.reply(message, responseString);
+					gameList.sort(function(a, b) {
+		    		return b.playtime_forever - a.playtime_forever;
 					});
-				});
 
-				reqGet.end();
-				reqGet.on('error', function(e) {
-    			console.error(e);
-				});
+					var responseString = "Your Top 10 Played Games: \n```"
+					for (i = 0; i < Math.min(gameList.length, 10); i++) {
+						var game = gameList[i];
+						responseString += i+1 + ". " + game.name + " | " + parseFloat(game.playtime_forever/60).toFixed(2) + " hours played \n";
+					}
+					responseString += "```";
 
-				db.close();
+					bot.reply(message, responseString);
+				});
+			});
+
+			reqGet.end();
+			reqGet.on('error', function(e) {
+  			console.error(e);
 			});
 		});
 	}
