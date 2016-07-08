@@ -41,7 +41,8 @@ bot.on("ready", function(){
 
 bot.on("message", function(message)
 {
-	var serverID = message.channel.server.id;
+	if (!message.channel.isPrivate){var serverID = message.channel.server.id;}
+
 	//don't listen for self messages
 	if (message.author.id == bot.user.id || message.author.bot){
 		return;
@@ -50,6 +51,41 @@ bot.on("message", function(message)
 	var lowerCaseMessage = message.content.toLowerCase();
 
 	//------------------------- Honor System Start ------------------------||
+	function returnHonor(user, serverID){
+		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
+			var myCursor = db.collection('honorCollection').find(
+				{id : user.id, server : serverID},
+				{upvotes: 1, downvotes: 1}
+			);
+			myCursor.each(function(err, doc){
+				if(err) throw err;
+				if (doc != null){
+					var upvotes = doc.upvotes;
+					var downvotes = doc.downvotes;
+					var netHonor = upvotes - downvotes;
+					bot.reply(message, user + " has " + netHonor + " honor!");
+				}
+				db.close();
+			});
+		});
+	}
+
+	function initializeAndReturnHonor(user, serverID, callback){
+		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
+				if(err) throw err;
+				var honorCollection = db.collection('honorCollection');
+				honorCollection.findOne({id: user.id, server: serverID}, function(err, doc){
+					if(err) throw err;
+					if(doc == null){
+						honorCollection.insert(
+							{id: user.id, server: serverID,  upvotes: 0, downvotes: 0}
+						);
+					}
+					callback(user, serverID);
+				});
+			});
+	}
+
 	if(message.mentions.length > 0) { //check if message has any mentions
 		var mentionsArray = message.mentions; //store array of user objects which were mentioned in message
 		var messageTokens = message.content.split(" "); //tokenize message into array
@@ -89,28 +125,12 @@ bot.on("message", function(message)
 		}
 	}
 
-	//Command to return user's honor.
+	//Command to return user's honor
 	if(message.content.includes("!honor") && message.mentions.length == 1){
 		var mentionedUser = message.mentions[0];
-		MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, db) {
-			var myCursor = db.collection('honorCollection').find(
-				{id : mentionedUser.id, server : serverID},
-				{upvotes: 1, downvotes: 1}
-			);
-			myCursor.each(function(err, doc){
-				if(err) throw err;
-				if (doc != null){
-					var upvotes = doc.upvotes;
-					var downvotes = doc.downvotes;
-					var netHonor = upvotes - downvotes;
-					bot.reply(message, mentionedUser.username + " has " + netHonor + " honor!");
-					db.close();
-				}else {
-					db.close();
-				}
-			});
-		});
+		initializeAndReturnHonor(mentionedUser, serverID, returnHonor);
 	}
+
 	//-------------------------- Honor System End -------------------------||
 
   // Steam Association
