@@ -1,13 +1,23 @@
 var botVersion = "0.5";
 var botStartTime = new Date();
+var winston = require('winston');
 
 var InfoManager = function (bot){
   this.help = function (message){
-    bot.reply(message, "Available commands *(all commands start with !)* :\r" +
-		"!help\r" +
-		"!uptime\r" +
-		"!stats\r" +
-		"!battle begin *@player1* *@player2*");
+    bot.reply(message, "\r__Available commands__ :\r" +
+		"**!help** : List of possible commands.\r" +
+    "**!about** : General info on the bot.\r" +
+		"**!uptime** : Returns bot's uptime.\r" +
+		"**!stats** : Returns general bot stats.\r" +
+    "**!fullStatstats** : Returns expanded bot stats.\r" +
+		"**!battle begin *@player1* *@player2* ** : Rock Paper Scissors with someone.\r" +
+    "**!setSteamID *Steam ID number* ** : Associate your Steam acct with your Discord acct.\r" +
+    "**!steamID** : See SteamID that is associated with your Discord acct.\r" +
+    "**!steamTop10** : Returns your top 10 most played games on Steam.\r" +
+    "**!clearSteamID** : Remove SteamID associated with your Discord acct.\r" +
+    "***@user* ++** : Give someone an upvote (can be used anywhere in a sentence or standalone).\r" +
+    "***@user* --** : Give someone a downvote (can be used anywhere in a sentence or standalone). \r" +
+    "**!honor *@user*** : Get user's total honor/karma.");
   }
 
   this.about = function (message){
@@ -27,7 +37,7 @@ var InfoManager = function (bot){
     var serverNames = [];
     var channelNames = [];
     var userNames = [];
-    
+
     bot.reply(message, "I've sent you a private message containing your request results.");
 
     bot.servers.forEach(function(server) {
