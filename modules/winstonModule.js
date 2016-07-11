@@ -1,6 +1,21 @@
 var winston = require('winston');
+var fs = require( "fs" );
+var path = require( "path" );
+var process = require( "process" );
 
 exports.createWinstonFileTransport = function() {
+  fs.mkdir("./logs", 0777, function(err) { //create directory with normal permissions to store logs
+          if (err) {
+              if (err.code == 'EEXIST'){
+                console.log("File already exists!");// ignore the error if the folder already exists
+              }
+              else {
+                throw err;  // something else went wrong
+              }
+          } else {
+            console.log("successfully created folder!");// successfully created folder
+          }
+      });
   winston.add( //add transport (console is default)
   	winston.transports.File, { //add File transport type
   		filename: 'standardLog.log', //base filename

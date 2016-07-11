@@ -1,6 +1,9 @@
 //Note: the .js is not required as Node assumes these files are javascript
 //node modules to include
 var Discord = require("discord.js");
+var fs = require( "fs" );
+var path = require( "path" );
+var process = require( "process" );
 var winston = require('winston');
 var winstonModule = require("./modules/winstonModule.js");
 var MongoClient = require('mongodb').MongoClient;
