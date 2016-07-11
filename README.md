@@ -6,12 +6,14 @@ A multipurpose bot for a private Discord server.
 ### Pre-Reqs:
 
 1. Node JS installed (version 4.0 or higher)[Download & Instructions](https://nodejs.org/en/download/)
-2. Text Editor
-3. John Cena
+2. MongoDB (https://www.mongodb.com/download-center)
+3. Steam API Key (http://steamcommunity.com/dev/apikey)
+3. Text Editor
+4. John Cena
 
-### Dependancies
+### Dependencies
 
-From the root of the cloned repository run "npm install" which will use the include package.json file to get all of your dependancies installed.
+From the root of the cloned repository run "npm install" which will use the include package.json file to get all of your dependencies installed.
 
 Discord.js is a node js library for interacting with Discord's API.
 Winston is a popular logging module.
@@ -29,31 +31,18 @@ If you are having issues check the install steps for Discord.js [here](http://di
 
 
 ### Post Install Steps
-After the dependancies are installed you are nearly ready to run the Shamebot but currently there are two items that need to be handled:
+After the dependencies are installed you are nearly ready to run the Shamebot but currently there are two items that need to be handled:
 
-1. Create the logging folder & file (this step will be removed at some future point):
-```
-MacBook:SDG_Discord_Bot awesomeUser$ mkdir logs
-MacBook:SDG_Discord_Bot awesomeUser$ touch logs/standardLog.log
-```
-2. Enter your bot token (assuming you followed Discord steps to get an app and bot user generated):
+1. Enter your bot token (assuming you followed Discord steps to get an app and bot user generated):
 ```
 MacBook:SDG_Discord_Bot awesomeUser$ touch auth.json
 ```
 Enter the following information:
 ```
 {
-  "token" : "your bot token"
+  "token" : "your bot token",
+  "steamAPIKey" : "your Steam API key"
 }
-```
-
-These will be fixed at a later date but for now the above is needed to properly run the bot.
-
-### Running the Bot
-Simply run the bot and you should see it connect:
-```
-MacBook:SDG_Discord_Bot awesomeUser$ node SDGDiscordBot.js
-info: || -- Shamebot ready for input at Thu May 12 2016 12:03:32 GMT-0400 (EDT) -- ||
 ```
 
 ### Adding the bot to your server
