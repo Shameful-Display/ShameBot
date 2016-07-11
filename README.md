@@ -44,6 +44,15 @@ Enter the following information:
   "steamAPIKey" : "your Steam API key"
 }
 ```
+These will be fixed at a later date but for now the above is needed to properly run the bot.
+
+### Running the Bot
+Simply run the bot and you should see it connect:
+```
+
+MacBook:SDG_Discord_Bot awesomeUser$ node SDGDiscordBot.js
+info: || -- Shamebot ready for input at Thu May 12 2016 12:03:32 GMT-0400 (EDT) -- ||
+```
 
 ### Adding the bot to your server
 To add the bot to your server use the follow URL (add in your client id) and any server that you have permissions to add a bot to will be listed.
