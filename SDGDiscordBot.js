@@ -237,7 +237,7 @@ bot.on("message", function(message)
     var buildString = "";
     var components = [];
 
-    function scrapeSite (url) {
+    function scrapeSite (url, userid, username, buildString, serverID, callback1, callback2) {
       request(url, function (error, response, html) {
         if (error) {
           console.log("We’ve encountered an error: " + error);
@@ -258,30 +258,25 @@ bot.on("message", function(message)
                x[1] = "";
              }
              components[item] = x;
-
            });
-           console.log("components: " + components );
+           callback1(components, userID, username, buildString, serverID, callback2);
   			 }
   		});
-      console.log("components: " + components );
-      return components;
     }
 
-    function componentsIntoString(components){
+    function componentsIntoString(components, userID, username, buildString, serverID, callback){
       for (var i = 0; i < components.length; i++){
         if (i == 0){
-          buildString += "\n__" + username + "'s PC Build:__";
+          buildString += "\n__" + username + "'s PC Build:__\n";
         }
         if (components[i][0] !== '') {
           buildString += "**" + components[i][0] + "**: " + components[i][1] + "\n";
         }
       }
-      bot.reply(message, "Build in components to string is : " + buildString);
-      return buildString;
+      callback(userID, buildString, serverID);
     }
 
-    function saveBuildToDB(buildString){
-      bot.reply(message, "Build in save build to db is : " + buildString);
+    function saveBuildToDB(userID, buildString, serverID){
       PCBuildCollection.update(
 				{ id: userID, server: serverID },
 				{ id: userID, server: serverID, pcBuild: buildString },
@@ -291,9 +286,7 @@ bot.on("message", function(message)
     }
 
     if(/^(http)[s]?(:\/\/pcpartpicker.com\/list\/)\w*$/.test(partPickerURL)) {
-      components = scrapeSite(partPickerURL);
-      buildString = componentsIntoString(components);
-      saveBuildToDB(buildString);
+      scrapeSite(partPickerURL, userID, userName, buildString, serverID, componentsIntoString, saveBuildToDB);
     } else {
       bot.reply(message, "You must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
     }
@@ -302,7 +295,7 @@ bot.on("message", function(message)
   if(message.content.includes("!PCBuild") && message.mentions.length == 1){
     var mentionedUser = message.mentions[0];
 
-    function returnPCBuild (user, serverID, callback){
+    function returnPCBuild (user, serverID){
   		PCBuildCollection.findOne({id: mentionedUser.id, server: serverID}, function(err, doc){
   			if(err) throw err;
   			if(doc == null){
@@ -317,12 +310,12 @@ bot.on("message", function(message)
     			if(err) throw err;
     			if (doc != null){
     				var build = doc.pcBuild;
-    				bot.reply(message, "hi" + build + 'bye');
+    				bot.reply(message, build);
     			}
     		});
   		});
   	}
-    returnPCBuild(mentionedUser, serverID, getBuildFromDB);
+    returnPCBuild(mentionedUser, serverID);
   }
 
 	//help
