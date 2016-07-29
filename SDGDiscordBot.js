@@ -22,6 +22,9 @@ var TableCatchManager = require("./modules/tableCatcherModule.js")
 var CatchManager = new TableCatchManager(bot);
 var InfoManager = require("./modules/informationModule.js")
 var InfoReplies = new InfoManager(bot);
+var request = require("request"),
+  cheerio = require("cheerio");
+
 
 //global connection for MongoDB
 MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, database) {
@@ -30,6 +33,7 @@ MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, databa
 	db = database;
 	honorCollection = db.collection('honorCollection');
 	steamIDCollection = db.collection('SteamIDtoDiscordID');
+  PCBuildCollection = db.collection('PCBuilds');
 });
 
 //initialize file transport for winston
@@ -224,6 +228,95 @@ bot.on("message", function(message)
 			});
 		});
 	}
+
+  if(message.content.includes("!setPCBuild")){
+    var splitContent = message.content.split(" ");
+    var userID = message.author.id;
+    var userName = message.author.username;
+		var partPickerURL = splitContent[1];
+    var buildString = "";
+    var components = [];
+
+    function scrapeSite (url, userid, username, buildString, serverID, callback1, callback2) {
+      request(url, function (error, response, html) {
+        if (error) {
+          console.log("We’ve encountered an error: " + error);
+        } else {
+  		     var $ = cheerio.load(html);
+           $('.manual-zebra').find("tr").each(function(item){
+             var x = [];
+             if ($(this).find(".component-type.tl").find('a').length !== 0){
+               x[0] = $(this).find(".component-type.tl").find('a').text();
+             }else if ($(this).find(".component-type.tl").length !== 0){
+               x[0] = components[item-1][0];
+             } else {
+               x[0] = "";
+             }
+             if ($(this).find(".component-name.tl").find('a').length !== 0){
+               x[1] = $(this).find(".component-name.tl").find('a').text();
+             }else {
+               x[1] = "";
+             }
+             components[item] = x;
+           });
+           callback1(components, userID, username, buildString, serverID, callback2);
+  			 }
+  		});
+    }
+
+    function componentsIntoString(components, userID, username, buildString, serverID, callback){
+      for (var i = 0; i < components.length; i++){
+        if (i == 0){
+          buildString += "\n__" + username + "'s PC Build:__\n";
+        }
+        if (components[i][0] !== '') {
+          buildString += "**" + components[i][0] + "**: " + components[i][1] + "\n";
+        }
+      }
+      callback(userID, buildString, serverID);
+    }
+
+    function saveBuildToDB(userID, buildString, serverID){
+      PCBuildCollection.update(
+				{ id: userID, server: serverID },
+				{ id: userID, server: serverID, pcBuild: buildString },
+				{ upsert: true }
+			);
+      bot.reply(message, "Your build has been accepted!");
+    }
+
+    if(/^(http)[s]?(:\/\/pcpartpicker.com\/list\/)\w*$/.test(partPickerURL)) {
+      scrapeSite(partPickerURL, userID, userName, buildString, serverID, componentsIntoString, saveBuildToDB);
+    } else {
+      bot.reply(message, "You must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
+    }
+  }
+
+  if(message.content.includes("!PCBuild") && message.mentions.length == 1){
+    var mentionedUser = message.mentions[0];
+
+    function returnPCBuild (user, serverID){
+  		PCBuildCollection.findOne({id: mentionedUser.id, server: serverID}, function(err, doc){
+  			if(err) throw err;
+  			if(doc == null){
+  				bot.reply(message, mentionedUser.username + " has not set their PC Build yet." + mentionedUser.username + " must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
+  			}else
+        var myCursor = PCBuildCollection.find(
+    			{id : user.id, server : serverID},
+    			{pcBuild: 1}
+    		);
+
+    		myCursor.each(function(err, doc){
+    			if(err) throw err;
+    			if (doc != null){
+    				var build = doc.pcBuild;
+    				bot.reply(message, build);
+    			}
+    		});
+  		});
+  	}
+    returnPCBuild(mentionedUser, serverID);
+  }
 
 	//help
 	if(message.content.includes("!help")){

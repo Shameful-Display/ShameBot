@@ -17,7 +17,9 @@ var InfoManager = function (bot){
     "**!clearSteamID** : Remove SteamID associated with your Discord acct.\r" +
     "***@user* ++** : Give someone an upvote (can be used anywhere in a sentence or standalone).\r" +
     "***@user* --** : Give someone a downvote (can be used anywhere in a sentence or standalone). \r" +
-    "**!honor *@user*** : Get user's total honor/karma.");
+    "**!honor *@user*** : Get user's total honor/karma.\r" +
+    "**!setPCBuild *PCPartPicker.com part list permalink*** : Associate your PC build with your Discord ID.\r" +
+    "**!PCBuild *@user*** : Returns user's PC Build");
   }
 
   this.about = function (message){
