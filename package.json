@@ -6,7 +6,9 @@
   "dependencies": {
     "discord.js": "^7.0.1",
     "mongodb": "^2.1.21",
-    "winston": "^2.2.0"
+    "winston": "^2.2.0",
+    "cheerio": "^0.20.0",
+    "request": "^2.74.0"
   },
   "devDependencies": {},
   "scripts": {
