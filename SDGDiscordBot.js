@@ -289,6 +289,7 @@ bot.on("message", function(message)
       scrapeSite(partPickerURL, userID, userName, buildString, serverID, componentsIntoString, saveBuildToDB);
     } else {
       bot.reply(message, "You must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
+      return;
     }
   }
 
@@ -300,19 +301,20 @@ bot.on("message", function(message)
   			if(err) throw err;
   			if(doc == null){
   				bot.reply(message, mentionedUser.username + " has not set their PC Build yet." + mentionedUser.username + " must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
-  			}else
-        var myCursor = PCBuildCollection.find(
-    			{id : user.id, server : serverID},
-    			{pcBuild: 1}
-    		);
+  			}else{
+          var myCursor = PCBuildCollection.find(
+      			{id : user.id, server : serverID},
+      			{pcBuild: 1}
+      		);
 
-    		myCursor.each(function(err, doc){
-    			if(err) throw err;
-    			if (doc != null){
-    				var build = doc.pcBuild;
-    				bot.reply(message, build);
-    			}
-    		});
+      		myCursor.each(function(err, doc){
+      			if(err) throw err;
+      			if (doc != null){
+      				var build = doc.pcBuild;
+      				bot.reply(message, build);
+      			}
+      		});
+        }
   		});
   	}
     returnPCBuild(mentionedUser, serverID);
