@@ -269,7 +269,7 @@ bot.on("message", function(message)
     function componentsIntoString(components, userID, username, buildString, serverID, callback){
       for (var i = 0; i < components.length; i++){
         if (i == 0){
-          buildString += "\n__" + username + "'s PC Build:__\n**[Power draw:** " + wattage + "]\n";
+          buildString += "\n__" + username + "'s PC Build:__\n**[Power draw:** " + wattage + " || **Build URL:** " + partPickerURL + "]\n";
         }
         if (components[i][0] !== '') {
           buildString += "**" + components[i][0] + "**: " + components[i][1] + "\n";
