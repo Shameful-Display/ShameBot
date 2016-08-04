@@ -251,7 +251,9 @@ bot.on("message", function(message)
 
              if ($(this).find(".component-type.tl").find('a').length !== 0){
                x[0] = $(this).find(".component-type.tl").find('a').text();
-             }else if ($(this).find(".component-type.tl").length !== 0){
+             } else if ($(this).find(".component-type.tl").length !== 0 && $(this).find(".component-type.tl").text() !== ""){
+               x[0] = $(this).find(".component-type.tl").text();
+             } else if ($(this).find(".component-type.tl").length !== 0){
                x[0] = components[item-1][0];
              } else {
                x[0] = "";
@@ -269,6 +271,7 @@ bot.on("message", function(message)
 
              components[item] = x;
            });
+
            callback1(components, userID, username, buildString, serverID, callback2);
   			 }
   		});
