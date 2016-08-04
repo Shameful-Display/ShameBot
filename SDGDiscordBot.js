@@ -283,6 +283,7 @@ bot.on("message", function(message)
       for (var i = 0; i < components.length; i++){
         if (i == 0){
           updatedDate = new Date();
+          updatedDate = updatedDate.toDateString();
           buildString += "\n__**" + username + "'s PC Build:**__\n\n**Power draw:** " + wattage + "\n**Build URL:** " + partPickerURL + "\n**Last updated on Discord:** "+ updatedDate + "\n\n";
         }
         if (components[i][0] !== '') {
