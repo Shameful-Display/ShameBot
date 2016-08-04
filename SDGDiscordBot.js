@@ -237,6 +237,7 @@ bot.on("message", function(message)
     var buildString = "";
     var components = [];
     var wattage = "";
+    var updatedDate;
 
     function scrapeSite (url, userid, username, buildString, serverID, callback1, callback2) {
       request(url, function (error, response, html) {
@@ -269,7 +270,8 @@ bot.on("message", function(message)
     function componentsIntoString(components, userID, username, buildString, serverID, callback){
       for (var i = 0; i < components.length; i++){
         if (i == 0){
-          buildString += "\n__" + username + "'s PC Build:__\n**[Power draw:** " + wattage + " || **Build URL:** " + partPickerURL + "]\n";
+          updatedDate = new Date();
+          buildString += "\n__**" + username + "'s PC Build:**__\n\n**Power draw:** " + wattage + "\n**Build URL:** " + partPickerURL + "\n**Last updated:** "+ updatedDate + "\n\n";
         }
         if (components[i][0] !== '') {
           buildString += "**" + components[i][0] + "**: " + components[i][1] + "\n";
