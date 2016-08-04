@@ -236,6 +236,7 @@ bot.on("message", function(message)
 		var partPickerURL = splitContent[1];
     var buildString = "";
     var components = [];
+    var wattage = "";
 
     function scrapeSite (url, userid, username, buildString, serverID, callback1, callback2) {
       request(url, function (error, response, html) {
@@ -243,6 +244,8 @@ bot.on("message", function(message)
           console.log("We’ve encountered an error: " + error);
         } else {
   		     var $ = cheerio.load(html);
+           wattage = $('#explain_wattage').text();
+           console.log(wattage);
            $('.manual-zebra').find("tr").each(function(item){
              var x = [];
              if ($(this).find(".component-type.tl").find('a').length !== 0){
