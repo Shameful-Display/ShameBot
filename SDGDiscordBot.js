@@ -236,6 +236,8 @@ bot.on("message", function(message)
 		var partPickerURL = splitContent[1];
     var buildString = "";
     var components = [];
+    var wattage = "";
+    var updatedDate;
 
     function scrapeSite (url, userid, username, buildString, serverID, callback1, callback2) {
       request(url, function (error, response, html) {
@@ -243,22 +245,35 @@ bot.on("message", function(message)
           console.log("We’ve encountered an error: " + error);
         } else {
   		     var $ = cheerio.load(html);
+           wattage = $('#explain_wattage').text();
            $('.manual-zebra').find("tr").each(function(item){
              var x = [];
+
              if ($(this).find(".component-type.tl").find('a').length !== 0){
                x[0] = $(this).find(".component-type.tl").find('a').text();
-             }else if ($(this).find(".component-type.tl").length !== 0){
+             } else if ($(this).find(".component-type.tl").length !== 0 && $(this).find(".component-type.tl").text() !== ""){
+               x[0] = $(this).find(".component-type.tl").text();
+               x[0] = x[0].replace(/\n/g,""); //remove \n chars
+               x[0] = x[0].trim(); //remove whitespace
+             } else if ($(this).find(".component-type.tl").length !== 0){
                x[0] = components[item-1][0];
              } else {
                x[0] = "";
              }
+
              if ($(this).find(".component-name.tl").find('a').length !== 0){
                x[1] = $(this).find(".component-name.tl").find('a').text();
              }else {
                x[1] = "";
              }
+
+            if (x[0] !== "" && x[1] == "") {
+              x[1] = $(this).find("td:nth-child(3)").text();
+            }
+
              components[item] = x;
            });
+
            callback1(components, userID, username, buildString, serverID, callback2);
   			 }
   		});
@@ -267,7 +282,9 @@ bot.on("message", function(message)
     function componentsIntoString(components, userID, username, buildString, serverID, callback){
       for (var i = 0; i < components.length; i++){
         if (i == 0){
-          buildString += "\n__" + username + "'s PC Build:__\n";
+          updatedDate = new Date();
+          updatedDate = updatedDate.toDateString();
+          buildString += "\n__**" + username + "'s PC Build:**__\n\n**Power draw:** " + wattage + "\n**Build URL:** " + partPickerURL + "\n**Last updated on Discord:** "+ updatedDate + "\n\n";
         }
         if (components[i][0] !== '') {
           buildString += "**" + components[i][0] + "**: " + components[i][1] + "\n";
