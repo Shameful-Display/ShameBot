@@ -253,6 +253,8 @@ bot.on("message", function(message)
                x[0] = $(this).find(".component-type.tl").find('a').text();
              } else if ($(this).find(".component-type.tl").length !== 0 && $(this).find(".component-type.tl").text() !== ""){
                x[0] = $(this).find(".component-type.tl").text();
+               x[0] = x[0].replace(/\n/g,""); //remove \n chars
+               x[0] = x[0].trim(); //remove whitespace
              } else if ($(this).find(".component-type.tl").length !== 0){
                x[0] = components[item-1][0];
              } else {
