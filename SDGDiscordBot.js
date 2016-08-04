@@ -248,6 +248,7 @@ bot.on("message", function(message)
            wattage = $('#explain_wattage').text();
            $('.manual-zebra').find("tr").each(function(item){
              var x = [];
+
              if ($(this).find(".component-type.tl").find('a').length !== 0){
                x[0] = $(this).find(".component-type.tl").find('a').text();
              }else if ($(this).find(".component-type.tl").length !== 0){
@@ -255,11 +256,17 @@ bot.on("message", function(message)
              } else {
                x[0] = "";
              }
+
              if ($(this).find(".component-name.tl").find('a').length !== 0){
                x[1] = $(this).find(".component-name.tl").find('a').text();
              }else {
                x[1] = "";
              }
+
+            if (x[0] !== "" && x[1] == "") {
+              x[1] = $(this).find("td:nth-child(3)").text();
+            }
+
              components[item] = x;
            });
            callback1(components, userID, username, buildString, serverID, callback2);
