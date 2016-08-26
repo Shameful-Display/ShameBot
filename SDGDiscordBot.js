@@ -385,6 +385,11 @@ bot.on("message", function(message)
 		MemeReplies.tinyRickReply(message);
 	}
 
+  // Harambe
+  if(lowerCaseMessage.includes("jesus")) {
+    MemeReplies.harambeReply(message);
+  }
+
   // Rock, Paper, Scissors
 	if (message.content.substring(0, 7) == "!battle") {
 	  rpsManager.parseCommand(message);

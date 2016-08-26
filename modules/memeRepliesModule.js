@@ -49,6 +49,15 @@ var MemeManager = function (bot){
         winston.error("couldn't send image:", err);
     });
   }
+
+  //Harambe Reply
+  this.harambeReply = function (message){
+    bot.reply(message, "I think you mean Harambe* \n 🙏😇 -|- Saint Harambe -|- 😇🙏");
+    bot.sendFile(message.channel, "./modules/memeImages/harambe.png","harambe.png", (err, message) => {
+      if(err)
+        winston.error("couldn't send image:", err);
+      });
+  }
 }
 
 module.exports = MemeManager;
