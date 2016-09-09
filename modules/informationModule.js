@@ -4,7 +4,7 @@ var winston = require('winston');
 
 var InfoManager = function (bot){
   this.help = function (message){
-    bot.reply(message, "\r__Available commands__ :\r" +
+    message.reply("\r__Available commands__ :\r" +
 		"**!help** : List of possible commands.\r" +
     "**!about** : General info on the bot.\r" +
 		"**!uptime** : Returns bot's uptime.\r" +
@@ -23,7 +23,7 @@ var InfoManager = function (bot){
   }
 
   this.about = function (message){
-    bot.reply(message, "ShameBot Version " + botVersion + "\r" +
+    message.reply("ShameBot Version " + botVersion + "\r" +
 		"Stack: Discord.js, Node.js, Ubuntu, Digital Ocean, GitHub, and pm2.\r" +
 		"Find us on GitHub!\r" +
 		"https://github.com/B1anc0N1n0/SDG_Discord_Bot\r" +
@@ -31,7 +31,7 @@ var InfoManager = function (bot){
   }
 
   this.stats = function (message){
-    bot.reply(message, "Working hard for [" + bot.servers.length + "] Servers " +
+    message.reply("Working hard for [" + bot.servers.length + "] Servers " +
     "in [" + bot.channels.length + "] Channels for [" + bot.users.length + "] Users!");
   }
 
@@ -40,7 +40,7 @@ var InfoManager = function (bot){
     var channelNames = [];
     var userNames = [];
 
-    bot.reply(message, "I've sent you a private message containing your request results.");
+    message.reply("I've sent you a private message containing your request results.");
 
     bot.servers.forEach(function(server) {
       serverNames.push (server.name);
@@ -68,7 +68,7 @@ var InfoManager = function (bot){
 		x /= 24;
 		var uptimeDays = Math.floor(x);
 		botUptime = "D:H:M:S - " + uptimeDays + ":" + uptimeHours + ":" + uptimeMinutes + ":" + uptimeSeconds;
-		bot.reply(message, botUptime);
+    message.reply(botUptime);
   }
 }
 

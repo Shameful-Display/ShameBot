@@ -14,7 +14,7 @@ var MemeManager = function (bot){
   //cena reply function
   this.cenaReply = function (message) {
     //Reply message - \uD83C is the unicode trumpet
-    bot.reply(message, "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
+    message.reply("\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
     //Get random image path from array
     var randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
     //Reply with random cena image
@@ -34,7 +34,7 @@ var MemeManager = function (bot){
 
   //Macho Man function
   this.machoManReply = function (message){
-    bot.reply(message, "Ohhhh yeah brother!");
+    message.reply("Ohhhh yeah brother!");
 		bot.sendFile(message.channel, "./modules/memeImages/savage.jpg","savage.jpg", (err, message) => {
 			if(err)
 				winston.error("Couldn't send image:", err);
@@ -43,7 +43,7 @@ var MemeManager = function (bot){
 
   //Tiny Rick function
   this.tinyRickReply = function (message) {
-    bot.reply(message, "I'm Tiny Rick!!!!!");
+    message.reply("I'm Tiny Rick!!!!!");
     bot.sendFile(message.channel, "./modules/memeImages/tinyRick.jpg","tinyRick.jpg", (err, message) => {
       if(err)
         winston.error("couldn't send image:", err);
@@ -52,7 +52,7 @@ var MemeManager = function (bot){
 
   //Harambe Reply
   this.harambeReply = function (message){
-    bot.reply(message, "I think you mean Harambe* \n 🙏😇 -|- Saint Harambe -|- 😇🙏");
+    message.reply("I think you mean Harambe* \n 🙏😇 -|- Saint Harambe -|- 😇🙏");
     bot.sendFile(message.channel, "./modules/memeImages/harambe.png","harambe.png", (err, message) => {
       if(err)
         winston.error("couldn't send image:", err);

@@ -73,7 +73,7 @@ bot.on("message", function(message)
 				var upvotes = doc.upvotes;
 				var downvotes = doc.downvotes;
 				var netHonor = upvotes - downvotes;
-				bot.reply(message, user + " has " + netHonor + " honor!");
+				message.reply(user + " has " + netHonor + " honor!");
 			}
 		});
 	}
@@ -144,10 +144,10 @@ bot.on("message", function(message)
 				{ id: userID, steamID: steamID },
 				{ upsert: true }
 			);
-			bot.reply(message, "Your SteamID has been associated with your DiscordID!");
+			message.reply("Your SteamID has been associated with your DiscordID!");
 		} else
       {
-				bot.reply(message, "A Steam ID must be a string comprised only of numbers. \n\nExample: \n ```!setSteamID 76561197960434622```");
+				message.reply("A Steam ID must be a string comprised only of numbers. \n\nExample: \n ```!setSteamID 76561197960434622```");
 			}
 	}
 
@@ -159,7 +159,7 @@ bot.on("message", function(message)
 		db.collection('SteamIDtoDiscordID').deleteOne(
 			{ id: userID }
 		);
-		bot.reply(message, "Your SteamID has been cleared!");
+		message.reply("Your SteamID has been cleared!");
 	}
 
 	// Return Steam ID
@@ -168,10 +168,10 @@ bot.on("message", function(message)
 		steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
 		  if (err) throw err;
 			if (doc == null) {
-				bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```\nNeed help finding your SteamID? Try https://steamid.io/");
+				message.reply("You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```\nNeed help finding your SteamID? Try https://steamid.io/");
 				return;
 			}
-			bot.reply(message, "SteamID: " + doc.steamID);
+			message.reply("SteamID: " + doc.steamID);
 		});
 	}
 
@@ -183,7 +183,7 @@ bot.on("message", function(message)
 			if (err) throw err;
 
 			if (doc == null) {
-				bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622``` \nNeed help finding your SteamID? Try https://steamid.io/");
+				message.reply("You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622``` \nNeed help finding your SteamID? Try https://steamid.io/");
 				return;
 			}
 
@@ -221,7 +221,7 @@ bot.on("message", function(message)
 					}
 					responseString += "```";
 
-					bot.reply(message, responseString);
+					message.reply(responseString);
 				});
 			});
 
@@ -302,13 +302,13 @@ bot.on("message", function(message)
 				{ id: userID, server: serverID, pcBuild: buildString },
 				{ upsert: true }
 			);
-      bot.reply(message, "Your build has been accepted!");
+      message.reply("Your build has been accepted!");
     }
 
     if(/^(http)[s]?(:\/\/pcpartpicker.com\/list\/)\w*$/.test(partPickerURL)) {
       scrapeSite(partPickerURL, userID, userName, buildString, serverID, componentsIntoString, saveBuildToDB);
     } else {
-      bot.reply(message, "You must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
+      message.reply("You must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
       return;
     }
   }
@@ -320,7 +320,7 @@ bot.on("message", function(message)
   		PCBuildCollection.findOne({id: mentionedUser.id, server: serverID}, function(err, doc){
   			if(err) throw err;
   			if(doc == null){
-  				bot.reply(message, mentionedUser.username + " has not set their PC Build yet." + mentionedUser.username + " must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
+  				message.reply(mentionedUser.username + " has not set their PC Build yet." + mentionedUser.username + " must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
   			}else{
           var myCursor = PCBuildCollection.find(
       			{id : user.id, server : serverID},
@@ -331,7 +331,7 @@ bot.on("message", function(message)
       			if(err) throw err;
       			if (doc != null){
       				var build = doc.pcBuild;
-      				bot.reply(message, build);
+      				message.reply(build);
       			}
       		});
         }
