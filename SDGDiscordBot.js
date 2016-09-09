@@ -1,6 +1,9 @@
 //Note: the .js is not required as Node assumes these files are javascript
 //node modules to include
-var Discord = require("discord.js");
+const Discord = require("discord.js"),
+    bot = new Discord.Client({
+      autoReconnect:true
+    })
 var fs = require( "fs" );
 var path = require( "path" );
 var process = require( "process" );
@@ -10,8 +13,6 @@ var MongoClient = require('mongodb').MongoClient;
 var db;
 var honorCollection;
 var steamIDCollection;
-//initial bot setup
-var bot = new Discord.Client({autoReconnect: true});
 var AuthDetails = require("./auth.json");
 //bot modules
 var RPSManager = require("./modules/RPSManager.js")
@@ -420,4 +421,4 @@ bot.on("channelCreated", function(newChannel){
   ServerLog.newChannelEvent(newChannel);
 });
 
-bot.loginWithToken(AuthDetails.token);
+bot.login(AuthDetails.token);
