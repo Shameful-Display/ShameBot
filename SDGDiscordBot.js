@@ -52,7 +52,7 @@ bot.on("ready", function(){
 
 bot.on("message", function(message)
 {
-	if (!message.channel.isPrivate){var serverID = message.channel.server.id;}
+	if (!message.channel.isPrivate){var serverID = message.channel.guild.id;}
 
 	//don't listen for self messages
 	if (message.author.id == bot.user.id || message.author.bot){

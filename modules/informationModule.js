@@ -31,8 +31,8 @@ var InfoManager = function (bot){
   }
 
   this.stats = function (message){
-    message.reply("Working hard for [" + bot.servers.length + "] Servers " +
-    "in [" + bot.channels.length + "] Channels for [" + bot.users.length + "] Users!");
+    message.reply("Working hard for [" + bot.guilds.size + "] Servers " +
+    "in [" + bot.channels.size + "] Channels for [" + bot.users.size + "] Users!");
   }
 
   this.fullStats = function (message){
@@ -42,8 +42,8 @@ var InfoManager = function (bot){
 
     message.reply("I've sent you a private message containing your request results.");
 
-    bot.servers.forEach(function(server) {
-      serverNames.push (server.name);
+    bot.guilds.forEach(function(guild) {
+      serverNames.push (guild.name);
     });
     bot.channels.forEach(function(channel) {
       channelNames.push (channel.name);
