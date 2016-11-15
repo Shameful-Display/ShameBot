@@ -22,6 +22,8 @@ var TableCatchManager = require("./modules/tableCatcherModule.js")
 var CatchManager = new TableCatchManager(bot);
 var InfoManager = require("./modules/informationModule.js")
 var InfoReplies = new InfoManager(bot);
+var ServerLogManager = require("./modules/serverLogModule.js")
+var ServerLog = new ServerLogManager(bot);
 var request = require("request"),
   cheerio = require("cheerio");
 
@@ -403,6 +405,11 @@ bot.on("message", function(message)
 		CatchManager.tableCatcherReply(message);
 	}
 
+});
+
+// Server Logging
+bot.on("messageUpdated", function(originalMessage, updatedMessage){
+  ServerLog.editedMessageEvent(originalMessage, updatedMessage);
 });
 
 bot.loginWithToken(AuthDetails.token);
