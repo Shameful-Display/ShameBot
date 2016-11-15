@@ -416,4 +416,8 @@ bot.on("messageDeleted", function(deletedMessage, channel){
   ServerLog.deletedMessageEvent(deletedMessage, channel);
 });
 
+bot.on("channelCreated", function(newChannel){
+  ServerLog.newChannelEvent(newChannel);
+});
+
 bot.loginWithToken(AuthDetails.token);

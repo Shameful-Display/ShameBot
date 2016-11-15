@@ -19,6 +19,13 @@ var ServerLogManager = function (bot){
     deletedMessage.cleanContent);
   }
 
+  this.newChannelEvent = function (newChannel) {
+    var serverLogChannel = bot.channels.get("name", "serverlog");
+
+    bot.sendMessage(serverLogChannel, '**New Channel Created**\n' + 'A new channel named ' +
+    newChannel + ' was created.\n');
+  }
+
 }
 
 module.exports = ServerLogManager;
