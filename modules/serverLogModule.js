@@ -10,6 +10,15 @@ var ServerLogManager = function (bot){
     updatedMessage.cleanContent + '\n');
   }
 
+  this.deletedMessageEvent = function (deletedMessage, channel) {
+    var serverLogChannel = bot.channels.get("name", "serverlog");
+
+    bot.sendMessage(serverLogChannel, '**Deleted Message**\n' + deletedMessage.author.username + '#' +
+    deletedMessage.author.discriminator + '' + ' deleted this message in the ' +
+    deletedMessage.channel + ' channel\n**Deleted Message:** \n' +
+    deletedMessage.cleanContent);
+  }
+
 }
 
 module.exports = ServerLogManager;

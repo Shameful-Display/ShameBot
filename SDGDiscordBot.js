@@ -412,4 +412,8 @@ bot.on("messageUpdated", function(originalMessage, updatedMessage){
   ServerLog.editedMessageEvent(originalMessage, updatedMessage);
 });
 
+bot.on("messageDeleted", function(deletedMessage, channel){
+  ServerLog.deletedMessageEvent(deletedMessage, channel);
+});
+
 bot.loginWithToken(AuthDetails.token);
