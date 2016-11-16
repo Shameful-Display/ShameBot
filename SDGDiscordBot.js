@@ -440,5 +440,9 @@ bot.on("serverRoleDeleted", function(deletedServerRole){
   ServerLog.serverRoleDeletedEvent(deletedServerRole);
 });
 
+bot.on("serverRoleUpdated", function(originalRole, updatedRole){
+  ServerLog.serverRoleUpdatedEvent(originalRole, updatedRole);
+});
+
 
 bot.loginWithToken(AuthDetails.token);

@@ -85,6 +85,21 @@ var ServerLogManager = function (bot){
     '\n\tCreation Date: ' + deletedServerRole.createdAt + '\n');
   }
 
+  this.serverRoleUpdatedEvent = function (originalRole, updatedRole) {
+    bot.sendMessage(originalRole.client.channels.get("name", "serverlog"), '**Updated Server Role**\n' +
+    'The ' + originalRole.name + ' server role was updated.' +
+    '\n**Original Role:** \t' + originalRole.name +
+    '\n\tName: ' + deletedServerRole.name +
+    '\n\tID: ' + deletedServerRole.id +
+    '\n\tColor: ' + deletedServerRole.colorAsHex() +
+    '\n\tCreation Date: ' + deletedServerRole.createdAt +
+    '\n**Updated Role:** \t' + updatedRole.name +
+    '\n\tName: ' + updatedRole.name +
+    '\n\tID: ' + updatedRole.id +
+    '\n\tColor: ' + updatedRole.colorAsHex() +
+    '\n\tCreation Date: ' + updatedRole.createdAt + '\n');
+  }
+
 }
 
 module.exports = ServerLogManager;
