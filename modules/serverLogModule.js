@@ -75,6 +75,16 @@ var ServerLogManager = function (bot){
     '\n\tCreation Date: ' + newServerRole.createdAt + '\n');
   }
 
+  this.serverRoleDeletedEvent = function (deletedServerRole) {
+    bot.sendMessage(deletedServerRole.client.channels.get("name", "serverlog"), '**Server Role Deleted**\n' +
+    'The ' + deletedServerRole.name + ' server role was deleted.' +
+    '\n**Original Channel:** \t' + deletedServerRole.name +
+    '\n\tName: ' + deletedServerRole.name +
+    '\n\tID: ' + deletedServerRole.id +
+    '\n\tColor: ' + deletedServerRole.colorAsHex() +
+    '\n\tCreation Date: ' + deletedServerRole.createdAt + '\n');
+  }
+
 }
 
 module.exports = ServerLogManager;

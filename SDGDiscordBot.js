@@ -436,5 +436,9 @@ bot.on("serverRoleCreated", function(newServerRole){
   ServerLog.serverRoleCreatedEvent(newServerRole);
 });
 
+bot.on("serverRoleDeleted", function(deletedServerRole){
+  ServerLog.serverRoleDeletedEvent(deletedServerRole);
+});
+
 
 bot.loginWithToken(AuthDetails.token);
