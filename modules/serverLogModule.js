@@ -2,7 +2,8 @@ var ServerLogManager = function (bot){
 
   this.editedMessageEvent = function (originalMessage, updatedMessage) {
     // Make sure it's not a slash command adding embeded content to the message
-    if (originalMessage.embeds.length == 0 && updatedMessage.embeds.length == 0) {
+    // Same for pinning counting as a message edit
+    if ((originalMessage.embeds.length == updatedMessage.embeds.length) && (originalMessage.pinned == updatedMessage.pinned)) {
       bot.sendMessage(originalMessage.client.channels.get("name", "serverlog"), '**Updated Message**\n' + originalMessage.author.username + '#' +
       originalMessage.author.discriminator + '' + ' updated their message in the ' +
       originalMessage.channel + ' channel\n**Original Message:** \n' +
