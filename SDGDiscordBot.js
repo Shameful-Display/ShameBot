@@ -428,5 +428,9 @@ bot.on("channelDeleted", function(deletedChannel){
   ServerLog.channelDeletedEvent(deletedChannel);
 });
 
+bot.on("serverUpdated", function(originalServer, updatedServer){
+  ServerLog.serverUpdatedEvent(originalServer, updatedServer);
+});
+
 
 bot.loginWithToken(AuthDetails.token);

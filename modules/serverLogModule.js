@@ -45,6 +45,27 @@ var ServerLogManager = function (bot){
     '\n\tTopic: ' + deletedChannel.topic + '\n');
   }
 
+  this.serverUpdatedEvent = function (originalServer, updatedServer) {
+    bot.sendMessage(originalServer.client.channels.get("name", "serverlog"), '**Updated Server**\n' +
+    'The ' + originalServer.name + ' channel was updated.' +
+    '\n**Original Server:** \t' + originalServer.name +
+    '\n\tName: ' + originalServer.name +
+    '\n\tRegion: ' + originalServer.region +
+    '\n\tOwner: ' + originalServer.owner.username + '#' + originalServer.owner.discriminator +
+    '\n\tAFK Timeout: ' + originalServer.afkTimeout +
+    '\n\tAFK Channel: ' + originalServer.afkChannel +
+    '\n\tDefault Channel: ' + originalServer.defaultChannel +
+    '\n\tCreation Date: ' + originalServer.createdAt +
+    '\n**Updated Server:** \t' + updatedServer.name +
+    '\n\tName: ' + updatedServer.name +
+    '\n\tRegion: ' + updatedServer.region +
+    '\n\tOwner: ' + updatedServer.owner.username + '#' + updatedServer.owner.discriminator +
+    '\n\tAFK Timeout: ' + updatedServer.afkTimeout +
+    '\n\tAFK Channel: ' + updatedServer.afkChannel +
+    '\n\tDefault Channel: ' + updatedServer.defaultChannel +
+    '\n\tCreation Date: ' + updatedServer.createdAt +'\n');
+  }
+
 }
 
 module.exports = ServerLogManager;
