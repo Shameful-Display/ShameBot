@@ -1,11 +1,14 @@
 var ServerLogManager = function (bot){
 
   this.editedMessageEvent = function (originalMessage, updatedMessage) {
-    bot.sendMessage(originalMessage.client.channels.get("name", "serverlog"), '**Updated Message**\n' + originalMessage.author.username + '#' +
-    originalMessage.author.discriminator + '' + ' updated their message in the ' +
-    originalMessage.channel + ' channel\n**Original Message:** \n' +
-    originalMessage.cleanContent + '\n**Updated Message:** \n' +
-    updatedMessage.cleanContent + '\n');
+    // Make sure it's not a slash command adding embeded content to the message
+    if (originalMessage.embeds.length == 0 && updatedMessage.embeds.length == 0) {
+      bot.sendMessage(originalMessage.client.channels.get("name", "serverlog"), '**Updated Message**\n' + originalMessage.author.username + '#' +
+      originalMessage.author.discriminator + '' + ' updated their message in the ' +
+      originalMessage.channel + ' channel\n**Original Message:** \n' +
+      originalMessage.cleanContent + '\n**Updated Message:** \n' +
+      updatedMessage.cleanContent + '\n');
+    }
   }
 
   this.deletedMessageEvent = function (deletedMessage, channel) {
