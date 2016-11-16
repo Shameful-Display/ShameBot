@@ -432,5 +432,9 @@ bot.on("serverUpdated", function(originalServer, updatedServer){
   ServerLog.serverUpdatedEvent(originalServer, updatedServer);
 });
 
+bot.on("serverRoleCreated", function(newServerRole){
+  ServerLog.serverRoleCreatedEvent(newServerRole);
+});
+
 
 bot.loginWithToken(AuthDetails.token);

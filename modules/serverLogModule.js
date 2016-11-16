@@ -66,6 +66,15 @@ var ServerLogManager = function (bot){
     '\n\tCreation Date: ' + updatedServer.createdAt +'\n');
   }
 
+  this.serverRoleCreatedEvent = function (newServerRole) {
+    bot.sendMessage(newServerRole.client.channels.get("name", "serverlog"), '**New Server Role Created**\n' +
+    'A new server role named ' + newServerRole + ' was created.' +
+    '\n\tName: ' + newServerRole.name +
+    '\n\tID: ' + newServerRole.id +
+    '\n\tColor: ' + newServerRole.colorAsHex() +
+    '\n\tCreation Date: ' + newServerRole.createdAt + '\n');
+  }
+
 }
 
 module.exports = ServerLogManager;
