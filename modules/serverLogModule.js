@@ -35,6 +35,16 @@ var ServerLogManager = function (bot){
     '\n\tTopic: ' + updatedChannel.topic + '\n');
   }
 
+  this.channelDeletedEvent = function (deletedChannel) {
+    bot.sendMessage(deletedChannel.client.channels.get("name", "serverlog"), '**Channel Deleted**\n' +
+    'The ' + deletedChannel.name + ' channel was deleted.' +
+    '\n**Original Channel:** \t' + deletedChannel.name +
+    '\n\tName: ' + deletedChannel.name +
+    '\n\tType: ' + deletedChannel.type +
+    '\n\tPosition: ' + deletedChannel.position +
+    '\n\tTopic: ' + deletedChannel.topic + '\n');
+  }
+
 }
 
 module.exports = ServerLogManager;
