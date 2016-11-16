@@ -20,6 +20,21 @@ var ServerLogManager = function (bot){
     newChannel + ' was created.\n');
   }
 
+  this.channelUpdatedEvent = function (originalChannel, updatedChannel) {
+    bot.sendMessage(originalChannel.client.channels.get("name", "serverlog"), '**Updated Channel**\n' +
+    'The ' + originalChannel.name + ' channel was updated.' +
+    '\n**Original Channel:** \t' + originalChannel.name +
+    '\n\tName: ' + originalChannel.name +
+    '\n\tType: ' + originalChannel.type +
+    '\n\tPosition: ' + originalChannel.position +
+    '\n\tTopic: ' + originalChannel.topic +
+    '\n**Updated Channel:** \t' + updatedChannel +
+    '\n\tName: ' + updatedChannel.name +
+    '\n\tType: ' + updatedChannel.type +
+    '\n\tPosition: ' + updatedChannel.position +
+    '\n\tTopic: ' + updatedChannel.topic + '\n');
+  }
+
 }
 
 module.exports = ServerLogManager;

@@ -420,4 +420,9 @@ bot.on("channelCreated", function(newChannel){
   ServerLog.newChannelEvent(newChannel);
 });
 
+bot.on("channelUpdated", function(originalChannel, updatedChannel){
+  ServerLog.channelUpdatedEvent(originalChannel, updatedChannel);
+});
+
+
 bot.loginWithToken(AuthDetails.token);
