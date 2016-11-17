@@ -420,4 +420,29 @@ bot.on("channelCreated", function(newChannel){
   ServerLog.newChannelEvent(newChannel);
 });
 
+bot.on("channelUpdated", function(originalChannel, updatedChannel){
+  ServerLog.channelUpdatedEvent(originalChannel, updatedChannel);
+});
+
+bot.on("channelDeleted", function(deletedChannel){
+  ServerLog.channelDeletedEvent(deletedChannel);
+});
+
+bot.on("serverUpdated", function(originalServer, updatedServer){
+  ServerLog.serverUpdatedEvent(originalServer, updatedServer);
+});
+
+bot.on("serverRoleCreated", function(newServerRole){
+  ServerLog.serverRoleCreatedEvent(newServerRole);
+});
+
+bot.on("serverRoleDeleted", function(deletedServerRole){
+  ServerLog.serverRoleDeletedEvent(deletedServerRole);
+});
+
+bot.on("serverRoleUpdated", function(originalRole, updatedRole){
+  ServerLog.serverRoleUpdatedEvent(originalRole, updatedRole);
+});
+
+
 bot.loginWithToken(AuthDetails.token);
