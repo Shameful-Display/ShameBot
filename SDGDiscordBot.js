@@ -42,16 +42,15 @@ MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, databa
 //initialize file transport for winston
 winstonModule.createWinstonFileTransport();
 
-bot.on("disconnected", function(){
+bot.on("disconnected", () => {
 	winston.info("** Shamebot disconnected at " + new Date() + " **");
 });
 
-bot.on("ready", function(){
+bot.on("ready", () => {
 	winston.info("|| -- Shamebot ready for input at " + new Date() + " -- ||");
 });
 
-bot.on("message", function(message)
-{
+bot.on("message", message => {
 	if (!message.channel.isPrivate){var serverID = message.channel.guild.id;}
 
 	//don't listen for self messages
@@ -409,15 +408,15 @@ bot.on("message", function(message)
 });
 
 // Server Logging
-bot.on("messageUpdated", function(originalMessage, updatedMessage){
+bot.on("messageUpdated", (originalMessage, updatedMessage) => {
   ServerLog.editedMessageEvent(originalMessage, updatedMessage);
 });
 
-bot.on("messageDeleted", function(deletedMessage, channel){
+bot.on("messageDeleted", (deletedMessage, channel) => {
   ServerLog.deletedMessageEvent(deletedMessage, channel);
 });
 
-bot.on("channelCreated", function(newChannel){
+bot.on("channelCreated", (newChannel) => {
   ServerLog.newChannelEvent(newChannel);
 });
 
