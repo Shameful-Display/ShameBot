@@ -49,9 +49,9 @@ var InfoManager = function (bot){
       channelNames.push (channel.name);
     });
     bot.users.forEach(function(user) {
-      userNames.push (user.name + "#" + user.discriminator);
+      userNames.push (user.username + "#" + user.discriminator);
     });
-    bot.sendMessage(message.author, "Here are your full stats as requested:\n\n" +
+    message.author.sendMessage("Here are your full stats as requested:\n\n" +
       "**Servers:**\n\`\`\`" + serverNames+ "\`\`\`" +
       "**Channels:**\n\`\`\`" + channelNames + "\`\`\`" +
       "**Users:**\n\`\`\`" + userNames + "\`\`\`");
