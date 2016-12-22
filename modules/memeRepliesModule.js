@@ -18,7 +18,7 @@ var MemeManager = function (bot){
     //Get random image path from array
     var randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
     //Reply with random cena image
-    bot.sendFile(message.channel, cenaImageFolder.concat(randomCenaImageFilePath),"jonny.png", (err, message) => {
+    bot.user.sendFile(message.channel, cenaImageFolder.concat(randomCenaImageFilePath),"jonny.png", (err, message) => {
       if(err)
         winston.error("couldn't send image:", err);
     })
@@ -26,7 +26,7 @@ var MemeManager = function (bot){
 
   //KoolAid reply function
   this.koolaidReply = function (message){
-    bot.sendFile(message.channel, "./modules/memeImages/koolaid.jpg","koolaid.jpg", (err, message) => {
+    bot.user.sendFile(message.channel, "./modules/memeImages/koolaid.jpg","koolaid.jpg", (err, message) => {
       if(err)
         winston.error("couldn't send image:", err);
       });
@@ -35,7 +35,7 @@ var MemeManager = function (bot){
   //Macho Man function
   this.machoManReply = function (message){
     message.reply("Ohhhh yeah brother!");
-		bot.sendFile(message.channel, "./modules/memeImages/savage.jpg","savage.jpg", (err, message) => {
+		bot.user.sendFile(message.channel, "./modules/memeImages/savage.jpg","savage.jpg", (err, message) => {
 			if(err)
 				winston.error("Couldn't send image:", err);
 		});
@@ -44,7 +44,7 @@ var MemeManager = function (bot){
   //Tiny Rick function
   this.tinyRickReply = function (message) {
     message.reply("I'm Tiny Rick!!!!!");
-    bot.sendFile(message.channel, "./modules/memeImages/tinyRick.jpg","tinyRick.jpg", (err, message) => {
+    bot.user.sendFile(message.channel, "./modules/memeImages/tinyRick.jpg","tinyRick.jpg", (err, message) => {
       if(err)
         winston.error("couldn't send image:", err);
     });
@@ -53,7 +53,7 @@ var MemeManager = function (bot){
   //Harambe Reply
   this.harambeReply = function (message){
     message.reply("I think you mean Harambe* \n 🙏😇 -|- Saint Harambe -|- 😇🙏");
-    bot.sendFile(message.channel, "./modules/memeImages/harambe.png","harambe.png", (err, message) => {
+    bot.user.sendFile(message.channel, "./modules/memeImages/harambe.png","harambe.png", (err, message) => {
       if(err)
         winston.error("couldn't send image:", err);
       });
