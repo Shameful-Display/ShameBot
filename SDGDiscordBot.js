@@ -51,7 +51,9 @@ bot.on("ready", () => {
 });
 
 bot.on("message", message => {
-	if (!message.channel.isPrivate){var serverID = message.channel.guild.id;}
+	if (!message.channel.type == 'dm' || !message.channel.type == 'group') {
+    var serverID = message.channel.guild.id;
+  }
 
 	//don't listen for self messages
 	if (message.author.id == bot.user.id || message.author.bot){
