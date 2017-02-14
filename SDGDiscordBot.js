@@ -410,11 +410,11 @@ bot.on("message", message => {
 });
 
 // Server Logging
-bot.on("messageUpdated", (originalMessage, updatedMessage) => {
+bot.on("messageUpdate", (originalMessage, updatedMessage) => {
   ServerLog.editedMessageEvent(originalMessage, updatedMessage);
 });
 
-bot.on("messageDeleted", (deletedMessage, channel) => {
+bot.on("messageDelete", (deletedMessage, channel) => {
   ServerLog.deletedMessageEvent(deletedMessage, channel);
 });
 
