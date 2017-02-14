@@ -418,7 +418,7 @@ bot.on("messageDelete", (deletedMessage, channel) => {
   ServerLog.deletedMessageEvent(deletedMessage, channel);
 });
 
-bot.on("channelCreated", (newChannel) => {
+bot.on("channelCreate", (newChannel) => {
   ServerLog.newChannelEvent(newChannel);
 });
 

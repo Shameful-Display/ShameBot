@@ -22,10 +22,11 @@ var ServerLogManager = function (bot){
   }
 
   this.newChannelEvent = function (newChannel) {
-    var serverLogChannel = bot.channels.get("name", "serverlog");
+    var serverLogChannel = bot.channels.find("name", "serverlog");
 
-    bot.sendMessage(serverLogChannel, '**New Channel Created**\n' + 'A new channel named ' +
-    newChannel + ' was created.\n');
+    serverLogChannel.sendMessage('**New Channel Created**\n' + 'A new channel named ' +
+    newChannel + ' was created.\n')
+    .catch((err) => winston.error("couldn't send new channel message info:", err));
   }
 
 }
