@@ -51,9 +51,10 @@ bot.on("ready", () => {
 });
 
 bot.on("message", message => {
-	if (!message.channel.type == 'dm' || !message.channel.type == 'group') {
-    var serverID = message.channel.guild.id;
+	if (message.channel.type == 'dm' || message.channel.type == 'group') {
+    return
   }
+  var serverID = message.channel.guild.id;
 
 	//don't listen for self messages
 	if (message.author.id == bot.user.id || message.author.bot){
@@ -396,11 +397,12 @@ bot.on("message", message => {
 
   // Rock, Paper, Scissors
 	if (message.content.substring(0, 7) == "!battle") {
-	  rpsManager.parseCommand(message);
+    message.reply("Currently Unsupported")
+	  // rpsManager.parseCommand(message); //Commenting out until DM's are handled
 	}
-	if (message.channel.isPrivate && rpsManager.isBattleOn()) {
-	  rpsManager.parseCommand(message);
-	}
+	// if (message.channel.isPrivate && rpsManager.isBattleOn()) {
+	//   rpsManager.parseCommand(message);
+	// }
 
 	//Table Catcher
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
