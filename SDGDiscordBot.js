@@ -91,27 +91,27 @@ bot.on("message", message => {
 		});
 	}
 
-	if(message.mentions.length > 0) { //check if message has any mentions
-		var mentionsArray = message.mentions; //store array of user objects which were mentioned in message
+	if(message.mentions.users) { //check if message has any mentions
+		var mentionsArray = message.mentions.users.array(); //store array of user objects which were mentioned in message
 		var messageTokens = message.content.split(" "); //tokenize message into array
 		for (i = 0; i < messageTokens.length; i++){ //step through tokenized message array
 			if (messageTokens[i].charAt(0) == '<'){ //check if word is a mention by checking for the opening char
-				var legitMention = false; //initialize flag for legitimate mentions
+        var legitMention = false; //initialize flag for legitimate mentions
 				slicedStringMention = messageTokens[i].slice(2, -1); //extract user ID from mention in the message (removing <@ and >)
 				for (var userObj of mentionsArray){ //step through each object in the mentions array
-					if (userObj.id == slicedStringMention && !userObj.equals(message.author) ) {// check to see if the user ID found matches a real mention
+          if (userObj.id == slicedStringMention && !userObj.equals(message.author) ) {// check to see if the user ID found matches a real mention
 						legitMention = true;
 					}
 				}
 				if (legitMention == true){ //if the user id from the string is good
 					if (messageTokens[i+1] == '++'){ //check to see if the token following the mention is a '++' for upvote
-						honorCollection.update(
+            honorCollection.update(
 							{ id: slicedStringMention, server: serverID },
 							{ $inc: { upvotes: 1} },
 							{upsert: true}
 						);
 					}else if (messageTokens[i+1] == '--'){ //check to see if the token following the mention is a '--' for downvote
-						honorCollection.update(
+            honorCollection.update(
 							{ id: slicedStringMention, server: serverID },
 							{ $inc: { downvotes: 1} },
 							{upsert: true}
@@ -123,8 +123,8 @@ bot.on("message", message => {
 	}
 
 	//Command to return user's honor
-	if(message.content.includes("!honor") && message.mentions.length == 1){
-		var mentionedUser = message.mentions[0];
+	if(message.content.includes("!honor") && message.mentions.users.array().length == 1){
+		var mentionedUser = message.mentions.users.array()[0];
 		initializeAndReturnHonor(mentionedUser, serverID, returnHonor);
 	}
 
