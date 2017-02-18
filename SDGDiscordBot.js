@@ -424,4 +424,28 @@ bot.on("channelCreate", (newChannel) => {
   ServerLog.newChannelEvent(newChannel);
 });
 
+bot.on("channelUpdate", function(originalChannel, updatedChannel){
+  ServerLog.channelUpdatedEvent(originalChannel, updatedChannel);
+});
+
+bot.on("channelDelete", function(deletedChannel){
+  ServerLog.channelDeletedEvent(deletedChannel);
+});
+
+bot.on("guildUpdated", function(originalServer, updatedServer){
+  ServerLog.serverUpdatedEvent(originalServer, updatedServer);
+});
+
+bot.on("roleCreate", function(newServerRole){
+  ServerLog.serverRoleCreatedEvent(newServerRole);
+});
+
+bot.on("roleDelete", function(deletedServerRole){
+  ServerLog.serverRoleDeletedEvent(deletedServerRole);
+});
+
+bot.on("roleUpdate", function(originalRole, updatedRole){
+  ServerLog.serverRoleUpdatedEvent(originalRole, updatedRole);
+});
+
 bot.login(AuthDetails.token);
