@@ -14,49 +14,39 @@ var MemeManager = function (bot){
   //cena reply function
   this.cenaReply = function (message) {
     //Reply message - \uD83C is the unicode trumpet
-    bot.reply(message, "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
+    message.reply("\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
     //Get random image path from array
     var randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
     //Reply with random cena image
-    bot.sendFile(message.channel, cenaImageFolder.concat(randomCenaImageFilePath),"jonny.png", (err, message) => {
-      if(err)
-        winston.error("couldn't send image:", err);
-    })
+    message.channel.sendFile(cenaImageFolder.concat(randomCenaImageFilePath),"jonny.png")
+      .catch((err) => winston.error("couldn't send image:", err));
   }
 
   //KoolAid reply function
   this.koolaidReply = function (message){
-    bot.sendFile(message.channel, "./modules/memeImages/koolaid.jpg","koolaid.jpg", (err, message) => {
-      if(err)
-        winston.error("couldn't send image:", err);
-      });
+    message.channel.sendFile("./modules/memeImages/koolaid.jpg","koolaid.jpg")
+      .catch((err) => winston.error("couldn't send image:", err));
   }
 
   //Macho Man function
   this.machoManReply = function (message){
-    bot.reply(message, "Ohhhh yeah brother!");
-		bot.sendFile(message.channel, "./modules/memeImages/savage.jpg","savage.jpg", (err, message) => {
-			if(err)
-				winston.error("Couldn't send image:", err);
-		});
+    message.reply("Ohhhh yeah brother!");
+		message.channel.sendFile("./modules/memeImages/savage.jpg","savage.jpg")
+			.catch((err) => winston.error("Couldn't send image:", err));
   }
 
   //Tiny Rick function
   this.tinyRickReply = function (message) {
-    bot.reply(message, "I'm Tiny Rick!!!!!");
-    bot.sendFile(message.channel, "./modules/memeImages/tinyRick.jpg","tinyRick.jpg", (err, message) => {
-      if(err)
-        winston.error("couldn't send image:", err);
-    });
+    message.reply("I'm Tiny Rick!!!!!");
+    message.channel.sendFile("./modules/memeImages/tinyRick.jpg","tinyRick.jpg")
+      .catch((err) => winston.error("couldn't send image:", err));
   }
 
   //Harambe Reply
   this.harambeReply = function (message){
-    bot.reply(message, "I think you mean Harambe* \n 🙏😇 -|- Saint Harambe -|- 😇🙏");
-    bot.sendFile(message.channel, "./modules/memeImages/harambe.png","harambe.png", (err, message) => {
-      if(err)
-        winston.error("couldn't send image:", err);
-      });
+    message.reply("I think you mean Harambe* \n 🙏😇 -|- Saint Harambe -|- 😇🙏");
+    message.channel.sendFile("./modules/memeImages/harambe.png","harambe.png")
+      .catch((err) => winston.error("couldn't send image:", err));
   }
 }
 

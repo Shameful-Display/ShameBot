@@ -1,6 +1,9 @@
 //Note: the .js is not required as Node assumes these files are javascript
 //node modules to include
-var Discord = require("discord.js");
+const Discord = require("discord.js"),
+    bot = new Discord.Client({
+      autoReconnect:true
+    })
 var fs = require( "fs" );
 var path = require( "path" );
 var process = require( "process" );
@@ -10,8 +13,6 @@ var MongoClient = require('mongodb').MongoClient;
 var db;
 var honorCollection;
 var steamIDCollection;
-//initial bot setup
-var bot = new Discord.Client({autoReconnect: true});
 var AuthDetails = require("./auth.json");
 //bot modules
 var RPSManager = require("./modules/RPSManager.js")
@@ -41,17 +42,19 @@ MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, databa
 //initialize file transport for winston
 winstonModule.createWinstonFileTransport();
 
-bot.on("disconnected", function(){
+bot.on("disconnected", () => {
 	winston.info("** Shamebot disconnected at " + new Date() + " **");
 });
 
-bot.on("ready", function(){
+bot.on("ready", () => {
 	winston.info("|| -- Shamebot ready for input at " + new Date() + " -- ||");
 });
 
-bot.on("message", function(message)
-{
-	if (!message.channel.isPrivate){var serverID = message.channel.server.id;}
+bot.on("message", message => {
+	if (message.channel.type == 'dm' || message.channel.type == 'group') {
+    return
+  }
+  var serverID = message.channel.guild.id;
 
 	//don't listen for self messages
 	if (message.author.id == bot.user.id || message.author.bot){
@@ -72,7 +75,7 @@ bot.on("message", function(message)
 				var upvotes = doc.upvotes;
 				var downvotes = doc.downvotes;
 				var netHonor = upvotes - downvotes;
-				bot.reply(message, user + " has " + netHonor + " honor!");
+				message.reply(user + " has " + netHonor + " honor!");
 			}
 		});
 	}
@@ -89,27 +92,27 @@ bot.on("message", function(message)
 		});
 	}
 
-	if(message.mentions.length > 0) { //check if message has any mentions
-		var mentionsArray = message.mentions; //store array of user objects which were mentioned in message
+	if(message.mentions.users) { //check if message has any mentions
+		var mentionsArray = message.mentions.users.array(); //store array of user objects which were mentioned in message
 		var messageTokens = message.content.split(" "); //tokenize message into array
 		for (i = 0; i < messageTokens.length; i++){ //step through tokenized message array
 			if (messageTokens[i].charAt(0) == '<'){ //check if word is a mention by checking for the opening char
-				var legitMention = false; //initialize flag for legitimate mentions
+        var legitMention = false; //initialize flag for legitimate mentions
 				slicedStringMention = messageTokens[i].slice(2, -1); //extract user ID from mention in the message (removing <@ and >)
 				for (var userObj of mentionsArray){ //step through each object in the mentions array
-					if (userObj.id == slicedStringMention && !userObj.equals(message.author) ) {// check to see if the user ID found matches a real mention
+          if (userObj.id == slicedStringMention && !userObj.equals(message.author) ) {// check to see if the user ID found matches a real mention
 						legitMention = true;
 					}
 				}
 				if (legitMention == true){ //if the user id from the string is good
 					if (messageTokens[i+1] == '++'){ //check to see if the token following the mention is a '++' for upvote
-						honorCollection.update(
+            honorCollection.update(
 							{ id: slicedStringMention, server: serverID },
 							{ $inc: { upvotes: 1} },
 							{upsert: true}
 						);
 					}else if (messageTokens[i+1] == '--'){ //check to see if the token following the mention is a '--' for downvote
-						honorCollection.update(
+            honorCollection.update(
 							{ id: slicedStringMention, server: serverID },
 							{ $inc: { downvotes: 1} },
 							{upsert: true}
@@ -121,8 +124,8 @@ bot.on("message", function(message)
 	}
 
 	//Command to return user's honor
-	if(message.content.includes("!honor") && message.mentions.length == 1){
-		var mentionedUser = message.mentions[0];
+	if(message.content.includes("!honor") && message.mentions.users.array().length == 1){
+		var mentionedUser = message.mentions.users.array()[0];
 		initializeAndReturnHonor(mentionedUser, serverID, returnHonor);
 	}
 
@@ -143,10 +146,10 @@ bot.on("message", function(message)
 				{ id: userID, steamID: steamID },
 				{ upsert: true }
 			);
-			bot.reply(message, "Your SteamID has been associated with your DiscordID!");
+			message.reply("Your SteamID has been associated with your DiscordID!");
 		} else
       {
-				bot.reply(message, "A Steam ID must be a string comprised only of numbers. \n\nExample: \n ```!setSteamID 76561197960434622```");
+				message.reply("A Steam ID must be a string comprised only of numbers. \n\nExample: \n ```!setSteamID 76561197960434622```");
 			}
 	}
 
@@ -158,7 +161,7 @@ bot.on("message", function(message)
 		db.collection('SteamIDtoDiscordID').deleteOne(
 			{ id: userID }
 		);
-		bot.reply(message, "Your SteamID has been cleared!");
+		message.reply("Your SteamID has been cleared!");
 	}
 
 	// Return Steam ID
@@ -167,10 +170,10 @@ bot.on("message", function(message)
 		steamIDCollection.findOne({id: userID}, {steamID: 1}, function(err, doc) {
 		  if (err) throw err;
 			if (doc == null) {
-				bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```\nNeed help finding your SteamID? Try https://steamid.io/");
+				message.reply("You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622```\nNeed help finding your SteamID? Try https://steamid.io/");
 				return;
 			}
-			bot.reply(message, "SteamID: " + doc.steamID);
+			message.reply("SteamID: " + doc.steamID);
 		});
 	}
 
@@ -182,7 +185,7 @@ bot.on("message", function(message)
 			if (err) throw err;
 
 			if (doc == null) {
-				bot.reply(message, "You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622``` \nNeed help finding your SteamID? Try https://steamid.io/");
+				message.reply("You haven't associated a SteamID with your DiscordID. Use the command !setSteamID to set this up. \n\nExample: \n ```!setSteamID 76561197960434622``` \nNeed help finding your SteamID? Try https://steamid.io/");
 				return;
 			}
 
@@ -220,7 +223,7 @@ bot.on("message", function(message)
 					}
 					responseString += "```";
 
-					bot.reply(message, responseString);
+					message.reply(responseString);
 				});
 			});
 
@@ -301,13 +304,13 @@ bot.on("message", function(message)
 				{ id: userID, server: serverID, pcBuild: buildString },
 				{ upsert: true }
 			);
-      bot.reply(message, "Your build has been accepted!");
+      message.reply("Your build has been accepted!");
     }
 
     if(/^(http)[s]?(:\/\/pcpartpicker.com\/list\/)\w*$/.test(partPickerURL)) {
       scrapeSite(partPickerURL, userID, userName, buildString, serverID, componentsIntoString, saveBuildToDB);
     } else {
-      bot.reply(message, "You must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
+      message.reply("You must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
       return;
     }
   }
@@ -319,7 +322,7 @@ bot.on("message", function(message)
   		PCBuildCollection.findOne({id: mentionedUser.id, server: serverID}, function(err, doc){
   			if(err) throw err;
   			if(doc == null){
-  				bot.reply(message, mentionedUser.username + " has not set their PC Build yet." + mentionedUser.username + " must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
+  				message.reply(mentionedUser.username + " has not set their PC Build yet." + mentionedUser.username + " must enter `!setPCBuild` and then the build's URL from pcpartpicker.com. The build URL must be in the following format \n `!setPCBuild http://pcpartpicker.com/list/tMnjyf`");
   			}else{
           var myCursor = PCBuildCollection.find(
       			{id : user.id, server : serverID},
@@ -330,7 +333,7 @@ bot.on("message", function(message)
       			if(err) throw err;
       			if (doc != null){
       				var build = doc.pcBuild;
-      				bot.reply(message, build);
+      				message.reply(build);
       			}
       		});
         }
@@ -394,11 +397,12 @@ bot.on("message", function(message)
 
   // Rock, Paper, Scissors
 	if (message.content.substring(0, 7) == "!battle") {
-	  rpsManager.parseCommand(message);
+    message.reply("Currently Unsupported")
+	  // rpsManager.parseCommand(message); //Commenting out until DM's are handled
 	}
-	if (message.channel.isPrivate && rpsManager.isBattleOn()) {
-	  rpsManager.parseCommand(message);
-	}
+	// if (message.channel.isPrivate && rpsManager.isBattleOn()) {
+	//   rpsManager.parseCommand(message);
+	// }
 
 	//Table Catcher
 	if(message.content.includes("(╯°□°）╯︵ ┻━┻")){
@@ -408,41 +412,40 @@ bot.on("message", function(message)
 });
 
 // Server Logging
-bot.on("messageUpdated", function(originalMessage, updatedMessage){
+bot.on("messageUpdate", (originalMessage, updatedMessage) => {
   ServerLog.editedMessageEvent(originalMessage, updatedMessage);
 });
 
-bot.on("messageDeleted", function(deletedMessage, channel){
+bot.on("messageDelete", (deletedMessage, channel) => {
   ServerLog.deletedMessageEvent(deletedMessage, channel);
 });
 
-bot.on("channelCreated", function(newChannel){
+bot.on("channelCreate", (newChannel) => {
   ServerLog.newChannelEvent(newChannel);
 });
 
-bot.on("channelUpdated", function(originalChannel, updatedChannel){
+bot.on("channelUpdate", function(originalChannel, updatedChannel){
   ServerLog.channelUpdatedEvent(originalChannel, updatedChannel);
 });
 
-bot.on("channelDeleted", function(deletedChannel){
+bot.on("channelDelete", function(deletedChannel){
   ServerLog.channelDeletedEvent(deletedChannel);
 });
 
-bot.on("serverUpdated", function(originalServer, updatedServer){
+bot.on("guildUpdated", function(originalServer, updatedServer){
   ServerLog.serverUpdatedEvent(originalServer, updatedServer);
 });
 
-bot.on("serverRoleCreated", function(newServerRole){
+bot.on("roleCreate", function(newServerRole){
   ServerLog.serverRoleCreatedEvent(newServerRole);
 });
 
-bot.on("serverRoleDeleted", function(deletedServerRole){
+bot.on("roleDelete", function(deletedServerRole){
   ServerLog.serverRoleDeletedEvent(deletedServerRole);
 });
 
-bot.on("serverRoleUpdated", function(originalRole, updatedRole){
+bot.on("roleUpdate", function(originalRole, updatedRole){
   ServerLog.serverRoleUpdatedEvent(originalRole, updatedRole);
 });
 
-
-bot.loginWithToken(AuthDetails.token);
+bot.login(AuthDetails.token);

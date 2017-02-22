@@ -40,9 +40,9 @@ var BattleManager = function (bot) {
         //Assign the Choice to Appropriate Player
         var activePlayer = messageAuthorToPlayer(message.author);
         if (assignChoiceToPlayer(activePlayer, message.content.toLowerCase())) {
-            bot.reply(message, "Entry Acknowledged!");
+            message.reply("Entry Acknowledged!");
         } else {
-            bot.reply(message, "Choose one of the following: Rock, Paper, Scissors");
+            message.reply("Choose one of the following: Rock, Paper, Scissors");
         }
 
         // Both answered?
