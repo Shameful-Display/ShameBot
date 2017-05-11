@@ -17,8 +17,6 @@ var AuthDetails = require("./auth.json");
 //bot modules
 var RPSManager = require("./modules/RPSManager.js")
 var rpsManager = new RPSManager(bot);
-var MemeManager = require("./modules/memeRepliesModule.js")
-var MemeReplies = new MemeManager(bot);
 var TableCatchManager = require("./modules/tableCatcherModule.js")
 var CatchManager = new TableCatchManager(bot);
 var InfoManager = require("./modules/informationModule.js")
@@ -366,34 +364,6 @@ bot.on("message", message => {
 	if(message.content.includes("!uptime")){
 		InfoReplies.uptime(message);
 	}
-
-	//John Cena
-	if(lowerCaseMessage.includes("and his name is") ||
-		lowerCaseMessage.includes("and his name was") ||
-		message.content.includes("\uD83C\uDFBA")){
-			MemeReplies.cenaReply(message);
-	}
-
-	//KoolAid
-	if(lowerCaseMessage.includes("oh no") ||
-		lowerCaseMessage.includes("hey koolaid")){
-		MemeReplies.koolaidReply(message);
-	}
-
-	// Macho Man!
-	if(lowerCaseMessage.includes("savage")) {
-		MemeReplies.machoManReply(message);
-	}
-
-	// Tiny Rick!!!!
-	if(lowerCaseMessage.includes("tiny rick")) {
-		MemeReplies.tinyRickReply(message);
-	}
-
-  // Harambe
-  if(lowerCaseMessage.includes("jesus")) {
-    MemeReplies.harambeReply(message);
-  }
 
   // Rock, Paper, Scissors
 	if (message.content.substring(0, 7) == "!battle") {
