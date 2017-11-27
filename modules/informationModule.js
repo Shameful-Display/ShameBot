@@ -9,7 +9,7 @@ var InfoManager = function (bot){
     "**!about** : General info on the bot.\r" +
 		"**!uptime** : Returns bot's uptime.\r" +
 		"**!stats** : Returns general bot stats.\r" +
-    "**!fullStatstats** : Returns expanded bot stats.\r" +
+    "**!fullStats** : Returns expanded bot stats.\r" +
 		"**!battle begin *@player1* *@player2* ** : Rock Paper Scissors with someone.\r" +
     "**!setSteamID *Steam ID number* ** : Associate your Steam acct with your Discord acct.\r" +
     "**!steamID** : See SteamID that is associated with your Discord acct.\r" +
@@ -51,7 +51,7 @@ var InfoManager = function (bot){
     bot.users.forEach(function(user) {
       userNames.push (user.username + "#" + user.discriminator);
     });
-    message.author.sendMessage("Here are your full stats as requested:\n\n" +
+    message.reply("Here are your full stats as requested:\n\n" +
       "**Servers:**\n\`\`\`" + serverNames+ "\`\`\`" +
       "**Channels:**\n\`\`\`" + channelNames + "\`\`\`" +
       "**Users:**\n\`\`\`" + userNames + "\`\`\`");

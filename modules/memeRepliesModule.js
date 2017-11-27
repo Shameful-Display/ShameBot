@@ -13,35 +13,43 @@ var MemeManager = function (bot){
 
   //cena reply function
   this.cenaReply = function (message) {
-    //Reply message - \uD83C is the unicode trumpet
-    message.reply("\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA");
     //Get random image path from array
     var randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
-    //Reply with random cena image
-    message.channel.sendFile(cenaImageFolder.concat(randomCenaImageFilePath),"jonny.png")
-      .catch((err) => winston.error("couldn't send image:", err));
+
+    // \uD83C is the unicode trumpet
+    this.MemeReply(message,
+      "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA",
+      cenaImageFolder.concat(randomCenaImageFilePath)
+    )
   }
 
   //KoolAid reply function
   this.koolaidReply = function (message){
-    message.channel.sendFile("./modules/memeImages/koolaid.jpg","koolaid.jpg")
-      .catch((err) => winston.error("couldn't send image:", err));
+    this.MemeReply(message,
+      "Oh Yeah!",
+      "./modules/memeImages/koolaid.jpg")
   }
 
   //Macho Man function
   this.machoManReply = function (message){
-    message.reply("Ohhhh yeah brother!");
-		message.channel.sendFile("./modules/memeImages/savage.jpg","savage.jpg")
-			.catch((err) => winston.error("Couldn't send image:", err));
+    this.MemeReply(message,
+      "Ohhhh yeah brother!",
+      "./modules/memeImages/savage.jpg")
   }
 
   //Tiny Rick function
   this.tinyRickReply = function (message) {
-    message.reply("I'm Tiny Rick!!!!!");
-    message.channel.sendFile("./modules/memeImages/tinyRick.jpg","tinyRick.jpg")
-      .catch((err) => winston.error("couldn't send image:", err));
+    this.MemeReply(message,
+      "I'm Tiny Rick!!!!!",
+      "./modules/memeImages/tinyRick.jpg")
   }
 
+  // Utility function to make future Discord JS Upgrades "easier"
+  this.MemeReply = function (message, response, imagePath) {
+    message.reply(response, {
+      file: imagePath
+    }).catch((err) => winston.error("couldn't send image", err));
+  }
 }
 
 module.exports = MemeManager;
