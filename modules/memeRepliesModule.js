@@ -44,20 +44,12 @@ var MemeManager = function (bot){
       "./modules/memeImages/tinyRick.jpg")
   }
 
-  //Harambe Reply
-  this.harambeReply = function (message){
-    this.MemeReply(message,
-      "I think you mean Harambe* \n 🙏😇 -|- Saint Harambe -|- 😇🙏",
-      "./modules/memeImages/harambe.png")
-  }
-
   // Utility function to make future Discord JS Upgrades "easier"
   this.MemeReply = function (message, response, imagePath) {
     message.reply(response, {
       file: imagePath
     }).catch((err) => winston.error("couldn't send image", err));
   }
-
 }
 
 module.exports = MemeManager;
