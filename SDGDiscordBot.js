@@ -98,7 +98,7 @@ bot.on("message", message => {
 		for (i = 0; i < messageTokens.length; i++){ //step through tokenized message array
 			if (messageTokens[i].charAt(0) == '<'){ //check if word is a mention by checking for the opening char
         var legitMention = false; //initialize flag for legitimate mentions
-				slicedStringMention = messageTokens[i].slice(2, -1); //extract user ID from mention in the message (removing <@ and >)
+				slicedStringMention = messageTokens[i].slice(2, -1).toString().replace(/[!]/g, ''); //extract user ID from mention in the message (removing <@ and >) && removes ! from userIDs with a nickname
 				for (var userObj of mentionsArray){ //step through each object in the mentions array
           if (userObj.id == slicedStringMention && !userObj.equals(message.author) ) {// check to see if the user ID found matches a real mention
 						legitMention = true;
