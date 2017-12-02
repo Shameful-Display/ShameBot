@@ -407,7 +407,7 @@ bot.on("message", message => {
   //Giphy Search
   if(message.content.includes("!gif")) {
     var searchTerm = require('querystring').escape(message.cleanContent.replace('!gif',''));
-    var giphyAPIUrl = 'http://api.giphy.com/v1/gifs/search?q=' + searchTerm + '&api_key=dc6zaTOxFJmzC&limit=1';
+    var giphyAPIUrl = 'http://api.giphy.com/v1/gifs/search?q=' + searchTerm + '&api_key=' + AuthDetails.giphyAPIKey + '&limit=1';
     request(giphyAPIUrl, function(err, response, body) {
         var imageData = JSON.parse(body).data;
         if (imageData.length > 0) {
@@ -415,9 +415,8 @@ bot.on("message", message => {
         } else {
           message.reply("WAT? Try a different search term");
         }
-  });
-}
-
+      });
+    }
 });
 
 // Server Logging
