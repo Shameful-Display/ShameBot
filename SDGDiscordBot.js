@@ -48,6 +48,7 @@ bot.on("disconnected", () => {
 
 bot.on("ready", () => {
 	winston.info("|| -- Shamebot ready for input at " + new Date() + " -- ||");
+  bot.user.setPresence({ game: { name: "with Shame", type: 0 } });
 });
 
 bot.on("message", message => {
