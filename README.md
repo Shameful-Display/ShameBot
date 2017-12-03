@@ -5,7 +5,7 @@ A multipurpose bot for a private Discord server.
 
 ### Pre-Reqs:
 
-1. Node JS installed (version 4.0 or higher)[Download & Instructions](https://nodejs.org/en/download/)
+1. Node JS installed (version 9 or higher)[Download & Instructions](https://nodejs.org/en/download/)
 2. MongoDB (https://www.mongodb.com/download-center)
 3. Steam API Key (http://steamcommunity.com/dev/apikey)
 3. Text Editor
@@ -22,12 +22,14 @@ Example:
 ```
 MacBook:SDG_Discord_Bot awesomeUser$ npm install
 shame_bot@0.5.0 /Users/awesomeUser/SDG_Discord_Bot
-├── discord.js@7.0.1
+├── discord.js@11.2.1
 └── winston@2.2.0
+└── mongodb@2.1.21
 ```
+Note: you can ignore the warnings about missing peer modules as these are optional for discord JS. They are used for Voice Support.
 
 #### Issues
-If you are having issues check the install steps for Discord.js [here](http://discordjs.readthedocs.org/en/latest/installing.html)
+If you are having issues check the install steps for Discord.js [here](https://discord.js.org/#/docs/main/stable/general/welcome)
 
 
 ### Post Install Steps
@@ -42,12 +44,15 @@ Enter the following information:
 {
   "token" : "your bot token",
   "steamAPIKey" : "your Steam API key"
+  "giphyAPIKey : your giphy API key"
 }
 ```
 These will be fixed at a later date but for now the above is needed to properly run the bot.
 
 ### Running the Bot
-Simply run the bot and you should see it connect:
+Before starting up the bot you will need to be running mongodb locally as the bot will look at mongodb://localhost:27017/shamebotdb
+
+Then simply run the bot and you should see it connect:
 ```
 
 MacBook:SDG_Discord_Bot awesomeUser$ node SDGDiscordBot.js
