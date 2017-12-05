@@ -19,7 +19,8 @@ var InfoManager = function (bot){
     "***@user* --** : Give someone a downvote (can be used anywhere in a sentence or standalone). \r" +
     "**!honor *@user*** : Get user's total honor/karma.\r" +
     "**!setPCBuild *PCPartPicker.com part list permalink*** : Associate your PC build with your Discord ID.\r" +
-    "**!PCBuild *@user*** : Returns user's PC Build");
+    "**!PCBuild *@user*** : Returns user's PC Build\r" +
+    "**!gif *search-terms*** : Returns a gif matching your search terms");
   }
 
   this.about = function (message){
