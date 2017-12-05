@@ -19,7 +19,8 @@ var MemeManager = function (bot){
     // \uD83C is the unicode trumpet
     this.MemeReply(message,
       "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA",
-      cenaImageFolder.concat(randomCenaImageFilePath)
+      cenaImageFolder.concat(randomCenaImageFilePath),
+      "SUPERSLAM!"
     )
   }
 
@@ -27,28 +28,35 @@ var MemeManager = function (bot){
   this.koolaidReply = function (message){
     this.MemeReply(message,
       "Oh Yeah!",
-      "./modules/memeImages/koolaid.jpg")
+      "./modules/memeImages/koolaid.jpg",
+      "with Kool Aid"
+    )
   }
 
   //Macho Man function
   this.machoManReply = function (message){
     this.MemeReply(message,
       "Ohhhh yeah brother!",
-      "./modules/memeImages/savage.jpg")
+      "./modules/memeImages/savage.jpg",
+      "with Randall"
+    )
   }
 
   //Tiny Rick function
   this.tinyRickReply = function (message) {
     this.MemeReply(message,
       "I'm Tiny Rick!!!!!",
-      "./modules/memeImages/tinyRick.jpg")
+      "./modules/memeImages/tinyRick.jpg",
+      "with Rick Sanchez"
+    )
   }
 
   // Utility function to make future Discord JS Upgrades "easier"
-  this.MemeReply = function (message, response, imagePath) {
+  this.MemeReply = function (message, response, imagePath, presence) {
     message.reply(response, {
       file: imagePath
     }).catch((err) => winston.error("couldn't send image", err));
+    bot.user.setPresence({ game: { name: presence, type: 0 } });
   }
 }
 
