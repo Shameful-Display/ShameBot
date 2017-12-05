@@ -1,4 +1,4 @@
-var botVersion = "0.5";
+var botVersion = "0.6";
 var botStartTime = new Date();
 var winston = require('winston');
 
