@@ -112,7 +112,7 @@ bot.on("message", message => {
 							{ $inc: { upvotes: 1} },
 							{upsert: true}
 						);
-					}else if (messageTokens[i+1] == '--'){ //check to see if the token following the mention is a '--' for downvote
+					}else if (messageTokens[i+1] == '--' || messageTokens[i+1] == "—"){ //check to see if the token following the mention is a '--' for downvote
             honorCollection.update(
 							{ id: slicedStringMention, server: serverID },
 							{ $inc: { downvotes: 1} },
