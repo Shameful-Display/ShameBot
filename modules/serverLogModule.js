@@ -119,10 +119,10 @@ var ServerLogManager = function (bot){
     serverLogChannel.send('**Updated Server Role**\n' +
     'The ' + originalRole.name + ' server role was updated.' +
     '\n**Original Role:** \t' + originalRole.name +
-    '\n\tName: ' + deletedServerRole.name +
-    '\n\tID: ' + deletedServerRole.id +
-    '\n\tColor: ' + deletedServerRole.hexColor +
-    '\n\tCreation Date: ' + deletedServerRole.createdAt +
+    '\n\tName: ' + originalRole.name +
+    '\n\tID: ' + originalRole.id +
+    '\n\tColor: ' + originalRole.hexColor +
+    '\n\tCreation Date: ' + originalRole.createdAt +
     '\n**Updated Role:** \t' + updatedRole.name +
     '\n\tName: ' + updatedRole.name +
     '\n\tID: ' + updatedRole.id +
