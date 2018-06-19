@@ -332,9 +332,8 @@ bot.on("message", message => {
     }
   }
 
-  if(message.content.includes("!PCBuild") && message.mentions.length == 1){
-    var mentionedUser = message.mentions[0];
-
+  if(message.content.includes("!PCBuild") && message.mentions.users.array().length == 1){
+    var mentionedUser = message.mentions.users.array()[0];
     function returnPCBuild (user, serverID){
   		PCBuildCollection.findOne({id: mentionedUser.id, server: serverID}, function(err, doc){
   			if(err) throw err;
