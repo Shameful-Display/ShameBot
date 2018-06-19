@@ -43,12 +43,28 @@ MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, databa
 winstonModule.createWinstonFileTransport();
 
 bot.on("disconnected", () => {
-	winston.info("** Shamebot disconnected at " + new Date() + " **");
+  ServerLog.botConnectionStatus('disconnected');
 });
 
 bot.on("ready", () => {
-	winston.info("|| -- Shamebot ready for input at " + new Date() + " -- ||");
+  ServerLog.botConnectionStatus('ready');
   bot.user.setPresence({ game: { name: "with Shame", type: 0 } });
+});
+
+bot.on("resume", () => {
+  ServerLog.botConnectionStatus('resuming');
+});
+
+bot.on("reconnecting", () => {
+  ServerLog.botConnectionStatus('reconnecting');
+});
+
+bot.on("warn", (warning) => {
+	winston.info("+| Warning: " + warning + " |+");
+});
+
+bot.on("error", (error) => {
+	winston.info("*|| Error: " + error + " ||*");
 });
 
 bot.on("message", message => {

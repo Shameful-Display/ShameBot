@@ -131,6 +131,16 @@ var ServerLogManager = function (bot){
     .catch((err) => winston.error("couldn't send new channel message info:", err));
   }
 
+  this.botConnectionStatus = function (statusMessage) {
+    var serverLogChannel = bot.channels.find("name", "serverlog");
+
+    var message = "** Shamebot " + statusMessage + " at " + new Date() + " **"
+    winston.info(message);
+
+    serverLogChannel.send(message)
+    .catch((err) => winston.error("couldn't send new channel message info:", err));
+  }
+
 }
 
 module.exports = ServerLogManager;
