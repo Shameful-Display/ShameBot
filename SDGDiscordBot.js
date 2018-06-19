@@ -430,7 +430,9 @@ bot.on("message", message => {
         if (imageData.length > 0) {
           message.channel.send(imageData[0].embed_url);
         } else {
-          message.reply("WAT? Try a different search term");
+          message.reply("*" + message.cleanContent.replace('!gif ','') + "*\n", {
+            file: "./modules/memeImages/mimic.png"
+          }).catch((err) => winston.error("couldn't send image", err));
         }
       });
     }
