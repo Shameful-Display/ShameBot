@@ -1,4 +1,4 @@
-var botVersion = "0.5";
+var botVersion = "0.6";
 var botStartTime = new Date();
 var winston = require('winston');
 
@@ -9,7 +9,7 @@ var InfoManager = function (bot){
     "**!about** : General info on the bot.\r" +
 		"**!uptime** : Returns bot's uptime.\r" +
 		"**!stats** : Returns general bot stats.\r" +
-    "**!fullStatstats** : Returns expanded bot stats.\r" +
+    "**!fullStats** : Returns expanded bot stats.\r" +
 		"**!battle begin *@player1* *@player2* ** : Rock Paper Scissors with someone.\r" +
     "**!setSteamID *Steam ID number* ** : Associate your Steam acct with your Discord acct.\r" +
     "**!steamID** : See SteamID that is associated with your Discord acct.\r" +
@@ -19,7 +19,8 @@ var InfoManager = function (bot){
     "***@user* --** : Give someone a downvote (can be used anywhere in a sentence or standalone). \r" +
     "**!honor *@user*** : Get user's total honor/karma.\r" +
     "**!setPCBuild *PCPartPicker.com part list permalink*** : Associate your PC build with your Discord ID.\r" +
-    "**!PCBuild *@user*** : Returns user's PC Build");
+    "**!PCBuild *@user*** : Returns user's PC Build\r" +
+    "**!gif *search-terms*** : Returns a gif matching your search terms");
   }
 
   this.about = function (message){
@@ -51,7 +52,7 @@ var InfoManager = function (bot){
     bot.users.forEach(function(user) {
       userNames.push (user.username + "#" + user.discriminator);
     });
-    message.author.sendMessage("Here are your full stats as requested:\n\n" +
+    message.reply("Here are your full stats as requested:\n\n" +
       "**Servers:**\n\`\`\`" + serverNames+ "\`\`\`" +
       "**Channels:**\n\`\`\`" + channelNames + "\`\`\`" +
       "**Users:**\n\`\`\`" + userNames + "\`\`\`");

@@ -43,11 +43,28 @@ MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, databa
 winstonModule.createWinstonFileTransport();
 
 bot.on("disconnected", () => {
-	winston.info("** Shamebot disconnected at " + new Date() + " **");
+  ServerLog.botConnectionStatus('disconnected');
 });
 
 bot.on("ready", () => {
-	winston.info("|| -- Shamebot ready for input at " + new Date() + " -- ||");
+  ServerLog.botConnectionStatus('ready');
+  bot.user.setPresence({ game: { name: "with Shame", type: 0 } });
+});
+
+bot.on("resume", () => {
+  ServerLog.botConnectionStatus('resuming');
+});
+
+bot.on("reconnecting", () => {
+  ServerLog.botConnectionStatus('reconnecting');
+});
+
+bot.on("warn", (warning) => {
+	winston.info("+| Warning: " + warning + " |+");
+});
+
+bot.on("error", (error) => {
+	winston.info("*|| Error: " + error + " ||*");
 });
 
 bot.on("message", message => {
@@ -98,7 +115,7 @@ bot.on("message", message => {
 		for (i = 0; i < messageTokens.length; i++){ //step through tokenized message array
 			if (messageTokens[i].charAt(0) == '<'){ //check if word is a mention by checking for the opening char
         var legitMention = false; //initialize flag for legitimate mentions
-				slicedStringMention = messageTokens[i].slice(2, -1); //extract user ID from mention in the message (removing <@ and >)
+				slicedStringMention = messageTokens[i].slice(2, -1).toString().replace(/[!]/g, ''); //extract user ID from mention in the message (removing <@ and >) && removes ! from userIDs with a nickname
 				for (var userObj of mentionsArray){ //step through each object in the mentions array
           if (userObj.id == slicedStringMention && !userObj.equals(message.author) ) {// check to see if the user ID found matches a real mention
 						legitMention = true;
@@ -111,7 +128,7 @@ bot.on("message", message => {
 							{ $inc: { upvotes: 1} },
 							{upsert: true}
 						);
-					}else if (messageTokens[i+1] == '--'){ //check to see if the token following the mention is a '--' for downvote
+					}else if (messageTokens[i+1] == '--' || messageTokens[i+1] == "—"){ //check to see if the token following the mention is a '--' for downvote
             honorCollection.update(
 							{ id: slicedStringMention, server: serverID },
 							{ $inc: { downvotes: 1} },
@@ -315,9 +332,8 @@ bot.on("message", message => {
     }
   }
 
-  if(message.content.includes("!PCBuild") && message.mentions.length == 1){
-    var mentionedUser = message.mentions[0];
-
+  if(message.content.includes("!PCBuild") && message.mentions.users.array().length == 1){
+    var mentionedUser = message.mentions.users.array()[0];
     function returnPCBuild (user, serverID){
   		PCBuildCollection.findOne({id: mentionedUser.id, server: serverID}, function(err, doc){
   			if(err) throw err;
@@ -390,11 +406,6 @@ bot.on("message", message => {
 		MemeReplies.tinyRickReply(message);
 	}
 
-  // Harambe
-  if(lowerCaseMessage.includes("jesus")) {
-    MemeReplies.harambeReply(message);
-  }
-
   // Rock, Paper, Scissors
 	if (message.content.substring(0, 7) == "!battle") {
     message.reply("Currently Unsupported")
@@ -409,6 +420,21 @@ bot.on("message", message => {
 		CatchManager.tableCatcherReply(message);
 	}
 
+  //Giphy Search
+  if(message.content.includes("!gif")) {
+    var searchTerm = require('querystring').escape(message.cleanContent.replace('!gif',''));
+    var giphyAPIUrl = 'http://api.giphy.com/v1/gifs/search?q=' + searchTerm + '&api_key=' + AuthDetails.giphyAPIKey + '&limit=1';
+    request(giphyAPIUrl, function(err, response, body) {
+        var imageData = JSON.parse(body).data;
+        if (imageData.length > 0) {
+          message.channel.send(imageData[0].embed_url);
+        } else {
+          message.reply("*" + message.cleanContent.replace('!gif ','') + "*\n", {
+            file: "./modules/memeImages/mimic.png"
+          }).catch((err) => winston.error("couldn't send image", err));
+        }
+      });
+    }
 });
 
 // Server Logging

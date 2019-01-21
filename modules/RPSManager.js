@@ -57,7 +57,7 @@ var BattleManager = function (bot) {
                 victoryString = "It's a DRAW!";
             }
 
-            bot.sendMessage(_battleChannel, "```\n" + _playerOne.user.username + "\t\t\t" + _playerTwo.user.username + "\n" + _playerOne.choice + "\t\t\t" + _playerTwo.choice + "\n\n" + victoryString + "```");
+            bot.send(_battleChannel, "```\n" + _playerOne.user.username + "\t\t\t" + _playerTwo.user.username + "\n" + _playerOne.choice + "\t\t\t" + _playerTwo.choice + "\n\n" + victoryString + "```");
             _isBattleOn = false;
             _playerOne = null;
             _playerTwo = null;
@@ -74,7 +74,7 @@ var BattleManager = function (bot) {
             var validStart = true;
 
             if (message.mentions.length != 2) {
-                bot.sendMessage(_battleChannel, "**Error:** Not enough players");
+                bot.send(_battleChannel, "**Error:** Not enough players");
                 validStart = false;
             } else {
                 _playerOne = new Player(message.mentions[0]);
@@ -94,27 +94,27 @@ var BattleManager = function (bot) {
 
                 // Verify it's a valid game to start
                 if (_isBattleOn) {
-                    bot.sendMessage(_battleChannel, "**Error:** No more than one active battle at a time");
+                    bot.send(_battleChannel, "**Error:** No more than one active battle at a time");
                     validStart = false;
                 } else if (_playerOne.user.equals(_playerTwo.user)) {
-                    bot.sendMessage(this.battleChannel, "**Error:** Both players must be unique");
+                    bot.send(this.battleChannel, "**Error:** Both players must be unique");
                     validStart = false;
                 } else if (_playerOne.user.status != "online" || _playerTwo.user.status != "online") {
-                    bot.sendMessage(_battleChannel, "**Error:** One or more players is not online");
+                    bot.send(_battleChannel, "**Error:** One or more players is not online");
                     validStart = false;
                 }
             }
 
             if (validStart) {
-                bot.sendMessage(_battleChannel, "**ROCK - PAPER - SCISSORS** \n\n" + "**" + _playerOne.user.username + "** *-- VS --* **" + _playerTwo.user.username + "** \n" + "Both opponents must DM the bot with their selection.");
+                bot.send(_battleChannel, "**ROCK - PAPER - SCISSORS** \n\n" + "**" + _playerOne.user.username + "** *-- VS --* **" + _playerTwo.user.username + "** \n" + "Both opponents must DM the bot with their selection.");
                _isBattleOn = true;
 
                // Prompt players for their answers (so long as they aren't a bot)
                if (!_playerOne.user.equals(bot.user)) {
-                 bot.sendMessage(_playerOne.user, "Rock, Paper, or Scissors?");
+                 bot.send(_playerOne.user, "Rock, Paper, or Scissors?");
                }
                if (!_playerTwo.user.equals(bot.user)) {
-                 bot.sendMessage(_playerTwo.user, "Rock, Paper, or Scissors?");
+                 bot.send(_playerTwo.user, "Rock, Paper, or Scissors?");
                }
 
             } else {

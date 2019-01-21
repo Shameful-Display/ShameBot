@@ -4,9 +4,9 @@ var ServerLogManager = function (bot){
 
   this.editedMessageEvent = function (originalMessage, updatedMessage) {
   var serverLogChannel = bot.channels.find("name", "serverlog");
-  
+
   if ((originalMessage.embeds.length == updatedMessage.embeds.length) && !(originalMessage.pinned == updatedMessage.pinned)) {
-      serverLogChannel.sendMessage('**Updated Message**\n' + originalMessage.author.username + '#' +
+      serverLogChannel.send('**Updated Message**\n' + originalMessage.author.username + '#' +
       originalMessage.author.discriminator + '' + ' updated their message in the ' +
       originalMessage.channel + ' channel\n**Original Message:** \n' +
       originalMessage.cleanContent + '\n**Updated Message:** \n' +
@@ -18,7 +18,7 @@ var ServerLogManager = function (bot){
   this.deletedMessageEvent = function (deletedMessage, channel) {
     var serverLogChannel = bot.channels.find("name", "serverlog");
 
-    serverLogChannel.sendMessage('**Deleted Message**\n' + deletedMessage.author.username + '#' +
+    serverLogChannel.send('**Deleted Message**\n' + deletedMessage.author.username + '#' +
     deletedMessage.author.discriminator + '' + ' deleted this message in the ' +
     deletedMessage.channel + ' channel\n**Deleted Message:** \n' +
     deletedMessage.cleanContent)
@@ -28,7 +28,7 @@ var ServerLogManager = function (bot){
   this.newChannelEvent = function (newChannel) {
     var serverLogChannel = bot.channels.find("name", "serverlog");
 
-    serverLogChannel.sendMessage('**New Channel Created**\n' + 'A new channel named ' +
+    serverLogChannel.send('**New Channel Created**\n' + 'A new channel named ' +
     newChannel + ' was created.\n')
     .catch((err) => winston.error("couldn't send new channel message info:", err));
   }
@@ -36,7 +36,7 @@ var ServerLogManager = function (bot){
   this.channelUpdatedEvent = function (originalChannel, updatedChannel) {
     var serverLogChannel = bot.channels.find("name", "serverlog");
 
-    serverLogChannel.sendMessage('**Updated Channel**\n' +
+    serverLogChannel.send('**Updated Channel**\n' +
     'The ' + originalChannel.name + ' channel was updated.' +
     '\n**Original Channel:** \t' + originalChannel.name +
     '\n\tName: ' + originalChannel.name +
@@ -54,7 +54,7 @@ var ServerLogManager = function (bot){
   this.channelDeletedEvent = function (deletedChannel) {
     var serverLogChannel = bot.channels.find("name", "serverlog");
 
-    serverLogChannel.sendMessage('**Channel Deleted**\n' +
+    serverLogChannel.send('**Channel Deleted**\n' +
     'The ' + deletedChannel.name + ' channel was deleted.' +
     '\n**Original Channel:** \t' + deletedChannel.name +
     '\n\tName: ' + deletedChannel.name +
@@ -67,7 +67,7 @@ var ServerLogManager = function (bot){
   this.serverUpdatedEvent = function (originalServer, updatedServer) {
     var serverLogChannel = bot.channels.find("name", "serverlog");
 
-    serverLogChannel.sendMessage('**Updated Server**\n' +
+    serverLogChannel.send('**Updated Server**\n' +
     'The ' + originalServer.name + ' channel was updated.' +
     '\n**Original Server:** \t' + originalServer.name +
     '\n\tName: ' + originalServer.name +
@@ -91,7 +91,7 @@ var ServerLogManager = function (bot){
   this.serverRoleCreatedEvent = function (newServerRole) {
     var serverLogChannel = bot.channels.find("name", "serverlog");
 
-    serverLogChannel.sendMessage('**New Server Role Created**\n' +
+    serverLogChannel.send('**New Server Role Created**\n' +
     'A new server role named ' + newServerRole + ' was created.' +
     '\n\tName: ' + newServerRole.name +
     '\n\tID: ' + newServerRole.id +
@@ -103,7 +103,7 @@ var ServerLogManager = function (bot){
   this.serverRoleDeletedEvent = function (deletedServerRole) {
     var serverLogChannel = bot.channels.find("name", "serverlog");
 
-    serverLogChannel.sendMessage('**Server Role Deleted**\n' +
+    serverLogChannel.send('**Server Role Deleted**\n' +
     'The ' + deletedServerRole.name + ' server role was deleted.' +
     '\n**Original Channel:** \t' + deletedServerRole.name +
     '\n\tName: ' + deletedServerRole.name +
@@ -116,18 +116,28 @@ var ServerLogManager = function (bot){
   this.serverRoleUpdatedEvent = function (originalRole, updatedRole) {
     var serverLogChannel = bot.channels.find("name", "serverlog");
 
-    serverLogChannel.sendMessage('**Updated Server Role**\n' +
+    serverLogChannel.send('**Updated Server Role**\n' +
     'The ' + originalRole.name + ' server role was updated.' +
     '\n**Original Role:** \t' + originalRole.name +
-    '\n\tName: ' + deletedServerRole.name +
-    '\n\tID: ' + deletedServerRole.id +
-    '\n\tColor: ' + deletedServerRole.hexColor +
-    '\n\tCreation Date: ' + deletedServerRole.createdAt +
+    '\n\tName: ' + originalRole.name +
+    '\n\tID: ' + originalRole.id +
+    '\n\tColor: ' + originalRole.hexColor +
+    '\n\tCreation Date: ' + originalRole.createdAt +
     '\n**Updated Role:** \t' + updatedRole.name +
     '\n\tName: ' + updatedRole.name +
     '\n\tID: ' + updatedRole.id +
     '\n\tColor: ' + updatedRole.hexColor +
     '\n\tCreation Date: ' + updatedRole.createdAt + '\n')
+    .catch((err) => winston.error("couldn't send new channel message info:", err));
+  }
+
+  this.botConnectionStatus = function (statusMessage) {
+    var serverLogChannel = bot.channels.find("name", "serverlog");
+
+    var message = "** Shamebot " + statusMessage + " at " + new Date() + " **"
+    winston.info(message);
+
+    serverLogChannel.send(message)
     .catch((err) => winston.error("couldn't send new channel message info:", err));
   }
 
