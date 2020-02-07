@@ -4,9 +4,10 @@
   "description": "Shameful Display Gaming Discord Bot",
   "main": "SDGDiscordBot.js",
   "dependencies": {
+    "@discordjs/uws": "^11.149.1",
     "cheerio": "^0.20.0",
-    "discord.js": "^11.3.2",
-    "mongodb": "^2.1.21",
+    "discord.js": "^11.5.1",
+    "mongodb": "^3.5.2",
     "request": "^2.74.0",
     "winston": "^2.2.0"
   },

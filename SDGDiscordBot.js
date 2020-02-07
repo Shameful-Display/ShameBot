@@ -30,10 +30,10 @@ var request = require("request"),
 
 
 //global connection for MongoDB
-MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, database) {
+MongoClient.connect("mongodb://localhost:27017shamebotdb", {useUnifiedTopology: true}, function(err, client) {
 	if(err) throw err;
 
-	db = database;
+	db = client.db('shamebotdb');
 	honorCollection = db.collection('honorCollection');
 	steamIDCollection = db.collection('SteamIDtoDiscordID');
   PCBuildCollection = db.collection('PCBuilds');
