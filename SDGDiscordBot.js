@@ -51,13 +51,13 @@ bot.on("ready", () => {
   bot.user.setPresence({ game: { name: "with Shame", type: 0 } });
 });
 
-bot.on("resume", () => {
-  ServerLog.botConnectionStatus('resuming');
-});
-
-bot.on("reconnecting", () => {
-  ServerLog.botConnectionStatus('reconnecting');
-});
+// bot.on("resume", () => {
+//   ServerLog.botConnectionStatus('resuming');
+// });
+//
+// bot.on("reconnecting", () => {
+//   ServerLog.botConnectionStatus('reconnecting');
+// });
 
 bot.on("warn", (warning) => {
 	winston.info("+| Warning: " + warning + " |+");
