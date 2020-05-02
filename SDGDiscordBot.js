@@ -30,10 +30,10 @@ var request = require("request"),
 
 
 //global connection for MongoDB
-MongoClient.connect("mongodb://localhost:27017/shamebotdb", function(err, database) {
+MongoClient.connect("mongodb://localhost:27017shamebotdb", {useUnifiedTopology: true}, function(err, client) {
 	if(err) throw err;
 
-	db = database;
+	db = client.db('shamebotdb');
 	honorCollection = db.collection('honorCollection');
 	steamIDCollection = db.collection('SteamIDtoDiscordID');
   PCBuildCollection = db.collection('PCBuilds');
@@ -101,7 +101,7 @@ bot.on("message", message => {
 		honorCollection.findOne({id: user.id, server: serverID}, function(err, doc){
 			if(err) throw err;
 			if(doc == null){
-				honorCollection.insert(
+				honorCollection.insertOne(
 					{id: user.id, server: serverID,  upvotes: 0, downvotes: 0}
 				);
 			}
@@ -123,13 +123,13 @@ bot.on("message", message => {
 				}
 				if (legitMention == true){ //if the user id from the string is good
 					if (messageTokens[i+1] == '++'){ //check to see if the token following the mention is a '++' for upvote
-            honorCollection.update(
+            honorCollection.updateOne(
 							{ id: slicedStringMention, server: serverID },
 							{ $inc: { upvotes: 1} },
 							{upsert: true}
 						);
 					}else if (messageTokens[i+1] == '--' || messageTokens[i+1] == "—"){ //check to see if the token following the mention is a '--' for downvote
-            honorCollection.update(
+            honorCollection.updateOne(
 							{ id: slicedStringMention, server: serverID },
 							{ $inc: { downvotes: 1} },
 							{upsert: true}
@@ -158,7 +158,7 @@ bot.on("message", message => {
 
 		if(/^\d+$/.test(steamID)) {
 			// Assign SteamID to UserID in Mongo
-			steamIDCollection.update(
+			steamIDCollection.updateOne(
 				{ id: userID },
 				{ id: userID, steamID: steamID },
 				{ upsert: true }
@@ -316,7 +316,7 @@ bot.on("message", message => {
     }
 
     function saveBuildToDB(userID, buildString, serverID){
-      PCBuildCollection.update(
+      PCBuildCollection.updateOne(
 				{ id: userID, server: serverID },
 				{ id: userID, server: serverID, pcBuild: buildString },
 				{ upsert: true }
