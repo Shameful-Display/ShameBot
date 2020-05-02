@@ -1,4 +1,4 @@
-var botVersion = "0.6";
+var botVersion = "0.7";
 var botStartTime = new Date();
 var winston = require('winston');
 
@@ -27,7 +27,7 @@ var InfoManager = function (bot){
     message.reply("ShameBot Version " + botVersion + "\r" +
 		"Stack: Discord.js, Node.js, Ubuntu, Digital Ocean, GitHub, and pm2.\r" +
 		"Find us on GitHub!\r" +
-		"https://github.com/B1anc0N1n0/SDG_Discord_Bot\r" +
+		"https://github.com/Shameful-Display/ShameBot\r" +
 		"@B1anc0N1n0 @DaKing @TeckHybrid");
   }
 
