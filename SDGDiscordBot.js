@@ -92,7 +92,7 @@ bot.on("message", message => {
 				var upvotes = doc.upvotes;
 				var downvotes = doc.downvotes;
 				var netHonor = upvotes - downvotes;
-				message.reply(user + " has " + netHonor + " honor!");
+				message.reply(user.username + " has " + netHonor + " honor!");
 			}
 		});
 	}
