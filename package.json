@@ -1,23 +1,26 @@
 {
   "name": "shame_bot",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Shameful Display Gaming Discord Bot",
   "main": "SDGDiscordBot.js",
   "dependencies": {
-    "@discordjs/uws": "^11.149.1",
-    "cheerio": "^0.20.0",
-    "discord.js": "^11.5.1",
-    "mongodb": "^3.5.2",
-    "request": "^2.74.0",
-    "winston": "^2.2.0"
+    "cheerio": "^1.0.0-rc.3",
+    "discord.js": "^12.2.0",
+    "mongodb": "^3.5.7",
+    "request": "^2.88.2",
+    "winston": "^2.4.4"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No Tests Yet\" && exit"
+  },
+  "engines": {
+    "node": ">=12.0.0",
+    "npm": ">=6.0.0"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/B1anc0N1n0/SDG_Discord_Bot.git"
+    "url": "git@github.com:Shameful-Display/ShameBot.git"
   },
   "keywords": [
     "Discord",
@@ -34,7 +37,7 @@
   "author": "B1anc0N1n0, TeckHybrid, DaKing",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/B1anc0N1n0/SDG_Discord_Bot/issues"
+    "url": "https://github.com/Shameful-Display/ShameBot/issues"
   },
-  "homepage": "https://github.com/B1anc0N1n0/SDG_Discord_Bot#readme"
+  "homepage": "https://github.com/Shameful-Display/ShameBot#readme"
 }
