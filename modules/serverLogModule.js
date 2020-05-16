@@ -3,7 +3,7 @@ var winston = require('winston');
 var ServerLogManager = function (bot){
 
   this.editedMessageEvent = function (originalMessage, updatedMessage) {
-  var serverLogChannel = bot.channels.find("name", "serverlog");
+  var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
   if ((originalMessage.embeds.length == updatedMessage.embeds.length) && !(originalMessage.pinned == updatedMessage.pinned)) {
       serverLogChannel.send('**Updated Message**\n' + originalMessage.author.username + '#' +
@@ -16,7 +16,7 @@ var ServerLogManager = function (bot){
   }
 
   this.deletedMessageEvent = function (deletedMessage, channel) {
-    var serverLogChannel = bot.channels.find("name", "serverlog");
+    var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
     serverLogChannel.send('**Deleted Message**\n' + deletedMessage.author.username + '#' +
     deletedMessage.author.discriminator + '' + ' deleted this message in the ' +
@@ -26,7 +26,7 @@ var ServerLogManager = function (bot){
   }
 
   this.newChannelEvent = function (newChannel) {
-    var serverLogChannel = bot.channels.find("name", "serverlog");
+    var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
     serverLogChannel.send('**New Channel Created**\n' + 'A new channel named ' +
     newChannel + ' was created.\n')
@@ -34,7 +34,7 @@ var ServerLogManager = function (bot){
   }
 
   this.channelUpdatedEvent = function (originalChannel, updatedChannel) {
-    var serverLogChannel = bot.channels.find("name", "serverlog");
+    var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
     serverLogChannel.send('**Updated Channel**\n' +
     'The ' + originalChannel.name + ' channel was updated.' +
@@ -52,7 +52,7 @@ var ServerLogManager = function (bot){
   }
 
   this.channelDeletedEvent = function (deletedChannel) {
-    var serverLogChannel = bot.channels.find("name", "serverlog");
+    var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
     serverLogChannel.send('**Channel Deleted**\n' +
     'The ' + deletedChannel.name + ' channel was deleted.' +
@@ -65,7 +65,7 @@ var ServerLogManager = function (bot){
   }
 
   this.serverUpdatedEvent = function (originalServer, updatedServer) {
-    var serverLogChannel = bot.channels.find("name", "serverlog");
+    var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
     serverLogChannel.send('**Updated Server**\n' +
     'The ' + originalServer.name + ' channel was updated.' +
@@ -89,7 +89,7 @@ var ServerLogManager = function (bot){
   }
 
   this.serverRoleCreatedEvent = function (newServerRole) {
-    var serverLogChannel = bot.channels.find("name", "serverlog");
+    var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
     serverLogChannel.send('**New Server Role Created**\n' +
     'A new server role named ' + newServerRole + ' was created.' +
@@ -101,7 +101,7 @@ var ServerLogManager = function (bot){
   }
 
   this.serverRoleDeletedEvent = function (deletedServerRole) {
-    var serverLogChannel = bot.channels.find("name", "serverlog");
+    var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
     serverLogChannel.send('**Server Role Deleted**\n' +
     'The ' + deletedServerRole.name + ' server role was deleted.' +
@@ -114,7 +114,7 @@ var ServerLogManager = function (bot){
   }
 
   this.serverRoleUpdatedEvent = function (originalRole, updatedRole) {
-    var serverLogChannel = bot.channels.find("name", "serverlog");
+    var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
     serverLogChannel.send('**Updated Server Role**\n' +
     'The ' + originalRole.name + ' server role was updated.' +
@@ -132,7 +132,7 @@ var ServerLogManager = function (bot){
   }
 
   this.botConnectionStatus = function (statusMessage) {
-    var serverLogChannel = bot.channels.find("name", "serverlog");
+    var serverLogChannel = bot.channels.cache.find(channel => channel.name === "serverlog");
 
     var message = "** Shamebot " + statusMessage + " at " + new Date() + " **"
     winston.info(message);

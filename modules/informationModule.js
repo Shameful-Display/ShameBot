@@ -1,4 +1,4 @@
-var botVersion = "0.6";
+var botVersion = "0.7";
 var botStartTime = new Date();
 var winston = require('winston');
 
@@ -27,13 +27,13 @@ var InfoManager = function (bot){
     message.reply("ShameBot Version " + botVersion + "\r" +
 		"Stack: Discord.js, Node.js, Ubuntu, Digital Ocean, GitHub, and pm2.\r" +
 		"Find us on GitHub!\r" +
-		"https://github.com/B1anc0N1n0/SDG_Discord_Bot\r" +
+		"https://github.com/Shameful-Display/ShameBot\r" +
 		"@B1anc0N1n0 @DaKing @TeckHybrid");
   }
 
   this.stats = function (message){
-    message.reply("Working hard for [" + bot.guilds.size + "] Servers " +
-    "in [" + bot.channels.size + "] Channels for [" + bot.users.size + "] Users!");
+    message.reply("Working hard for [" + bot.guilds.cache.size + "] Servers " +
+    "in [" + bot.channels.cache.size + "] Channels for [" + bot.users.cache.size + "] Users!");
   }
 
   this.fullStats = function (message){
@@ -41,15 +41,13 @@ var InfoManager = function (bot){
     var channelNames = [];
     var userNames = [];
 
-    message.reply("I've sent you a private message containing your request results.");
-
-    bot.guilds.forEach(function(guild) {
+    bot.guilds.cache.forEach(function(guild) {
       serverNames.push (guild.name);
     });
-    bot.channels.forEach(function(channel) {
+    bot.channels.cache.forEach(function(channel) {
       channelNames.push (channel.name);
     });
-    bot.users.forEach(function(user) {
+    bot.users.cache.forEach(function(user) {
       userNames.push (user.username + "#" + user.discriminator);
     });
     message.reply("Here are your full stats as requested:\n\n" +
