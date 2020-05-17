@@ -2,6 +2,7 @@
 var fs = require( "fs" );
 var path = require( "path" );
 var process = require( "process" );
+const { Client, MessageAttachment } = require('discord.js');
 
 var winston = require('winston');
 
@@ -53,9 +54,9 @@ var MemeManager = function (bot){
 
   // Utility function to make future Discord JS Upgrades "easier"
   this.MemeReply = function (message, response, imagePath, presence) {
-    message.reply(response, {
-      file: imagePath
-    }).catch((err) => winston.error("couldn't send image", err));
+
+    const attachment = new MessageAttachment(imagePath);
+    message.reply(response, attachment).catch((err) => winston.error("couldn't send image", err));
     bot.user.setPresence({ game: { name: presence, type: 0 } });
   }
 }
