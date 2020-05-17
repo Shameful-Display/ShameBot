@@ -4,6 +4,7 @@
   "description": "Shameful Display Gaming Discord Bot",
   "main": "SDGDiscordBot.js",
   "dependencies": {
+    "axios": "^0.19.2",
     "cheerio": "^1.0.0-rc.3",
     "discord.js": "^12.2.0",
     "mongodb": "^3.5.7",

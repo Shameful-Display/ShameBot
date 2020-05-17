@@ -24,6 +24,8 @@ var InfoManager = require("./modules/informationModule.js")
 var InfoReplies = new InfoManager(bot);
 var ServerLogManager = require("./modules/serverLogModule.js")
 var ServerLog = new ServerLogManager(bot);
+var FinanceManager = require("./modules/financeModule.js")
+var FinanceInfo = new FinanceManager(bot);
 var request = require("request"),
   cheerio = require("cheerio");
 
@@ -356,6 +358,14 @@ bot.on("message", message => {
   	}
     returnPCBuild(mentionedUser, serverID);
   }
+
+  //Stocks
+
+  if(message.content.includes("!stock")){
+    FinanceInfo.stockInfo(message);
+  }
+
+  //End stocks
 
 	//help
 	if(message.content.includes("!help")){
