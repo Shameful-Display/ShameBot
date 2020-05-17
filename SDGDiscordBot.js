@@ -47,7 +47,7 @@ bot.on("disconnected", () => {
 
 bot.on("ready", () => {
   ServerLog.botConnectionStatus('ready');
-  bot.user.setPresence({ game: { name: "with Shame", type: 0 } });
+  bot.user.setPresence({ activity: { name: "with Shame" , type: 0} });
 });
 
 // bot.on("resume", () => {

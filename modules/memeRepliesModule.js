@@ -57,7 +57,7 @@ var MemeManager = function (bot){
 
     const attachment = new MessageAttachment(imagePath);
     message.reply(response, attachment).catch((err) => winston.error("couldn't send image", err));
-    bot.user.setPresence({ game: { name: presence, type: 0 } });
+    bot.user.setPresence({ activity: { name: presence , type: 0} });
   }
 }
 
