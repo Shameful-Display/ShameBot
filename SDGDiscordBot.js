@@ -1,9 +1,8 @@
 //Note: the .js is not required as Node assumes these files are javascript
 //node modules to include
-const Discord = require("discord.js"),
-    bot = new Discord.Client({
-      autoReconnect:true
-    })
+const { Client, MessageEmbed } = require('discord.js');
+const bot = new Client();
+
 var fs = require( "fs" );
 var path = require( "path" );
 var process = require( "process" );

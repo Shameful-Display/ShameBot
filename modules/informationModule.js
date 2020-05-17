@@ -1,10 +1,20 @@
 var botVersion = "0.7";
 var botStartTime = new Date();
 var winston = require('winston');
+const { Client, MessageEmbed } = require('discord.js');
+
+var infoEmbedBuilder = function(title, message) {
+  const embed = new MessageEmbed()
+    .setTitle(title)
+    .setColor(0x00B0FF)
+    .setDescription(message);
+  return embed;
+}
 
 var InfoManager = function (bot){
   this.help = function (message){
-    message.reply("\r__Available commands__ :\r" +
+    var title = "Bot Commands"
+    var details = ("\r__Available commands__ :\r" +
 		"**!help** : List of possible commands.\r" +
     "**!about** : General info on the bot.\r" +
 		"**!uptime** : Returns bot's uptime.\r" +
@@ -21,22 +31,29 @@ var InfoManager = function (bot){
     "**!setPCBuild *PCPartPicker.com part list permalink*** : Associate your PC build with your Discord ID.\r" +
     "**!PCBuild *@user*** : Returns user's PC Build\r" +
     "**!gif *search-terms*** : Returns a gif matching your search terms");
+
+    message.reply(infoEmbedBuilder(title, details));
   }
 
   this.about = function (message){
-    message.reply("ShameBot Version " + botVersion + "\r" +
+    var title = "About the Bot";
+    var details = ("ShameBot Version " + botVersion + "\r" +
 		"Stack: Discord.js, Node.js, Ubuntu, Digital Ocean, GitHub, and pm2.\r" +
 		"Find us on GitHub!\r" +
 		"https://github.com/Shameful-Display/ShameBot\r" +
 		"@B1anc0N1n0 @DaKing @TeckHybrid");
+    message.reply(infoEmbedBuilder(title, details));
   }
 
   this.stats = function (message){
-    message.reply("Working hard for [" + bot.guilds.cache.size + "] Servers " +
+    var title = "Bot Stats"
+    var details = ("Working hard for [" + bot.guilds.cache.size + "] Servers " +
     "in [" + bot.channels.cache.size + "] Channels for [" + bot.users.cache.size + "] Users!");
+    message.reply(infoEmbedBuilder(title, details));
   }
 
   this.fullStats = function (message){
+    var title = "Full Bot Stats";
     var serverNames = [];
     var channelNames = [];
     var userNames = [];
@@ -50,13 +67,15 @@ var InfoManager = function (bot){
     bot.users.cache.forEach(function(user) {
       userNames.push (user.username + "#" + user.discriminator);
     });
-    message.reply("Here are your full stats as requested:\n\n" +
+    var details = ("Here are your full stats as requested:\n\n" +
       "**Servers:**\n\`\`\`" + serverNames+ "\`\`\`" +
       "**Channels:**\n\`\`\`" + channelNames + "\`\`\`" +
       "**Users:**\n\`\`\`" + userNames + "\`\`\`");
+    message.reply(infoEmbedBuilder(title, details));
   }
 
   this.uptime = function (message){
+    var title = "Bot Uptime";
     var botUptime = Math.abs(new Date() - botStartTime);
 		var x = botUptime / 1000;
 		var uptimeSeconds = Math.floor(x % 60);
@@ -67,7 +86,7 @@ var InfoManager = function (bot){
 		x /= 24;
 		var uptimeDays = Math.floor(x);
 		botUptime = "D:H:M:S - " + uptimeDays + ":" + uptimeHours + ":" + uptimeMinutes + ":" + uptimeSeconds;
-    message.reply(botUptime);
+    message.reply(infoEmbedBuilder(title, botUptime));
   }
 }
 
