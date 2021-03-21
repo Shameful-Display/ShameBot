@@ -98,7 +98,7 @@ var FFXIVManager = function (bot) {
             if (err) throw err;
 
             if (doc == null) {
-                message.reply("You haven't associated a FFXIV ID with your DiscordID. Use the command !ffxiv-setCharacter to set this up. \n\nExample: \n ```!ffxiv-setCharacter Sephiroth|Cactuar```");
+                message.reply("You haven't associated a FFXIV ID with your DiscordID.\rUse the command \`!ffxiv-set [Name]|[Server]\` to set this up. \n\nExample: \n ```!ffxiv-set Sephiroth|Cactuar```");
                 return;
             }
 

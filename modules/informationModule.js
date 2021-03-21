@@ -30,7 +30,10 @@ var InfoManager = function (bot){
     "**!honor *@user*** : Get user's total honor/karma.\r" +
     "**!setPCBuild *PCPartPicker.com part list permalink*** : Associate your PC build with your Discord ID.\r" +
     "**!PCBuild *@user*** : Returns user's PC Build\r" +
-    "**!gif *search-terms*** : Returns a gif matching your search terms");
+    "**!gif *search-terms*** : Returns a gif matching your search terms \r" +
+    "**!ffxiv-set [Name]|[Server]** : Searches for a character to associate to your DiscordID. Example \`!ffxiv-set Sephiroth|Cactuar\` \r" +
+    "**!ffxiv-clear** : Clears the associated character from your DiscordID \r" +
+    "**!ffxiv-show** : Shows your associated FFXIV character's profile and class jobs");
 
     message.reply(infoEmbedBuilder(title, details));
   }
