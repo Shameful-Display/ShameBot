@@ -170,9 +170,7 @@ var FFXIVManager = function (bot) {
                     );
 
                     classJobs.forEach(classJob => {
-                        //if(classJob.Level != 0) {
-                            embed.addField(classJob.UnlockedState.Name, classJob.Level, true)
-                        //}
+                        embed.addField(classJob.UnlockedState.Name, classJob.Level, true)
                     });
 
                     message.channel.send(embed);
