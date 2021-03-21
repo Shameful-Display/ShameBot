@@ -135,7 +135,7 @@ var FFXIVManager = function (bot) {
                         .setImage(character.Portrait)
 
                     var raceName
-                    switch(character.Race) {
+                    switch (character.Race) {
                         case 1:
                             raceName = "Hyur";
                             break;
@@ -164,14 +164,21 @@ var FFXIVManager = function (bot) {
                     embed.addField("Race", raceName);
 
                     embed.addFields(
-                            { name: 'Nameday', value: character.Nameday},
-                            { name: 'Server', value: character.Server},
-                            { name: 'Class Jobs', value: '--------------------------------------------------'}
+                        { name: 'Nameday', value: character.Nameday },
+                        { name: 'Server', value: character.Server },
+                        { name: 'Class Jobs', value: '-------------------------------------------------------' }
                     );
 
                     classJobs.forEach(classJob => {
-                        embed.addField(classJob.UnlockedState.Name, classJob.Level, true)
+                        if (classJob.Level != 0) {
+                            embed.addField(classJob.UnlockedState.Name, classJob.Level, true)
+                        }
                     });
+
+                    var mod = classJobs.length % 3;
+                    for (var i = 0; i < 3-mod; i++) {
+                        embed.addField("󠀠󠀠\u200b‎", "\u200b", true);
+                    }
 
                     message.channel.send(embed);
                 });
