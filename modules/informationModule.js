@@ -21,7 +21,7 @@ var InfoManager = function (bot){
 		"**!stats** : Returns general bot stats.\r" +
     "**!fullStats** : Returns expanded bot stats.\r" +
 		"**!battle begin *@player1* *@player2* ** : Rock Paper Scissors with someone.\r" +
-    "**!setSteamID *Steam ID number* ** : Associate your Steam acct with your Discord acct.\r" +
+    "**!findSteamID *Steam User Name* ** : Associate your Steam acct with your Discord acct.\r" +
     "**!steamID** : See SteamID that is associated with your Discord acct.\r" +
     "**!steamTop10** : Returns your top 10 most played games on Steam.\r" +
     "**!clearSteamID** : Remove SteamID associated with your Discord acct.\r" +
