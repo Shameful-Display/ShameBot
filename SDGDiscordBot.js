@@ -271,6 +271,10 @@ bot.on("message", message => {
 
 	//Steam
 
+	if (message.content.includes("!findSteamID")) {
+		steamManager.findSteamID(message, steamIDCollection);
+	}
+
 	if (message.content.includes("!setSteamID")) {
 		steamManager.setSteamID(message, steamIDCollection);
 	}
