@@ -26,6 +26,8 @@ var ServerLogManager = require("./modules/serverLogModule.js")
 var ServerLog = new ServerLogManager(bot);
 var FinanceManager = require("./modules/financeModule.js")
 var FinanceInfo = new FinanceManager(bot);
+var FFXIVManager = require("./modules/ffxivModule.js")
+var FFXIVInfo = new FFXIVManager(bot);
 var request = require("request"),
   cheerio = require("cheerio");
 
@@ -37,7 +39,8 @@ MongoClient.connect("mongodb://localhost:27017shamebotdb", {useUnifiedTopology: 
 	db = client.db('shamebotdb');
 	honorCollection = db.collection('honorCollection');
 	steamIDCollection = db.collection('SteamIDtoDiscordID');
-  PCBuildCollection = db.collection('PCBuilds');
+  	PCBuildCollection = db.collection('PCBuilds');
+	ffxivCollection = db.collection('FFXIV');
 });
 
 //initialize file transport for winston
@@ -165,11 +168,9 @@ bot.on("message", message => {
 			// Assign SteamID to UserID in Mongo
 			steamIDCollection.updateOne(query, update, options)
 			.then((obj) => {
-				console.log('Updated - ' + obj);
 				message.reply("Your SteamID has been associated with your DiscordID!");
 			})
 			.catch((err) => {
-				console.log('Error: ' + err);
 				message.reply("There was an error associating your SteamID with your DiscordID: " + err);
 			})
 		} else {
@@ -372,6 +373,22 @@ bot.on("message", message => {
   }
 
   //End stocks
+
+  //FFXIV
+
+  if(message.content.includes("!ffxiv-set")){
+    FFXIVInfo.setCharacter(message, ffxivCollection);
+  }
+
+  if(message.content.includes("!ffxiv-clear")) {
+	FFXIVInfo.clearCharacter(message, ffxivCollection);
+  }
+
+  if(message.content.includes("!ffxiv-show")){
+    FFXIVInfo.showCharacter(message, ffxivCollection);
+  }
+
+  //End FFXIV
 
 	//help
 	if(message.content.includes("!help")){
