@@ -157,18 +157,24 @@ bot.on("message", message => {
 		var userID = message.author.id;
 		var steamID = splitContent[1];
 
+		const query = { id: userID };
+		const update = { $set: { id: userID, steamID: steamID }};
+		const options = { upsert: true };
+
 		if(/^\d+$/.test(steamID)) {
 			// Assign SteamID to UserID in Mongo
-			steamIDCollection.updateOne(
-				{ id: userID },
-				{ id: userID, steamID: steamID },
-				{ upsert: true }
-			);
-			message.reply("Your SteamID has been associated with your DiscordID!");
-		} else
-      {
-				message.reply("A Steam ID must be a string comprised only of numbers. \n\nExample: \n ```!setSteamID 76561197960434622```");
-			}
+			steamIDCollection.updateOne(query, update, options)
+			.then((obj) => {
+				console.log('Updated - ' + obj);
+				message.reply("Your SteamID has been associated with your DiscordID!");
+			})
+			.catch((err) => {
+				console.log('Error: ' + err);
+				message.reply("There was an error associating your SteamID with your DiscordID: " + err);
+			})
+		} else {
+			message.reply("A Steam ID must be a string comprised only of numbers. \n\nExample: \n ```!setSteamID 76561197960434622```");
+		}
 	}
 
 	// Clear Steam ID
