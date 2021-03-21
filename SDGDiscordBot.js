@@ -380,8 +380,12 @@ bot.on("message", message => {
     FFXIVInfo.setCharacter(message, ffxivCollection);
   }
 
+  if(message.content.includes("!ffxiv-clear")) {
+	FFXIVInfo.clearCharacter(message, ffxivCollection);
+  }
+
   if(message.content.includes("!ffxiv-show")){
-    FFXIVInfo.displayCharacter(message);
+    FFXIVInfo.showCharacter(message, ffxivCollection);
   }
 
   //End FFXIV

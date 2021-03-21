@@ -33,8 +33,8 @@ var FFXIVManager = function (bot) {
                 var character = jsonObj.Results[0];
 
                 const embed = new Discord.MessageEmbed()
-                    .setColor('#81e0f7')
-                    .setTitle(character.Name)
+                    .setColor('#24a2e2')
+                    .setAuthor(character.Name, "https://jaehyuk-lee.github.io/FFXIV-KR-PF-Client-test/static/img/ffxiv-logo.b28c8b8.png")
                     .setDescription("Is this you, " + message.author.toString() + "?\nClick on the ✅ reaction to register to your DiscordID.")
                     .setThumbnail(character.Avatar)
                     .addField('Server', character.Server, true)
@@ -56,7 +56,7 @@ var FFXIVManager = function (bot) {
                                     if (reaction.emoji.name === '✅') {
                                         // Set FFXIV ID
                                         const query = { id: message.author.id };
-                                        const update = { $set: { id: message.author.id, steamID: character.ID } };
+                                        const update = { $set: { id: message.author.id, ffxivID: character.ID } };
                                         const options = { upsert: true };
 
                                         dbCollection.updateOne(query, update, options)
@@ -68,22 +68,123 @@ var FFXIVManager = function (bot) {
                                             })
                                     }
                                 })
-                    .catch(collected => {
-                        console.log("Failed Reaction");
-                    }))
+                                .catch(collected => {
+                                    console.log("Failed Reaction");
+                                }))
+                    });
+            });
         });
-    });
-});
 
-reqGet.end();
-reqGet.on('error', function (e) {
-    console.error(e);
-});
+        reqGet.end();
+        reqGet.on('error', function (e) {
+            console.error(e);
+        });
     }
 
-this.saveCharacter = function (characterID, discordID) {
-    console.log("HERE IT IS: " + characterID + " -- " + discordID);
-}
+    this.clearCharacter = function (message, dbCollection) {
+        var userID = message.author.id;
+
+        // Clear Assigned FFXIV ID from UserID in Mongo
+        dbCollection.deleteOne(
+            { id: userID }
+        );
+        message.reply("Your FFXIV ID has been cleared!");
+    }
+
+    this.showCharacter = function (message, dbCollection) {
+        var userID = message.author.id;
+
+        dbCollection.findOne({ id: userID }, { ffxivID: 1 }, function (err, doc) {
+            if (err) throw err;
+
+            if (doc == null) {
+                message.reply("You haven't associated a FFXIV ID with your DiscordID. Use the command !ffxiv-setCharacter to set this up. \n\nExample: \n ```!ffxiv-setCharacter Sephiroth|Cactuar```");
+                return;
+            }
+
+            var ffxivID = doc.ffxivID;
+
+            var https = require('https');
+            var pathWithParameters = "/character/" + ffxivID;
+
+            var optionsget = {
+                host: 'xivapi.com',
+                port: 443,
+                path: pathWithParameters,
+                method: 'GET'
+            };
+
+            var reqGet = https.request(optionsget, function (res) {
+                var data = "";
+                res.on('data', function (chunk) {
+                    data += chunk;
+                });
+
+                res.on("end", function () {
+
+                    var jsonObj = JSON.parse(data);
+                    var character = jsonObj.Character;
+                    var activeClass = character.ActiveClassJob;
+                    var classJobs = character.ClassJobs;
+
+                    const embed = new Discord.MessageEmbed()
+                        .setColor('#24a2e2')
+                        .setAuthor(character.Name, "https://jaehyuk-lee.github.io/FFXIV-KR-PF-Client-test/static/img/ffxiv-logo.b28c8b8.png")
+                        .setTitle(activeClass.UnlockedState.Name + "/ Level " + activeClass.Level)
+                        .setThumbnail(character.Avatar)
+                        .setImage(character.Portrait)
+
+                    var raceName
+                    switch(character.Race) {
+                        case 1:
+                            raceName = "Hyur";
+                            break;
+                        case 2:
+                            raceName = "Elezen";
+                            break;
+                        case 3:
+                            raceName = "Lalafell";
+                            break;
+                        case 4:
+                            raceName = "Miqo\'te";
+                            break;
+                        case 5:
+                            raceName = "Roegadyn";
+                            break;
+                        case 6:
+                            raceName = "Au Ra";
+                            break;
+                        case 7:
+                            raceName = "Hrothgar";
+                            break;
+                        case 8:
+                            raceName = "Viera";
+                            break;
+                    }
+                    embed.addField("Race", raceName);
+
+                    embed.addFields(
+                            { name: 'Nameday', value: character.Nameday},
+                            { name: 'Server', value: character.Server},
+                            { name: 'Class Jobs', value: '--------------------------------------------------'}
+                    );
+
+                    classJobs.forEach(classJob => {
+                        //if(classJob.Level != 0) {
+                            embed.addField(classJob.UnlockedState.Name, classJob.Level, true)
+                        //}
+                    });
+
+                    message.channel.send(embed);
+                });
+            });
+
+            reqGet.end();
+            reqGet.on('error', function (e) {
+                console.error(e);
+            });
+        });
+    }
 }
 
 module.exports = FFXIVManager;
