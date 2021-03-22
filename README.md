@@ -5,7 +5,7 @@ A multipurpose bot for a private Discord server.
 
 ### Pre-Reqs:
 
-1. Node JS installed (version 9 or higher)[Download & Instructions](https://nodejs.org/en/download/)
+1. Node JS installed (version 9 to 14)[Download & Instructions](https://nodejs.org/en/download/)
 2. MongoDB (https://www.mongodb.com/download-center)
    1. For Windows: Go to Community Server tab and download the *Windows Server 2008 R2 64-bit* version.
    2. For Windows: After installing, it is required that you create a new folder in the C: root named "data" and a folder named "db" inside of that. Failure to do so will result in MongoDB failing to run.
@@ -15,7 +15,7 @@ A multipurpose bot for a private Discord server.
 
 ### Dependencies
 
-From the root of the cloned repository run "npm install" which will use the include package.json file to get all of your dependencies installed.
+From the root of the cloned repository run "npm install" which will use the included package.json file to get all of your dependencies installed.
 
 Discord.js is a node js library for interacting with Discord's API.
 Winston is a popular logging module.
@@ -54,8 +54,8 @@ After the dependencies are installed you are nearly ready to run the Shamebot bu
    ```
    {
      "token" : "your bot token",
-     "steamAPIKey" : "your Steam API key"
-     "giphyAPIKey : your giphy API key"
+     "steamAPIKey" : "your Steam API key",
+     "giphyAPIKey" : "your giphy API key",
    }
      ```
 These will be fixed at a later date but for now the above is needed to properly run the bot.
