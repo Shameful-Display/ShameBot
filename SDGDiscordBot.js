@@ -30,6 +30,8 @@ var FFXIVManager = require("./modules/ffxivModule.js")
 var FFXIVInfo = new FFXIVManager(bot);
 var SteamManager = require("./modules/steamModule.js")
 var steamManager = new SteamManager(bot);
+var DrinkingManager = require("./modules/drinkingModule.js")
+var drinkingManager = new DrinkingManager(bot);
 var request = require("request"),
 	cheerio = require("cheerio");
 
@@ -43,6 +45,7 @@ MongoClient.connect("mongodb://localhost:27017shamebotdb", { useUnifiedTopology:
 	steamIDCollection = db.collection('SteamIDtoDiscordID');
 	PCBuildCollection = db.collection('PCBuilds');
 	ffxivCollection = db.collection('FFXIV');
+	drinkingCollection = db.collection('Drinking');
 });
 
 //initialize file transport for winston
@@ -308,6 +311,17 @@ bot.on("message", message => {
 	}
 
 	//End FFXIV
+
+	//Drinking
+	if(message.content.includes("!cheers")) {
+		drinkingManager.addDrinks(message, drinkingCollection);
+	}
+
+	if(message.content.includes("!drunk")) {
+		drinkingManager.getStatus(message, drinkingCollection);
+	}
+
+	//End Drinking
 
 	//help
 	if (message.content.includes("!help")) {
