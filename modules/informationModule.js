@@ -33,7 +33,9 @@ var InfoManager = function (bot){
     "**!gif *search-terms*** : Returns a gif matching your search terms \r" +
     "**!ffxiv-set [Name]|[Server]** : Searches for a character to associate to your DiscordID. Example \`!ffxiv-set Sephiroth|Cactuar\` \r" +
     "**!ffxiv-clear** : Clears the associated character from your DiscordID \r" +
-    "**!ffxiv-show** : Shows your associated FFXIV character's profile and class jobs");
+    "**!ffxiv-show** : Shows your associated FFXIV character's profile and class jobs \r" +
+    "**!cheers [:beer:, :wine_glass:, or :tumbler_glass:]** : When you have one, Shamebot will drink with you! \r" +
+    "**!drunk** : Checks Shamebot's BAC without pouring him another");
 
     message.reply(infoEmbedBuilder(title, details));
   }
