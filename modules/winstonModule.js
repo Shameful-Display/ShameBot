@@ -1,7 +1,6 @@
 var winston = require('winston');
 var fs = require( "fs" );
 var path = require( "path" );
-var process = require( "process" );
 
 exports.createWinstonFileTransport = function() {
   fs.mkdir("./logs", 0777, function(err) { //create directory with normal permissions to store logs
