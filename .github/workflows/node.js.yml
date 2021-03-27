@@ -27,7 +27,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - name: Run ESLint
-      run: npx eslint . --ext .js,.jsx,.ts,.tsx --output-file eslint_report.json --format json src
+      run: npx eslint . --ext .js,.jsx,.ts,.tsx --output-file eslint_report.json --format json
       continue-on-error: true
     - run: npm run build --if-present
     - run: npm test
