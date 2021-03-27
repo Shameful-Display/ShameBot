@@ -9,3 +9,13 @@ updates:
     directory: "/" # Location of package manifests
     schedule:
       interval: "daily"
+    # Specify labels for npm pull requests
+    labels:
+      - "npm"
+      - "dependencies"
+    # Add reviewers
+    reviewers:
+      - "Shameful-Display/Shamebot"
+    # Add assignees
+    assignees:
+      - "Shameful-Display/Shamebot"
