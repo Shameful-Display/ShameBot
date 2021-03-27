@@ -9,7 +9,7 @@ function minutesToHourMinuteString(n) {
   return `${rhours}h ${rminutes}m `;
 }
 
-const DrinkingManager = function (_bot) {
+const DrinkingManager = function (bot) {
   this.addDrinks = function (message, dbCollection) {
     let beerCount = 0;
     let wineCount = 0;

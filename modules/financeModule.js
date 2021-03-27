@@ -1,6 +1,3 @@
-const fs = require('fs');
-const path = require('path');
-const process = require('process');
 const querystring = require('querystring');
 const winston = require('winston');
 const { Client, MessageEmbed } = require('discord.js');
