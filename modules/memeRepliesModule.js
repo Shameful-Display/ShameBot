@@ -1,64 +1,57 @@
-//These three required for the fs.readdirSync()
-var fs = require( "fs" );
-var path = require( "path" );
-var process = require( "process" );
+// These three required for the fs.readdirSync()
+const fs = require('fs');
 const { Client, MessageAttachment } = require('discord.js');
 
-var winston = require('winston');
+const winston = require('winston');
 
-var MemeManager = function (bot){
-  //initialize cena
-  var cenaImageFolder = "./modules/cenaImages/";
-  var cenaImageArray = new Array();
-  cenaImageArray = fs.readdirSync(cenaImageFolder); //Loops through a given folder and creates an array of file names
+const MemeManager = function (bot) {
+  // initialize cena
+  const cenaImageFolder = './modules/cenaImages/';
+  let cenaImageArray = new Array();
+  cenaImageArray = fs.readdirSync(cenaImageFolder); // Loops through a given folder and creates an array of file names
 
-  //cena reply function
+  // cena reply function
   this.cenaReply = function (message) {
-    //Get random image path from array
-    var randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
+    // Get random image path from array
+    const randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
 
     // \uD83C is the unicode trumpet
     this.MemeReply(message,
-      "\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA",
+      '\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA**JOHN CENA!**\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA\uD83C\uDFBA',
       cenaImageFolder.concat(randomCenaImageFilePath),
-      "SUPERSLAM!"
-    )
-  }
+      'SUPERSLAM!');
+  };
 
-  //KoolAid reply function
-  this.koolaidReply = function (message){
+  // KoolAid reply function
+  this.koolaidReply = function (message) {
     this.MemeReply(message,
-      "Oh Yeah!",
-      "./modules/memeImages/koolaid.jpg",
-      "with Kool Aid"
-    )
-  }
+      'Oh Yeah!',
+      './modules/memeImages/koolaid.jpg',
+      'with Kool Aid');
+  };
 
-  //Macho Man function
-  this.machoManReply = function (message){
+  // Macho Man function
+  this.machoManReply = function (message) {
     this.MemeReply(message,
-      "Ohhhh yeah brother!",
-      "./modules/memeImages/savage.jpg",
-      "with Randall"
-    )
-  }
+      'Ohhhh yeah brother!',
+      './modules/memeImages/savage.jpg',
+      'with Randall');
+  };
 
-  //Tiny Rick function
+  // Tiny Rick function
   this.tinyRickReply = function (message) {
     this.MemeReply(message,
       "I'm Tiny Rick!!!!!",
-      "./modules/memeImages/tinyRick.jpg",
-      "with Rick Sanchez"
-    )
-  }
+      './modules/memeImages/tinyRick.jpg',
+      'with Rick Sanchez');
+  };
 
   // Utility function to make future Discord JS Upgrades "easier"
   this.MemeReply = function (message, response, imagePath, presence) {
-
     const attachment = new MessageAttachment(imagePath);
     message.reply(response, attachment).catch((err) => winston.error("couldn't send image", err));
-    bot.user.setPresence({ activity: { name: presence , type: 0} });
-  }
-}
+    bot.user.setPresence({ activity: { name: presence, type: 0 } });
+  };
+};
 
 module.exports = MemeManager;
