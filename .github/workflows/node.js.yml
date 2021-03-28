@@ -26,5 +26,16 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
+    - name: Run ESLint
+      run: npx eslint . --ext .js,.jsx,.ts,.tsx --output-file eslint_report.json --format json
+      continue-on-error: true
     - run: npm run build --if-present
     - run: npm test
+    - name: Annotate Code Linting Results
+      uses: ataylorme/eslint-annotate-action@1.0.4
+      if: always()
+      with:
+        repo-token: '${{ secrets.GITHUB_TOKEN }}'
+        report-json: 'eslint_report.json'
+      continue-on-error: true
+
