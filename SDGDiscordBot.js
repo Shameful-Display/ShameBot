@@ -13,7 +13,6 @@ const winstonModule = require('./modules/winstonModule.js');
 let db;
 let honorCollection;
 let steamIDCollection;
-let PCBuildCollection;
 let ffxivCollection;
 let drinkingCollection;
 
