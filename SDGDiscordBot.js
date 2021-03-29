@@ -6,8 +6,6 @@ const bot = new Client();
 
 const winston = require('winston');
 const { MongoClient } = require('mongodb');
-const request = require('request');
-const queryString = require('querystring');
 const winstonModule = require('./modules/winstonModule.js');
 
 let db;
@@ -50,6 +48,10 @@ const DrinkingManager = require('./modules/drinkingModule.js');
 
 const drinkingManager = new DrinkingManager(bot);
 
+const GiphyManager = require('./modules/giphyModule.js');
+
+const giphyManager = new GiphyManager(bot);
+
 // global connection for MongoDB
 MongoClient.connect('mongodb://localhost:27017shamebotdb', { useUnifiedTopology: true }, (err, client) => {
   if (err) throw err;
@@ -77,14 +79,6 @@ bot.on('ready', () => {
   bot.user.setPresence({ activity: { name: 'with Shame', type: 0 } });
 });
 
-// bot.on("resume", () => {
-//   ServerLog.botConnectionStatus('resuming');
-// });
-//
-// bot.on("reconnecting", () => {
-//   ServerLog.botConnectionStatus('reconnecting');
-// });
-
 bot.on('warn', (warning) => {
   winston.info(`+| Warning: ${warning} |+`);
 });
@@ -102,6 +96,7 @@ bot.on('message', (message) => {
   if (message.author.id === bot.user.id || message.author.bot) {
     return;
   }
+
   // Make all message content lower case so all triggers can be written lower case and always work.
   const lowerCaseMessage = message.content.toLowerCase();
 
@@ -231,18 +226,7 @@ bot.on('message', (message) => {
 
   // Giphy Search
   if (message.content.includes('!gif')) {
-    const searchTerm = queryString.escape(message.cleanContent.replace('!gif', ''));
-    const giphyAPIUrl = `http://api.giphy.com/v1/gifs/search?q=${searchTerm}&api_key=${AuthDetails.giphyAPIKey}&limit=1`;
-    request(giphyAPIUrl, (err, response, body) => {
-      const imageData = JSON.parse(body).data;
-      if (imageData.length > 0) {
-        message.channel.send(imageData[0].embed_url);
-      } else {
-        message.reply(`*${message.cleanContent.replace('!gif ', '')}*\n`, {
-          file: './modules/memeImages/mimic.png',
-        }).catch((err) => winston.error("couldn't send image", err));
-      }
-    });
+    giphyManager.search(message);
   }
 });
 
