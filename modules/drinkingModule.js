@@ -41,7 +41,7 @@ const DrinkingManager = function drinkingManager() {
   this.getStatus = function getStatus(message, dbCollection) {
     dbCollection.aggregate([
       {
-        $match: { createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } },
+        $match: { createdAt: { $gt: new Date(Date.now() - 8 * 60 * 60 * 1000) } },
       },
       {
         $group: {
