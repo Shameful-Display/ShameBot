@@ -52,12 +52,8 @@ const DrinkingManager = function drinkingManager() {
           liquorCount: { $sum: '$liquor' },
         },
       },
-    ]).toArray(
-      (err, result) => {
-        if (err) {
-          message.channel.send(`Party Foul:  ${err}`);
-        }
-
+    ]).toArray()
+      .then((result) => {
         const sums = result[0];
         const { beerCount } = sums;
         const { wineCount } = sums;
@@ -90,8 +86,22 @@ const DrinkingManager = function drinkingManager() {
           );
 
         message.channel.send(embed);
-      },
-    );
+      }).catch((err) => {
+        console.log(`Error: ${err}`);
+        const embed = new Discord.MessageEmbed()
+          .setColor('#DBE4EB')
+          .setAuthor("Shamebot Drinkin' Buddy")
+          .setThumbnail('https://findicons.com/files/icons/1202/futurama_vol_6_the_movies/256/steamboat_bender.png')
+          .setTitle('BAC: 0.0%')
+          .setDescription('We gonna start drinking, or what?')
+          .addFields(
+            { name: '🍺 Beer', value: 0, inline: true },
+            { name: '🍷 Wine', value: 0, inline: true },
+            { name: '🥃 Liqour', value: 0, inline: true },
+          );
+
+        message.channel.send(embed);
+      });
   };
 };
 
