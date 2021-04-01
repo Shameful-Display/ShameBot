@@ -1,16 +1,14 @@
 const Discord = require('discord.js');
 
-function minutesToHourMinuteString(n) {
-  const num = n;
-  const hours = (num / 60);
+function hourMinuteString(hours) {
   const rhours = Math.floor(hours);
   const minutes = (hours - rhours) * 60;
   const rminutes = Math.round(minutes);
   return `${rhours}h ${rminutes}m `;
 }
 
-const DrinkingManager = function (bot) {
-  this.addDrinks = function (message, dbCollection) {
+const DrinkingManager = function drinkingManager() {
+  this.addDrinks = function addDrinks(message, dbCollection) {
     let beerCount = 0;
     let wineCount = 0;
     let liquorCount = 0;
@@ -32,7 +30,7 @@ const DrinkingManager = function (bot) {
     };
 
     dbCollection.insertOne(doc)
-      .then((obj) => {
+      .then(() => {
         this.getStatus(message, dbCollection);
       })
       .catch((err) => {
@@ -40,10 +38,10 @@ const DrinkingManager = function (bot) {
       });
   };
 
-  this.getStatus = function (message, dbCollection) {
+  this.getStatus = function getStatus(message, dbCollection) {
     dbCollection.aggregate([
       {
-        $match: { createdAt: { $gt: new Date(Date.now() - 24 * 60 * 60 * 1000) } },
+        $match: { createdAt: { $gt: new Date(Date.now() - 8 * 60 * 60 * 1000) } },
       },
       {
         $group: {
@@ -54,32 +52,33 @@ const DrinkingManager = function (bot) {
           liquorCount: { $sum: '$liquor' },
         },
       },
-    ]).toArray(
-      (err, result) => {
-        if (err) {
-          message.channel.send(`Party Foul:  ${err}`);
-        }
-
+    ]).toArray()
+      .then((result) => {
         const sums = result[0];
         const { beerCount } = sums;
         const { wineCount } = sums;
         const { liquorCount } = sums;
         const { earliestDrink } = sums;
 
-        const hoursDrinking = Math.round(Math.abs(new Date() - earliestDrink) / (60 * 60 * 1000) * 100) / 100;
+        const hourFactor = 60 * 60 * 1000;
+        const hoursDrinking = Math.abs(new Date() - earliestDrink) / hourFactor;
 
-        const GenderConstant = 0.68;
-        const Weight = 240.0;
-
-        // BAC = (Standard Drinks * 0.06 * 100 * 1.055 / Weight * Gender Constant) ­ (0.015 * Hours)
-        const BAC = Math.max(Math.round((((beerCount + wineCount + liquorCount) * 0.06 * 100 * 1.055 / Weight * GenderConstant) - (0.015 * hoursDrinking)) * 100) / 100, 0);
+        // BAC = BAC = [Alcohol consumed in grams / (Body weight in grams x R)] X 100
+        const drinkCount = beerCount + wineCount + liquorCount;
+        const alcohol = drinkCount * 14;
+        const bodyWeight = 240 * 454;
+        const r = 0.68;
+        const metabolized = hoursDrinking * 0.015;
+        let newBac = ((alcohol / (bodyWeight * r)) * 100) - metabolized;
+        newBac = Math.max(newBac, 0);
+        newBac = newBac.toFixed(2);
 
         const embed = new Discord.MessageEmbed()
           .setColor('#DBE4EB')
           .setAuthor("Shamebot Drinkin' Buddy")
           .setThumbnail('https://findicons.com/files/icons/1202/futurama_vol_6_the_movies/256/steamboat_bender.png')
-          .setTitle(`BAC: ${BAC}%`)
-          .setDescription(`Started drinking ${minutesToHourMinuteString(hoursDrinking * 60)} ago.`)
+          .setTitle(`BAC: ${newBac}%`)
+          .setDescription(`Started drinking ${hourMinuteString(hoursDrinking)} ago.`)
           .addFields(
             { name: '🍺 Beer', value: beerCount, inline: true },
             { name: '🍷 Wine', value: wineCount, inline: true },
@@ -87,8 +86,22 @@ const DrinkingManager = function (bot) {
           );
 
         message.channel.send(embed);
-      },
-    );
+      }).catch((err) => {
+        console.log(`Error: ${err}`);
+        const embed = new Discord.MessageEmbed()
+          .setColor('#DBE4EB')
+          .setAuthor("Shamebot Drinkin' Buddy")
+          .setThumbnail('https://findicons.com/files/icons/1202/futurama_vol_6_the_movies/256/steamboat_bender.png')
+          .setTitle('BAC: 0.0%')
+          .setDescription('We gonna start drinking, or what?')
+          .addFields(
+            { name: '🍺 Beer', value: 0, inline: true },
+            { name: '🍷 Wine', value: 0, inline: true },
+            { name: '🥃 Liqour', value: 0, inline: true },
+          );
+
+        message.channel.send(embed);
+      });
   };
 };
 

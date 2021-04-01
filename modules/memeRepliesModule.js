@@ -4,16 +4,18 @@ const { Client, MessageAttachment } = require('discord.js');
 
 const winston = require('winston');
 
-const MemeManager = function (bot) {
+const MemeManager = function MemeManager(bot) {
   // initialize cena
   const cenaImageFolder = './modules/cenaImages/';
-  let cenaImageArray = new Array();
-  cenaImageArray = fs.readdirSync(cenaImageFolder); // Loops through a given folder and creates an array of file names
+  let cenaImageArray = [];
+  // Loops through a given folder and creates an array of file names
+  cenaImageArray = fs.readdirSync(cenaImageFolder);
 
   // cena reply function
-  this.cenaReply = function (message) {
+  this.cenaReply = function cenaReply(message) {
     // Get random image path from array
-    const randomCenaImageFilePath = cenaImageArray[Math.floor(Math.random() * cenaImageArray.length)];
+    const randomIndex = Math.floor(Math.random() * cenaImageArray.length);
+    const randomCenaImageFilePath = cenaImageArray[randomIndex];
 
     // \uD83C is the unicode trumpet
     this.MemeReply(message,
@@ -23,7 +25,7 @@ const MemeManager = function (bot) {
   };
 
   // KoolAid reply function
-  this.koolaidReply = function (message) {
+  this.koolaidReply = function koolaidReply(message) {
     this.MemeReply(message,
       'Oh Yeah!',
       './modules/memeImages/koolaid.jpg',
@@ -31,7 +33,7 @@ const MemeManager = function (bot) {
   };
 
   // Macho Man function
-  this.machoManReply = function (message) {
+  this.machoManReply = function machoManReply(message) {
     this.MemeReply(message,
       'Ohhhh yeah brother!',
       './modules/memeImages/savage.jpg',
@@ -39,7 +41,7 @@ const MemeManager = function (bot) {
   };
 
   // Tiny Rick function
-  this.tinyRickReply = function (message) {
+  this.tinyRickReply = function tinyRickReply(message) {
     this.MemeReply(message,
       "I'm Tiny Rick!!!!!",
       './modules/memeImages/tinyRick.jpg',
@@ -47,7 +49,7 @@ const MemeManager = function (bot) {
   };
 
   // Utility function to make future Discord JS Upgrades "easier"
-  this.MemeReply = function (message, response, imagePath, presence) {
+  this.MemeReply = function MemeReply(message, response, imagePath, presence) {
     const attachment = new MessageAttachment(imagePath);
     message.reply(response, attachment).catch((err) => winston.error("couldn't send image", err));
     bot.user.setPresence({ activity: { name: presence, type: 0 } });

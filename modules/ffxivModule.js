@@ -1,8 +1,8 @@
 const Discord = require('discord.js');
-const winston = require('winston');
+const https = require('https');
 
-const FFXIVManager = function (bot) {
-  this.setCharacter = function (message, dbCollection) {
+const FFXIVManager = function ffxivManager() {
+  this.setCharacter = function setCharacter(message, dbCollection) {
     const contentIndex = message.content.indexOf(' ');
     const content = message.content.slice(contentIndex);
     const splitContent = content.split('|');
@@ -10,7 +10,6 @@ const FFXIVManager = function (bot) {
     const characterName = splitContent[0];
     const serverName = splitContent[1];
 
-    const https = require('https');
     const pathWithParameters = encodeURI(`/character/search?name=${characterName}&server=${serverName}`);
 
     const optionsget = {
@@ -57,7 +56,7 @@ const FFXIVManager = function (bot) {
                     const options = { upsert: true };
 
                     dbCollection.updateOne(query, update, options)
-                      .then((obj) => {
+                      .then(() => {
                         message.channel.send('Your FFXIV ID has been associated with your DiscordID!');
                       })
                       .catch((err) => {
@@ -65,7 +64,7 @@ const FFXIVManager = function (bot) {
                       });
                   }
                 })
-                .catch((collected) => {
+                .catch(() => {
                   console.log('Failed Reaction');
                 }));
           });
@@ -78,7 +77,7 @@ const FFXIVManager = function (bot) {
     });
   };
 
-  this.clearCharacter = function (message, dbCollection) {
+  this.clearCharacter = function clearCharacter(message, dbCollection) {
     const userID = message.author.id;
 
     // Clear Assigned FFXIV ID from UserID in Mongo
@@ -88,20 +87,19 @@ const FFXIVManager = function (bot) {
     message.reply('Your FFXIV ID has been cleared!');
   };
 
-  this.showCharacter = function (message, dbCollection) {
+  this.showCharacter = function showCharacter(message, dbCollection) {
     const userID = message.author.id;
 
     dbCollection.findOne({ id: userID }, { ffxivID: 1 }, (err, doc) => {
       if (err) throw err;
 
       if (doc == null) {
-        message.reply("You haven't associated a FFXIV ID with your DiscordID.\rUse the command \`!ffxiv-set [Name]|[Server]\` to set this up. \n\nExample: \n ```!ffxiv-set Sephiroth|Cactuar```");
+        message.reply('You haven\'t associated a FFXIV ID with your DiscordID.\rUse the command `!ffxiv-set [Name]|[Server]` to set this up. \n\nExample: \n ```!ffxiv-set Sephiroth|Cactuar```');
         return;
       }
 
       const { ffxivID } = doc;
 
-      const https = require('https');
       const pathWithParameters = `/character/${ffxivID}`;
 
       const optionsget = {
@@ -142,7 +140,7 @@ const FFXIVManager = function (bot) {
               raceName = 'Lalafell';
               break;
             case 4:
-              raceName = "Miqo\'te";
+              raceName = 'Miqo\'te';
               break;
             case 5:
               raceName = 'Roegadyn';
