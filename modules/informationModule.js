@@ -34,6 +34,9 @@ __Available commands__ :
 **!ffxiv-set [Name]|[Server]** : Searches for a character to associate to your DiscordID. Example \`!ffxiv-set Sephiroth|Cactuar\` 
 **!ffxiv-clear** : Clears the associated character from your DiscordID 
 **!ffxiv-show** : Shows your associated FFXIV character's profile and class jobs 
+**!findOriginID *Origin User name* ** : Associate your Origin acct with your Discord acct
+**!apexStats** : Shows your Apex Legends stats
+**!apexMap** : Shows the current and upcoming Apex Legends map  
 **!cheers [:beer:, :wine_glass:, or :tumbler_glass:]** : When you have one, Shamebot will drink with you! 
 **!drunk** : Checks Shamebot's BAC without pouring him another`);
 
