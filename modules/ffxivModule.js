@@ -33,7 +33,7 @@ const FFXIVManager = function (bot) {
 
         const embed = new Discord.MessageEmbed()
           .setColor('#24a2e2')
-          .setAuthor(character.Name, 'https://jaehyuk-lee.github.io/FFXIV-KR-PF-Client-test/static/img/ffxiv-logo.b28c8b8.png')
+          .setAuthor(character.Name, './modules/images/ffxiv-logo.png')
           .setDescription(`Is this you, ${message.author.toString()}?\nClick on the ✅ reaction to register to your DiscordID.`)
           .setThumbnail(character.Avatar)
           .addField('Server', character.Server, true)
@@ -125,7 +125,7 @@ const FFXIVManager = function (bot) {
 
           const embed = new Discord.MessageEmbed()
             .setColor('#24a2e2')
-            .setAuthor(character.Name, 'https://jaehyuk-lee.github.io/FFXIV-KR-PF-Client-test/static/img/ffxiv-logo.b28c8b8.png')
+            .setAuthor(character.Name, './modules/images/ffxiv-logo.png')
             .setTitle(`${activeClass.UnlockedState.Name}/ Level ${activeClass.Level}`)
             .setThumbnail(character.Avatar)
             .setImage(character.Portrait);

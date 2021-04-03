@@ -77,7 +77,7 @@ const DrinkingManager = function (bot) {
         const embed = new Discord.MessageEmbed()
           .setColor('#DBE4EB')
           .setAuthor("Shamebot Drinkin' Buddy")
-          .setThumbnail('https://findicons.com/files/icons/1202/futurama_vol_6_the_movies/256/steamboat_bender.png')
+          .setThumbnail('./modules/images/steamboat_bender.png')
           .setTitle(`BAC: ${BAC}%`)
           .setDescription(`Started drinking ${minutesToHourMinuteString(hoursDrinking * 60)} ago.`)
           .addFields(

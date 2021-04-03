@@ -39,7 +39,7 @@ const SteamManager = function (bot) {
 
             const embed = new Discord.MessageEmbed()
               .setColor('#ff8200')
-              .setAuthor('Steam Profile', 'https://logodix.com/logo/813259.png')
+              .setAuthor('Steam Profile', './modules/images/steam-logo.png')
               .setURL(player.profileurl)
               .setTitle(player.personaname)
               .setDescription(`Is this you, ${message.author.toString()}?\nClick on the ✅ reaction to register to your DiscordID.`)
@@ -144,7 +144,7 @@ const SteamManager = function (bot) {
 
           const embed = new Discord.MessageEmbed()
             .setColor('#ff8200')
-            .setAuthor(`${message.author.username}\'s Top 10 Games`, 'https://logodix.com/logo/813259.png');
+            .setAuthor(`${message.author.username}\'s Top 10 Games`, './modules/images/steam-logo.png');
 
           for (let i = 0; i < Math.min(gameList.length, 10); i += 1) {
             const game = gameList[i];
