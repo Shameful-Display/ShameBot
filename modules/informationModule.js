@@ -1,9 +1,8 @@
 const botVersion = '0.7';
 const botStartTime = new Date();
-const winston = require('winston');
 const { Client, MessageEmbed } = require('discord.js');
 
-const infoEmbedBuilder = function (title, message) {
+const infoEmbedBuilder = function infoEmbedBuilder(title, message) {
   const embed = new MessageEmbed()
     .setTitle(title)
     .setColor(0x00B0FF)
@@ -11,8 +10,8 @@ const infoEmbedBuilder = function (title, message) {
   return embed;
 };
 
-const InfoManager = function (bot) {
-  this.help = function (message) {
+const InfoManager = function InfoManager(bot) {
+  this.help = function help(message) {
     const title = 'Bot Commands';
     const details = (`
 __Available commands__ :
@@ -35,30 +34,33 @@ __Available commands__ :
 **!ffxiv-set [Name]|[Server]** : Searches for a character to associate to your DiscordID. Example \`!ffxiv-set Sephiroth|Cactuar\` 
 **!ffxiv-clear** : Clears the associated character from your DiscordID 
 **!ffxiv-show** : Shows your associated FFXIV character's profile and class jobs 
+**!findOriginID *Origin User name* ** : Associate your Origin acct with your Discord acct
+**!apexStats** : Shows your Apex Legends stats
+**!apexMap** : Shows the current and upcoming Apex Legends map  
 **!cheers [:beer:, :wine_glass:, or :tumbler_glass:]** : When you have one, Shamebot will drink with you! 
 **!drunk** : Checks Shamebot's BAC without pouring him another`);
 
     message.reply(infoEmbedBuilder(title, details));
   };
 
-  this.about = function (message) {
+  this.about = function about(message) {
     const title = 'About the Bot';
     const details = (`ShameBot Version ${botVersion}
 Stack: Discord.js, Node.js, Ubuntu, Digital Ocean, GitHub, and pm2.
 Find us on GitHub!
 https://github.com/Shameful-Display/ShameBot
-@B1anc0N1n0 @DaKing @TeckHybrid`);
+@B1anc0N1n0 @DaKing @TeckHybrid @ReticentPixie`);
     message.reply(infoEmbedBuilder(title, details));
   };
 
-  this.stats = function (message) {
+  this.stats = function stats(message) {
     const title = 'Bot Stats';
     const details = (`Working hard for [${bot.guilds.cache.size}] Servers `
     + `in [${bot.channels.cache.size}] Channels for [${bot.users.cache.size}] Users!`);
     message.reply(infoEmbedBuilder(title, details));
   };
 
-  this.fullStats = function (message) {
+  this.fullStats = function fullStats(message) {
     const title = 'Full Bot Stats';
     const serverNames = [];
     const channelNames = [];
@@ -73,14 +75,14 @@ https://github.com/Shameful-Display/ShameBot
     bot.users.cache.forEach((user) => {
       userNames.push(`${user.username}#${user.discriminator}`);
     });
-    const details = (`${'Here are your full stats as requested:\n\n'
-      + '**Servers:**\n\`\`\`'}${serverNames}\`\`\``
+    const details = ('Here are your full stats as requested:\n\n'
+      + `**Servers:**\n\`\`\`${serverNames}\`\`\``
       + `**Channels:**\n\`\`\`${channelNames}\`\`\``
       + `**Users:**\n\`\`\`${userNames}\`\`\``);
     message.reply(infoEmbedBuilder(title, details));
   };
 
-  this.uptime = function (message) {
+  this.uptime = function uptime(message) {
     const title = 'Bot Uptime';
     let botUptime = Math.abs(new Date() - botStartTime);
     let x = botUptime / 1000;

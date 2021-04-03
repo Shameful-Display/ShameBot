@@ -11,7 +11,7 @@ const neutralColor = '0x99FFFF';
 const rapidAPIURL = 'https://alpha-vantage.p.rapidapi.com/query';
 const rapidAPIHost = 'alpha-vantage.p.rapidapi.com';
 
-const financeEmbedBuilder = function (symbol, message, color) {
+const financeEmbedBuilder = function financeEmbedBuilder(symbol, message, color) {
   const embed = new MessageEmbed()
     .setTitle(symbol)
     .setColor(color)
@@ -19,8 +19,8 @@ const financeEmbedBuilder = function (symbol, message, color) {
   return embed;
 };
 
-const FinanceManager = function (bot) {
-  this.stockInfo = function (message) {
+const FinanceManager = function FinanceManager(bot) {
+  this.stockInfo = function stockInfo(message) {
     bot.user.setPresence({ activity: { name: 'the stock market', type: 0 } });
     const company = querystring.escape(message.cleanContent.replace('!stock', '')).toString().substr(3);
 
@@ -49,7 +49,7 @@ const FinanceManager = function (bot) {
         } else {
           stockColor = redColor;
         }
-        message.reply(financeEmbedBuilder(`${symbol} Stock Info`, `**${symbol}** \n` + `$${price}\n${change.toString()}%` + '\n', stockColor));
+        message.reply(financeEmbedBuilder(`${symbol} Stock Info`, `**${symbol}** \n$${price}\n${change.toString()}% \n`, stockColor));
       })
       .catch((error) => {
         winston.error('Finance Error: ', error);

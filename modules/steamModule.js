@@ -1,9 +1,11 @@
 const axios = require('axios');
 const Discord = require('discord.js');
+const winston = require('winston');
+const https = require('https');
 const AuthDetails = require('../auth.json');
 
-const SteamManager = function (bot) {
-  this.findSteamID = function (message, dbCollection) {
+const SteamManager = function SteamManager() {
+  this.findSteamID = function findSteamID(message, dbCollection) {
     const splitContent = message.content.split(' ');
     const steamName = splitContent[1];
     const userID = message.author.id;
@@ -63,7 +65,7 @@ const SteamManager = function (bot) {
                         const options = { upsert: true };
 
                         dbCollection.updateOne(query, update, options)
-                          .then((obj) => {
+                          .then(() => {
                             message.reply('Your SteamID has been associated with your DiscordID!');
                           })
                           .catch((err) => {
@@ -71,21 +73,21 @@ const SteamManager = function (bot) {
                           });
                       }
                     })
-                    .catch((collected) => {
+                    .catch(() => {
                       console.log('Failed Reaction');
                     }));
               });
           })
           .catch((error) => {
-            // winston.error("Get Steam Player Error: ", error);
+            winston.error('Get Steam Player Error: ', error);
           });
       })
       .catch((error) => {
-        // winston.error("Get Steam ID Error: ", error);
+        winston.error('Get Steam ID Error: ', error);
       });
   };
 
-  this.clearSteamID = function (message, dbCollection) {
+  this.clearSteamID = function clearSteamID(message, dbCollection) {
     const userID = message.author.id;
 
     dbCollection.deleteOne(
@@ -95,7 +97,7 @@ const SteamManager = function (bot) {
     message.reply('Your SteamID has been cleared!');
   };
 
-  this.steamID = function (message, dbCollection) {
+  this.steamID = function steamID(message, dbCollection) {
     const userID = message.author.id;
     dbCollection.findOne({ id: userID }, { steamID: 1 }, (err, doc) => {
       if (err) throw err;
@@ -107,7 +109,7 @@ const SteamManager = function (bot) {
     });
   };
 
-  this.steamTopTen = function (message, dbCollection) {
+  this.steamTopTen = function steamTopTen(message, dbCollection) {
     const userID = message.author.id;
 
     dbCollection.findOne({ id: userID }, { steamID: 1 }, (err, doc) => {
@@ -120,7 +122,6 @@ const SteamManager = function (bot) {
 
       const { steamID } = doc;
 
-      const https = require('https');
       const pathWithParameters = `/IPlayerService/GetOwnedGames/v0001/?key=${AuthDetails.steamAPIKey}&steamid=${steamID}&format=json&include_appinfo=1`;
 
       const optionsget = {
