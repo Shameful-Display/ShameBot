@@ -82,7 +82,7 @@ const DrinkingManager = function drinkingManager() {
           .addFields(
             { name: '🍺 Beer', value: beerCount, inline: true },
             { name: '🍷 Wine', value: wineCount, inline: true },
-            { name: '🥃 Liqour', value: liquorCount, inline: true },
+            { name: '🥃 Liquor', value: liquorCount, inline: true },
           );
 
         message.channel.send(embed);
@@ -97,7 +97,7 @@ const DrinkingManager = function drinkingManager() {
           .addFields(
             { name: '🍺 Beer', value: 0, inline: true },
             { name: '🍷 Wine', value: 0, inline: true },
-            { name: '🥃 Liqour', value: 0, inline: true },
+            { name: '🥃 Liquor', value: 0, inline: true },
           );
 
         message.channel.send(embed);
