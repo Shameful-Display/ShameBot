@@ -25,7 +25,7 @@ const ApexManager = function ApexManager() {
 
         const embed = new Discord.MessageEmbed()
           .setColor('#e30613')
-          .setAuthor('Apex Profile', 'https://seeklogo.com/images/A/apex-logo-C3478A4601-seeklogo.com.png')
+          .setAuthor('Apex Profile', './modules/images/apex-logo.png')
           .setTitle(player.name)
           .setDescription(`Is this you, ${message.author.toString()}?\nClick on the ✅ reaction to register to your DiscordID.`)
           .setThumbnail(player.avatar);
@@ -104,7 +104,7 @@ const ApexManager = function ApexManager() {
 
           const embed = new Discord.MessageEmbed()
             .setColor('#e30613')
-            .setAuthor('Apex Profile', 'https://seeklogo.com/images/A/apex-logo-C3478A4601-seeklogo.com.png')
+            .setAuthor('Apex Profile', './modules/images/apex-logo.png')
             .setTitle(global.name)
             .setThumbnail(legends.selected.ImgAssets.icon)
             .setImage(legends.selected.ImgAssets.banner);
@@ -155,20 +155,20 @@ const ApexManager = function ApexManager() {
 
         const embed = new Discord.MessageEmbed()
           .setColor('#e30613')
-          .setAuthor('Apex Map Rotation', 'https://seeklogo.com/images/A/apex-logo-C3478A4601-seeklogo.com.png')
+          .setAuthor('Apex Map Rotation', './modules/images/apex-logo.png')
           .setTitle(`Current Map: ${current.map}`)
           .addField('Remaining', `${current.remainingMins} minutes`, true)
           .addField('Next', next.map, true);
 
         switch (current.map) {
           case 'Kings Canyon':
-            embed.setThumbnail('https://static.wikia.nocookie.net/apexlegends_gamepedia_en/images/c/cf/Loadingscreen_Kings_Canyon_MU3.png/revision/latest/scale-to-width-down/800?cb=20210202220042');
+            embed.setThumbnail('./modules/images/Apex-Kings_Canyon.png');
             break;
           case 'Olympus':
-            embed.setThumbnail('https://static.wikia.nocookie.net/apexlegends_gamepedia_en/images/5/57/Loadingscreen_Olympus.png/revision/latest/scale-to-width-down/800?cb=20201105143428');
+            embed.setThumbnail('./modules/images/Apex-Olympus.png');
             break;
           case "World's Edge":
-            embed.setThumbnail('https://static.wikia.nocookie.net/apexlegends_gamepedia_en/images/f/fe/Loadingscreen_World%27s_Edge_MU2.png/revision/latest/scale-to-width-down/800?cb=20200819134346');
+            embed.setThumbnail('./modules/images/Apex-Edge.png');
             break;
           default:
             break;
