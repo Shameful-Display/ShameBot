@@ -13,6 +13,7 @@ let honorCollection;
 let steamIDCollection;
 let ffxivCollection;
 let drinkingCollection;
+let originIDCollection;
 
 const AuthDetails = require('./auth.json');
 // bot modules
@@ -52,6 +53,10 @@ const GiphyManager = require('./modules/giphyModule.js');
 
 const giphyManager = new GiphyManager(bot);
 
+const ApexManager = require('./modules/apexModule.js');
+
+const apexManager = new ApexManager(bot);
+
 // global connection for MongoDB
 MongoClient.connect('mongodb://localhost:27017shamebotdb', { useUnifiedTopology: true }, (err, client) => {
   if (err) throw err;
@@ -61,6 +66,7 @@ MongoClient.connect('mongodb://localhost:27017shamebotdb', { useUnifiedTopology:
   steamIDCollection = db.collection('SteamIDtoDiscordID');
   ffxivCollection = db.collection('FFXIV');
   drinkingCollection = db.collection('Drinking');
+  originIDCollection = db.collection('OriginIDCollection');
 });
 
 const HonorManager = require('./modules/honorModule.js');
@@ -143,6 +149,22 @@ bot.on('message', (message) => {
   }
 
   // End Steam
+
+  // Apex
+
+  if (message.content.includes('!findOriginID')) {
+    apexManager.findOriginID(message, originIDCollection);
+  }
+
+  if (message.content.includes('!apexStats')) {
+    apexManager.getApexStats(message, originIDCollection);
+  }
+
+  if (message.content.includes('!apexMap')) {
+    apexManager.getMapRotation(message);
+  }
+
+  // End Apex
 
   // FFXIV
 
