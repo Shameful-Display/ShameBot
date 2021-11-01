@@ -5,7 +5,7 @@
   "main": "SDGDiscordBot.js",
   "dependencies": {
     "axios": "^0.21.1",
-    "discord.js": "^12.5.2",
+    "discord.js": "^13.3.0",
     "mongodb": "^3.6.5",
     "request": "^2.88.2",
     "winston": "^2.4.5"
