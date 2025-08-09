@@ -1,28 +1,28 @@
+const test = require('node:test');
+const assert = require('node:assert/strict');
 const InfoManager = require('../modules/informationModule');
 
-describe('informationModule', () => {
-  test('help replies with embed', () => {
-    const bot = { guilds: { cache: new Map() }, channels: { cache: new Map() }, users: { cache: new Map() } };
-    const info = new InfoManager(bot);
-    const replies = [];
-    const message = { reply: (embed) => replies.push(embed) };
+test('informationModule help replies with embed', () => {
+  const bot = { guilds: { cache: new Map() }, channels: { cache: new Map() }, users: { cache: new Map() } };
+  const info = new InfoManager(bot);
+  const replies = [];
+  const message = { reply: (embed) => replies.push(embed) };
 
-    info.help(message);
+  info.help(message);
 
-    expect(replies.length).toBe(1);
-    expect(replies[0].title).toContain('Bot Commands');
-    expect(typeof replies[0].description).toBe('string');
-  });
+  assert.equal(replies.length, 1);
+  assert.match(replies[0].title, /Bot Commands/);
+  assert.equal(typeof replies[0].description, 'string');
+});
 
-  test('about replies with version text', () => {
-    const bot = { guilds: { cache: new Map() }, channels: { cache: new Map() }, users: { cache: new Map() } };
-    const info = new InfoManager(bot);
-    const replies = [];
-    const message = { reply: (embed) => replies.push(embed) };
+test('informationModule about replies with version text', () => {
+  const bot = { guilds: { cache: new Map() }, channels: { cache: new Map() }, users: { cache: new Map() } };
+  const info = new InfoManager(bot);
+  const replies = [];
+  const message = { reply: (embed) => replies.push(embed) };
 
-    info.about(message);
+  info.about(message);
 
-    expect(replies.length).toBe(1);
-    expect(replies[0].description).toMatch(/ShameBot Version/);
-  });
+  assert.equal(replies.length, 1);
+  assert.match(replies[0].description, /ShameBot Version/);
 });
