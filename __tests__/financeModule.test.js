@@ -11,14 +11,26 @@ if (!fs.existsSync(authPath)) {
 
 // Stub discord.js used by the module
 const discordStubPath = require.resolve('discord.js');
-require.cache[discordStubPath] = { exports: {
-  MessageEmbed: class { constructor(){ this.title=undefined; this.color=undefined; this.description=undefined; this.fields=[]; }
-    setTitle(t){ this.title=t; return this; }
-    setColor(c){ this.color=c; return this; }
-    setDescription(d){ this.description=d; return this; }
-    addField(n,v,i){ this.fields.push({name:n,value:v,inline:i}); return this; }
+require.cache[discordStubPath] = {
+  exports: {
+    MessageEmbed: class {
+      constructor() {
+        this.title = undefined;
+        this.color = undefined;
+        this.description = undefined;
+        this.fields = [];
+      }
+
+      setTitle(t) { this.title = t; return this; }
+
+      setColor(c) { this.color = c; return this; }
+
+      setDescription(d) { this.description = d; return this; }
+
+      addField(n, v, i) { this.fields.push({ name: n, value: v, inline: i }); return this; }
+    },
   },
-}};
+};
 
 // Install an axios stub module into the require cache before requiring the module under test
 let axiosImpl = async () => ({ data: {} });
@@ -30,7 +42,15 @@ test('financeModule stockInfo replies with embed on success', async () => {
   const bot = { user: { setPresence: () => {} } };
   const fm = new FinanceManager(bot);
 
-  axiosImpl = async () => ({ data: { 'Global Quote': { '01. symbol': 'AAPL', '05. price': '100.00', '10. change percent': '1.23' } } });
+  axiosImpl = async () => ({
+    data: {
+      'Global Quote': {
+        '01. symbol': 'AAPL',
+        '05. price': '100.00',
+        '10. change percent': '1.23',
+      },
+    },
+  });
 
   const replies = [];
   const message = { cleanContent: '!stock AAPL', reply: (embed) => replies.push(embed) };

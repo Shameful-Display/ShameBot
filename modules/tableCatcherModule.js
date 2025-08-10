@@ -19,55 +19,52 @@ const tableCatchManager = function tableCatcherManger() {
         // if the we find an object already exists for the channel
         if (currentCatcher.channel.equals(message.channel)) {
           channelHasCatcher = true;// set flag to true that channel already has object
-          // if table is broken and it's been less than 5 minutes
-          if (currentCatcher.tableBroken === true
-            && Math.abs(new Date() - currentCatcher.lastFlipTimestamp) < 300000) {
+          const msSinceLast = Math.abs(new Date() - currentCatcher.lastFlipTimestamp);
+          if (currentCatcher.tableBroken === true && msSinceLast < 300000) {
             message.reply("*TABLE SHATTERS*: Shamebot's sick of your shit. He'll be back to save the tables in a few minutes.");
-            // if table is broken but it's been 5 minutes or more
-          } else if (currentCatcher.tableBroken === true
-            && Math.abs(new Date() - currentCatcher.lastFlipTimestamp) >= 300000) {
+          } else if (currentCatcher.tableBroken === true && msSinceLast >= 300000) {
             currentCatcher.tableBroken = false;
             message.reply(currentCatcher.emotionalState[currentCatcher.currentState]);
             currentCatcher.lastFlipTimestamp = new Date();
             currentCatcher.currentState += 1;
-          } else { // else -> table is not broken...
-            if (Math.abs(new Date() - currentCatcher.lastFlipTimestamp) <= 30000) {
+          } else if (msSinceLast <= 30000) {
+            // table is not broken, quick response
+            message.reply(currentCatcher.emotionalState[currentCatcher.currentState]);
+            currentCatcher.lastFlipTimestamp = new Date();
+            if (currentCatcher.currentState <= currentCatcher.emotionalState.length - 2) {
+              currentCatcher.currentState += 1;
+            } else {
+              currentCatcher.currentState = 0;
+              currentCatcher.tableBroken = true;
+            }
+          } else {
+            // msSinceLast > 30000
+            const timePast = msSinceLast;
+            let numberOfIncrementsPast = (timePast / 30000) - 1; // 30 seconds is one increment
+
+            if (numberOfIncrementsPast < 1) {
+              // return previous table catch emotion
+              currentCatcher.currentState -= 1;
               message.reply(currentCatcher.emotionalState[currentCatcher.currentState]);
               currentCatcher.lastFlipTimestamp = new Date();
-              if (currentCatcher.currentState <= currentCatcher.emotionalState.length - 2) {
-                currentCatcher.currentState += 1;
-              } else {
+            } else {
+              // decrease emotional states equal to the number of increments to a minimum of 0
+              numberOfIncrementsPast = Math.floor(numberOfIncrementsPast);
+              if (currentCatcher.currentState - numberOfIncrementsPast <= 0) {
                 currentCatcher.currentState = 0;
-                currentCatcher.tableBroken = true;
-              }
-            } else if (Math.abs(new Date() - currentCatcher.lastFlipTimestamp) > 30000) {
-              const timePast = Math.abs(new Date() - currentCatcher.lastFlipTimestamp);
-              let numberOfIncrementsPast = (timePast / 30000) - 1; // 30 seconds is one increment
-
-              if (numberOfIncrementsPast < 1) {
-                // return previous table catch emotion
-                currentCatcher.currentState -= 1;
-                message.reply(currentCatcher.emotionalState[currentCatcher.currentState]);
-                currentCatcher.lastFlipTimestamp = new Date();
+                message.reply(currentCatcher.emotionalState[0]);
               } else {
-                // decrease emotional states equal to the number of increments to a minimum of 0
-                numberOfIncrementsPast = Math.floor(numberOfIncrementsPast);
-                if (currentCatcher.currentState - numberOfIncrementsPast <= 0) {
-                  currentCatcher.currentState = 0;
-                  message.reply(currentCatcher.emotionalState[0]);
-                } else {
-                  currentCatcher.currentState -= numberOfIncrementsPast;
-                  message.reply(currentCatcher.emotionalState[currentCatcher.currentState]);
-                }
-              }
-
-              if (currentCatcher.currentState <= currentCatcher.emotionalState.length - 2) {
-                currentCatcher.currentState += 1;
-              } else {
+                currentCatcher.currentState -= numberOfIncrementsPast;
                 message.reply(currentCatcher.emotionalState[currentCatcher.currentState]);
-                currentCatcher.currentState = 0;
-                currentCatcher.tableBroken = true;
               }
+            }
+
+            if (currentCatcher.currentState <= currentCatcher.emotionalState.length - 2) {
+              currentCatcher.currentState += 1;
+            } else {
+              message.reply(currentCatcher.emotionalState[currentCatcher.currentState]);
+              currentCatcher.currentState = 0;
+              currentCatcher.tableBroken = true;
             }
           }
         }

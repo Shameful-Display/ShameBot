@@ -3,7 +3,11 @@ const assert = require('node:assert/strict');
 const InfoManager = require('../modules/informationModule');
 
 test('informationModule help replies with embed', () => {
-  const bot = { guilds: { cache: new Map() }, channels: { cache: new Map() }, users: { cache: new Map() } };
+  const bot = {
+    guilds: { cache: new Map() },
+    channels: { cache: new Map() },
+    users: { cache: new Map() },
+  };
   const info = new InfoManager(bot);
   const replies = [];
   const message = { reply: (embed) => replies.push(embed) };
@@ -16,7 +20,11 @@ test('informationModule help replies with embed', () => {
 });
 
 test('informationModule about replies with version text', () => {
-  const bot = { guilds: { cache: new Map() }, channels: { cache: new Map() }, users: { cache: new Map() } };
+  const bot = {
+    guilds: { cache: new Map() },
+    channels: { cache: new Map() },
+    users: { cache: new Map() },
+  };
   const info = new InfoManager(bot);
   const replies = [];
   const message = { reply: (embed) => replies.push(embed) };

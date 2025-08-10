@@ -1,6 +1,6 @@
 const querystring = require('querystring');
 const winston = require('winston');
-const { Client, MessageEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
 const AuthDetails = require('../auth.json');
 

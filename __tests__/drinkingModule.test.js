@@ -11,14 +11,29 @@ test('drinkingModule addDrinks counts emojis and calls getStatus', (t, done) => 
       inserts.push(doc);
       return Promise.resolve();
     },
-    aggregate: () => ({ toArray: () => Promise.resolve([{ earliestDrink: new Date(Date.now() - 60*60*1000), beerCount: 1, wineCount: 2, liquorCount: 0 }]) }),
+    aggregate: () => ({
+      toArray: () => Promise.resolve([
+        {
+          earliestDrink: new Date(Date.now() - (60 * 60 * 1000)),
+          beerCount: 1,
+          wineCount: 2,
+          liquorCount: 0,
+        },
+      ]),
+    }),
   };
 
   const sent = [];
   const message = {
     content: '!cheers 🍺🍷🍷',
-    reply: (t) => sent.push(t),
-    channel: { send: (embed) => { sent.push(embed); assert.ok(embed.title || embed.description); done(); } },
+    reply: (text) => sent.push(text),
+    channel: {
+      send: (embed) => {
+        sent.push(embed);
+        assert.ok(embed.title || embed.description);
+        done();
+      },
+    },
   };
 
   dm.addDrinks(message, dbCollection);

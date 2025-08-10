@@ -12,6 +12,7 @@
     },
     "rules": {
         "no-console": "off",
+        "import/extensions": ["error", "ignorePackages", {"js": "never"}],
         "no-restricted-syntax": [
             "error",
             {
@@ -19,5 +20,23 @@
                 "message": "Unexpected property on console object was called"
             }
         ]
-    }
+    },
+    "overrides": [
+      {
+        "files": ["**/__tests__/**/*.js", "__tests__/**/*.js"],
+        "rules": {
+          "import/no-unresolved": "off",
+          "max-len": ["error", {"code": 120}],
+          "eol-last": "off"
+        }
+      },
+      {
+        "files": ["__mocks__/**/*.js"],
+        "rules": {
+          "max-classes-per-file": "off",
+          "lines-between-class-members": "off",
+          "eol-last": "off"
+        }
+      }
+    ]
 }

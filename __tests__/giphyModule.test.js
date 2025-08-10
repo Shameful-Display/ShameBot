@@ -24,7 +24,11 @@ const GiphyManager = require('../modules/giphyModule');
 test('giphyModule sends URL when found', () => {
   const gm = new GiphyManager();
   const sent = [];
-  const message = { cleanContent: '!gif hasgif', channel: { send: (u) => sent.push(u) }, reply: () => {} };
+  const message = {
+    cleanContent: '!gif hasgif',
+    channel: { send: (u) => sent.push(u) },
+    reply: () => {},
+  };
 
   gm.search(message);
 
@@ -34,7 +38,11 @@ test('giphyModule sends URL when found', () => {
 test('giphyModule sends fallback when not found', () => {
   const gm = new GiphyManager();
   const sent = [];
-  const message = { cleanContent: '!gif nothing', channel: { send: (u) => sent.push(u) }, reply: (t, file) => { sent.push(file); return { catch: () => {} }; } };
+  const message = {
+    cleanContent: '!gif nothing',
+    channel: { send: (u) => sent.push(u) },
+    reply: (t, file) => { sent.push(file); return { catch: () => {} }; },
+  };
 
   gm.search(message);
 

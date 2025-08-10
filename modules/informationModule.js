@@ -1,6 +1,6 @@
 const botVersion = '0.7';
 const botStartTime = new Date();
-const { Client, MessageEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 
 const infoEmbedBuilder = function infoEmbedBuilder(title, message) {
   const embed = new MessageEmbed()

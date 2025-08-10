@@ -32,7 +32,7 @@ test('honorModule update increments on ++ and --', () => {
   const message = {
     channel: { guild: { id: 'guild1' } },
     content: '<@user2> ++ and <@!user3> --',
-    mentions: { users: { array: () => [{ id: 'user2', equals: () => false }, { id: 'user3', equals: () => false } ] } },
+    mentions: { users: { array: () => [{ id: 'user2', equals: () => false }, { id: 'user3', equals: () => false }] } },
     author: { id: 'me' },
   };
 

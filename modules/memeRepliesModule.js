@@ -1,6 +1,6 @@
 // These three required for the fs.readdirSync()
 const fs = require('fs');
-const { Client, MessageAttachment } = require('discord.js');
+const { MessageAttachment } = require('discord.js');
 
 const winston = require('winston');
 
