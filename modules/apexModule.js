@@ -1,6 +1,7 @@
 const axios = require('axios');
 const Discord = require('discord.js');
 const winston = require('winston');
+// eslint-disable-next-line import/no-unresolved
 const AuthDetails = require('../auth.json');
 
 const ApexManager = function ApexManager() {

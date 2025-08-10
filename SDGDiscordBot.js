@@ -1,12 +1,12 @@
 // Note: the .js is not required as Node assumes these files are javascript
 // node modules to include
-const { Client, MessageEmbed } = require('discord.js');
+const { Client } = require('discord.js');
 
 const bot = new Client();
 
 const winston = require('winston');
 const { MongoClient } = require('mongodb');
-const winstonModule = require('./modules/winstonModule.js');
+const winstonModule = require('./modules/winstonModule');
 
 let db;
 let honorCollection;
@@ -15,45 +15,46 @@ let ffxivCollection;
 let drinkingCollection;
 let originIDCollection;
 
+// eslint-disable-next-line import/no-unresolved
 const AuthDetails = require('./auth.json');
 // bot modules
-const MemeManager = require('./modules/memeRepliesModule.js');
+const MemeManager = require('./modules/memeRepliesModule');
 
 const MemeReplies = new MemeManager(bot);
 
-const TableCatchManager = require('./modules/tableCatcherModule.js');
+const TableCatchManager = require('./modules/tableCatcherModule');
 
 const CatchManager = new TableCatchManager(bot);
 
-const InfoManager = require('./modules/informationModule.js');
+const InfoManager = require('./modules/informationModule');
 
 const InfoReplies = new InfoManager(bot);
 
-const ServerLogManager = require('./modules/serverLogModule.js');
+const ServerLogManager = require('./modules/serverLogModule');
 
 const ServerLog = new ServerLogManager(bot);
 
-const FinanceManager = require('./modules/financeModule.js');
+const FinanceManager = require('./modules/financeModule');
 
 const FinanceInfo = new FinanceManager(bot);
 
-const FFXIVManager = require('./modules/ffxivModule.js');
+const FFXIVManager = require('./modules/ffxivModule');
 
 const FFXIVInfo = new FFXIVManager(bot);
 
-const SteamManager = require('./modules/steamModule.js');
+const SteamManager = require('./modules/steamModule');
 
 const steamManager = new SteamManager(bot);
 
-const DrinkingManager = require('./modules/drinkingModule.js');
+const DrinkingManager = require('./modules/drinkingModule');
 
 const drinkingManager = new DrinkingManager(bot);
 
-const GiphyManager = require('./modules/giphyModule.js');
+const GiphyManager = require('./modules/giphyModule');
 
 const giphyManager = new GiphyManager(bot);
 
-const ApexManager = require('./modules/apexModule.js');
+const ApexManager = require('./modules/apexModule');
 
 const apexManager = new ApexManager(bot);
 
@@ -69,7 +70,7 @@ MongoClient.connect('mongodb://localhost:27017shamebotdb', { useUnifiedTopology:
   originIDCollection = db.collection('OriginIDCollection');
 });
 
-const HonorManager = require('./modules/honorModule.js');
+const HonorManager = require('./modules/honorModule');
 
 const honorManager = new HonorManager();
 

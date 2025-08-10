@@ -5,7 +5,7 @@ A multipurpose bot for a private Discord server.
 
 ### Pre-Reqs:
 
-1. Node JS installed (version 9 to 14)[Download & Instructions](https://nodejs.org/en/download/)
+1. Node.js 22 LTS (or 20 LTS) installed — [Download & Instructions](https://nodejs.org/en/download/)
 2. MongoDB (https://www.mongodb.com/download-center)
    1. For Windows: Go to Community Server tab and download the *Windows Server 2008 R2 64-bit* version.
    2. For Windows: After installing, it is required that you create a new folder in the C: root named "data" and a folder named "db" inside of that. Failure to do so will result in MongoDB failing to run.

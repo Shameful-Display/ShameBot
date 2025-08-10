@@ -2,6 +2,7 @@ const axios = require('axios');
 const Discord = require('discord.js');
 const winston = require('winston');
 const https = require('https');
+// eslint-disable-next-line import/no-unresolved
 const AuthDetails = require('../auth.json');
 
 const SteamManager = function SteamManager() {
@@ -35,9 +36,9 @@ const SteamManager = function SteamManager() {
             steamids: steamID,
           },
         })
-          .then((response) => {
-            console.log(response);
-            const player = response.data.response.players[0];
+          .then((resp) => {
+            console.log(resp);
+            const player = resp.data.response.players[0];
 
             const embed = new Discord.MessageEmbed()
               .setColor('#ff8200')
@@ -145,7 +146,7 @@ const SteamManager = function SteamManager() {
 
           const embed = new Discord.MessageEmbed()
             .setColor('#ff8200')
-            .setAuthor(`${message.author.username}\'s Top 10 Games`, 'https://logodix.com/logo/813259.png');
+            .setAuthor(`${message.author.username}'s Top 10 Games`, 'https://logodix.com/logo/813259.png');
 
           for (let i = 0; i < Math.min(gameList.length, 10); i += 1) {
             const game = gameList[i];

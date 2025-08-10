@@ -16,11 +16,13 @@
     "eslint-plugin-import": "^2.25.3"
   },
   "scripts": {
-    "test": "echo \"No Tests Yet\" && exit"
+    "start": "node SDGDiscordBot.js",
+    "lint": "eslint .",
+    "test": "node --test"
   },
   "engines": {
-    "node": ">=12.0.0",
-    "npm": ">=6.0.0"
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
   },
   "repository": {
     "type": "git",
