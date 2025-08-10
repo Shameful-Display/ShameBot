@@ -15,6 +15,7 @@ let ffxivCollection;
 let drinkingCollection;
 let originIDCollection;
 
+// eslint-disable-next-line import/no-unresolved
 const AuthDetails = require('./auth.json');
 // bot modules
 const MemeManager = require('./modules/memeRepliesModule');

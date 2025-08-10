@@ -1,6 +1,7 @@
 const queryString = require('querystring');
 const winston = require('winston');
 const request = require('request');
+// eslint-disable-next-line import/no-unresolved
 const AuthDetails = require('../auth.json');
 
 const GiphyManager = function giphyManager() {

@@ -2,6 +2,7 @@ const axios = require('axios');
 const Discord = require('discord.js');
 const winston = require('winston');
 const https = require('https');
+// eslint-disable-next-line import/no-unresolved
 const AuthDetails = require('../auth.json');
 
 const SteamManager = function SteamManager() {

@@ -2,6 +2,7 @@ const querystring = require('querystring');
 const winston = require('winston');
 const { MessageEmbed } = require('discord.js');
 const axios = require('axios');
+// eslint-disable-next-line import/no-unresolved
 const AuthDetails = require('../auth.json');
 
 const greenColor = '0x33FF00';
